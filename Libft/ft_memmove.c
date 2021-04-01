@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/29 10:29:14 by mrosie            #+#    #+#             */
+/*   Updated: 2020/11/05 11:13:18 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	unsigned char		*d;
+	const unsigned char	*s;
 
-#endif
+	if (!dst && !src)
+		return (NULL);
+	if (dst == src)
+		return (dst);
+	d = (unsigned char *)dst;
+	s = (unsigned char *)src;
+	if (d < s)
+		while (len--)
+			*(d++) = *(s++);
+	else
+	{
+		d += (len - 1);
+		s += (len - 1);
+		while (len--)
+			*(d--) = *(s--);
+	}
+	return (dst);
+}

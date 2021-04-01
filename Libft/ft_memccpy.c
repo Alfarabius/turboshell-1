@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/29 10:09:29 by mrosie            #+#    #+#             */
+/*   Updated: 2020/11/04 17:10:49 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	unsigned char			*d;
+	unsigned char			*s;
+	unsigned char			acc;
 
-#endif
+	d = (unsigned char *)dst;
+	s = (unsigned char *)src;
+	acc = (unsigned char)c;
+	if (!d && !s)
+		return (NULL);
+	while (n--)
+	{
+		*(d++) = *(s++);
+		if (*(s - 1) == acc)
+			return (d);
+	}
+	return (NULL);
+}

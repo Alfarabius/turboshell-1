@@ -1,28 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/30 15:02:18 by mrosie            #+#    #+#             */
+/*   Updated: 2020/10/31 15:16:00 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+void	ft_putnbr_fd(int n, int fd)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	char	show_num[32];
+	int		i;
+	long	tmp;
 
-#endif
+	i = 0;
+	tmp = (long)n;
+	if (!n)
+		write(fd, "0", 1);
+	if (tmp < 0)
+	{
+		write(fd, "-", 1);
+		tmp *= -1;
+	}
+	while (tmp)
+	{
+		show_num[i] = (tmp % 10) + '0';
+		tmp = tmp / 10;
+		i++;
+	}
+	while (i)
+		write(fd, &show_num[--i], 1);
+}

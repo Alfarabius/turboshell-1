@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/30 14:56:31 by mrosie            #+#    #+#             */
+/*   Updated: 2020/11/01 16:08:52 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+void	ft_putendl_fd(char *s, int fd)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	size_t num_bytes;
 
-#endif
+	if (!s)
+		return ;
+	num_bytes = 0;
+	while (s[num_bytes])
+		num_bytes++;
+	write(fd, s, num_bytes);
+	write(fd, "\n", 1);
+}

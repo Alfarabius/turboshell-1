@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/30 18:11:26 by mrosie            #+#    #+#             */
+/*   Updated: 2020/10/31 10:36:07 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+t_list	*ft_lstnew(void *content)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	t_list *new_lst;
 
-#endif
+	new_lst = (t_list *)malloc(sizeof(t_list));
+	if (new_lst == NULL)
+		return (NULL);
+	new_lst->content = content;
+	(*new_lst).next = NULL;
+	return (new_lst);
+}

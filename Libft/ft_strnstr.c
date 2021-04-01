@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/29 17:04:42 by mrosie            #+#    #+#             */
+/*   Updated: 2020/11/05 17:15:33 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	size_t	needle_size;
 
-#endif
+	if (*needle == '\0')
+		return ((char *)haystack);
+	needle_size = ft_strlen(needle);
+	while (*haystack != '\0' && len-- >= needle_size)
+	{
+		if (*haystack == *needle)
+			if (ft_strncmp(haystack, needle, needle_size) == 0)
+				return ((char *)haystack);
+		haystack++;
+	}
+	return (NULL);
+}

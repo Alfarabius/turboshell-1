@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/29 16:01:13 by mrosie            #+#    #+#             */
+/*   Updated: 2020/10/29 16:34:26 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	const unsigned char *s1_ptr;
+	const unsigned char *s2_ptr;
 
-#endif
+	s1_ptr = (unsigned char *)s1;
+	s2_ptr = (unsigned char *)s2;
+	while (n--)
+		if ((*s1_ptr - *s2_ptr) != 0)
+			return (*s1_ptr - *s2_ptr);
+		else
+		{
+			s1_ptr++;
+			s2_ptr++;
+		}
+	return (0);
+}

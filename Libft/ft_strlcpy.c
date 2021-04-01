@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/10/28 14:37:47 by mrosie            #+#    #+#             */
+/*   Updated: 2021/03/10 15:23:17 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	size_t i;
+	size_t src_size;
 
-#endif
+	if (src == NULL && dst == NULL)
+		return (0);
+	i = dstsize - 1;
+	src_size = ft_strlen(src);
+	if (dstsize)
+	{
+		while (i-- && *src)
+			*(dst++) = *(src++);
+		*dst = '\0';
+	}
+	return (src_size);
+}

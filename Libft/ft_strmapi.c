@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:39:16 by mrosie           ###   ########.fr       */
+/*   Created: 2020/11/02 17:55:01 by mrosie            #+#    #+#             */
+/*   Updated: 2020/11/03 11:58:09 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# define STANDART  "\x1B[0m"
-# define YELLOW  "\x1B[33m"
-# include <unistd.h>
-# include <fcntl.h>
-# include "./Libft/libft.h"
+#include "libft.h"
 
-typedef	struct	s_dict
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*key;
-	char	*value;
-	char	separ;
-}				t_dict;
+	char	*new_string;
+	int		i;
 
-#endif
+	i = 0;
+	if (!s)
+		return (NULL);
+	new_string = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!new_string)
+		return (NULL);
+	while (s[i++])
+		new_string[i - 1] = f(i - 1, s[i - 1]);
+	new_string[i - 1] = '\0';
+	return (new_string);
+}
