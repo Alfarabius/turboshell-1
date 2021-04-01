@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plurlene <plurlene@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 15:25:30 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 16:59:14 by mrosie           ###   ########.fr       */
+/*   Updated: 2021/04/01 17:07:41 by plurlene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	main(int argc, char **argv, char **env)
 	char	buf[1024];
 	char	shell_is_running;
 
+	shell_is_running = 1;
 	shell_is_running = 1;
 	(void)argc;
 	(void)argv;
