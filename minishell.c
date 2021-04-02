@@ -1,40 +1,39 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: plurlene <plurlene@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/01 15:25:30 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/02 17:07:08 by plurlene         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
+
+static	int	init_shell(t_tsh *tsh)
+{
+	tsh->is_running = 1;
+	tsh->symbols = 0;
+	return (0);
+}
 
 int	main(int argc, char **argv, char **env)
 {
-	char	buf[1024];
-	char	shell_is_running;
-	int		num_read;
+	t_tsh	tsh;
 
-	shell_is_running = 1;
-	num_read = 0;
+	init_shell(&tsh);
+	env_to_lst(&tsh.env, env);
+	while(tsh.env)
+	{
+		printf("%s=",((t_dict *)(tsh.env->content))->key);
+		printf("%s\n",((t_dict *)(tsh.env->content))->value);
+		tsh.env = tsh.env->next;
+	}
 	(void)argc;
 	(void)argv;
 	(void)env;
-	while (shell_is_running)
+	while (tsh.is_running)
 	{
 		write(1, YELLOW, 6);
 		write(1, "turboshell-1.0$ ", 17);
 		write(1, STANDART, 5);
-		num_read = read(0, buf, 1024);
-		if (!num_read)
+		tsh.symbols = read(0, tsh.buf, 1024);
+		if (!tsh.symbols)
 			write(1, "\n", 2);
-		if (buf[0] != '\n')
-			printf("out: %s", buf);
-		line_parser(buf);
-		ft_bzero(buf, 1024);
+		if (tsh.buf[0] != '\n')
+			printf("out: %s", tsh.buf);
+		line_parser(tsh.buf);
+		ft_bzero(tsh.buf, 1024);
 	}
 	return (0);
 }
