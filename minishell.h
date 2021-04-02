@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plurlene <plurlene@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrosie <mrosie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 15:25:35 by mrosie            #+#    #+#             */
-/*   Updated: 2021/04/01 19:46:15 by plurlene         ###   ########.fr       */
+/*   Updated: 2021/04/02 17:52:57 by mrosie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,26 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include "./Libft/libft.h"
+# include <termcap.h>
 
 typedef	struct	s_dict
 {
 	char	*key;
 	char	*value;
-	char	separ;
+	char	is_separ;
+	char	is_set;
 }				t_dict;
 
-void line_parser(char *str);
+typedef	struct	s_msh
+{
+	t_list	*env;
+	char	buf[1024];
+	char	is_running;
+	int		symbols;
+}				t_tsh;
+
+void	line_parser(char *str);
+int		env_to_lst(t_list **lst, char **env);
+int		error_handler(char *msg);
 
 #endif
