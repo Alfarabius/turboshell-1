@@ -80,6 +80,23 @@ static char *ft_realloc(char *str, int num, int c)
 	return (res);
 }
 
+static int	parser_case(char *str, char *str_case, int n)
+{
+	if (ft_strnstr(str, str_case, n))
+		return (1);
+	return (0);
+}
+
+void	switch_case(char *str, char *current)
+{
+	if (parser_case(str, "$", 1))
+		(void *)str;
+	if (parser_case(str, "\"", 1))
+		(void *)str;
+	if (parser_case(str, "\'", 1))
+		(void *)str;
+}
+
 void line_parser(char *str)
 {
 	char **args;
