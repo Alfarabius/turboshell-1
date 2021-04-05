@@ -3,6 +3,7 @@ OBJS_PATH	= ./objs
 SRCS	= ft_isalpha.c \
 		ft_memchr.c \
 		ft_putchar_fd.c \
+		ft_putchar.c \
 		ft_strchr.c \
 		ft_strlen.c \
 		ft_strtrim.c \
@@ -19,6 +20,7 @@ SRCS	= ft_isalpha.c \
 		ft_putnbr_fd_base.c \
 		ft_strjoin.c \
 		ft_strncmp.c \
+		ft_strcmp.c \
 		ft_tolower.c \
 		ft_calloc.c \
 		ft_isprint.c \
