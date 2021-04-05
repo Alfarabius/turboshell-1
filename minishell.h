@@ -24,7 +24,7 @@ typedef	struct	s_msh
 	int		symbols;
 }				t_tsh;
 
-void	line_parser(char *str);
+void	line_parser(t_tsh tsh);
 int		env_to_lst(t_list **lst, char **env);
 int		error_handler(char *msg);
 

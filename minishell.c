@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **env)
 			write(1, "\n", 2);
 		if (tsh.buf[0] != '\n')
 			printf("out: %s", tsh.buf);
-		line_parser(tsh.buf);
+		line_parser(tsh);
 		ft_bzero(tsh.buf, 1024);
 	}
 	return (0);
