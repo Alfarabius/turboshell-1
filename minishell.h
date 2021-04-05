@@ -22,6 +22,7 @@ typedef	struct		s_msh
 	struct	termios	term;
 	t_list			*env;
 	char			buf[1024];
+	char			*line;
 	char			is_running;
 	int				symbols;
 	int				hfd;

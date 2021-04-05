@@ -12,6 +12,8 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR, 0755);
 	tsh->is_running = 1;
 	tsh->symbols = 0;
+	tsh->line = malloc(1);
+	tsh->line[0] = '\0';
 	return (0);
 }
 
@@ -19,6 +21,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_tsh	tsh;
 	char	end_line;
+	char	*tmp;
 
 	end_line = 0;
 	(void)argc;
@@ -47,6 +50,9 @@ int	main(int argc, char **argv, char **env)
 				end_line = 1;
 				tsh.is_running = 0;
 			}
+			tmp = ft_strjoin(tsh.line, tsh.buf);
+			free(tsh.line);
+			tsh.line = tmp;
 		}
 		line_parser(tsh);
 		ft_bzero(tsh.buf, 1024);

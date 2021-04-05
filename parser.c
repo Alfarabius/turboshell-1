@@ -149,7 +149,7 @@ char *double_quotes_case(char *str, t_tsh tsh, int *i)
 		}
 		(*i)++;
 	}
-	
+
 	return (res);
 }
 
@@ -189,25 +189,25 @@ void line_parser(t_tsh tsh)
 	args[0] = NULL;
 	current_arg = (char *)malloc(1);
 	current_arg[0] = '\0';
-	i = skip_whitespaces(tsh.buf, 0) - 1;
-	while (tsh.buf[++i])
+	i = skip_whitespaces(tsh.line, 0) - 1;
+	while (tsh.line[++i])
 	{
-		// if (tsh.buf[i] != ' ' && tsh.buf[i] != '\n') //воткнуть свич кейс на спец символы и кавычки
-		// 	current_arg = ft_realloc(current_arg, 1, tsh.buf[i]);
+		// if (tsh.line[i] != ' ' && tsh.line[i] != '\n') //воткнуть свич кейс на спец символы и кавычки
+		// 	current_arg = ft_realloc(current_arg, 1, tsh.line[i]);
 		// //свич на кавычки с передачей указателя на i
 		// else
 		// {
-		// 	i = skip_whitespaces(tsh.buf, i) - 1;
+		// 	i = skip_whitespaces(tsh.line, i) - 1;
 		// 	add_line(&args, current_arg);
 		// 	ft_free((void **)&current_arg);
 		// 	current_arg = (char *)malloc(1);
 		// 	current_arg[0] = '\0';
 		// }
-		i += distributor(&(tsh.buf[i]), tsh, &args);
+		i += distributor(&(tsh.line[i]), tsh, &args);
 	}
 	i = -1;
-	while (args[++i])
-		printf("args: %s\n", args[i]);
+	// while (args[++i])
+	// 	printf("args: %s\n", args[i]);
 	clear_arr(&args);
 	if (current_arg)
 		free(current_arg);
