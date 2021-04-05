@@ -56,6 +56,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		line_parser(tsh);
 		ft_bzero(tsh.buf, 1024);
+		ft_bzero(tsh.line, ft_strlen(tsh.line));
 		end_line = 0;
 	}
 	return (0);

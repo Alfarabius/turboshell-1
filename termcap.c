@@ -17,7 +17,7 @@ int	termcap_processor(char *line, t_tsh *tsh)
 		move_right_line(tsh);
 	else if (!ft_strcmp(line, "\033[D"))
 		move_left_line(tsh);
-	else if (!ft_strcmp(line, "\177"))
-		erase_symbol(tsh);
+//	else if (!ft_strcmp(line, "\177"))
+//		erase_symbol(tsh);
 	return (0);
 }

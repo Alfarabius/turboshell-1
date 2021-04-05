@@ -1,5 +1,13 @@
 # include "minishell.h"
 
+// NULL to the pointer after free
+static void ft_free(void **bfree)
+{
+	if (*bfree)
+		free(*bfree);
+	*bfree = NULL;
+}
+
 void clear_arr(char ***arr)
 {
 	int i;
@@ -9,8 +17,7 @@ void clear_arr(char ***arr)
 	{
 		while ((*arr)[++i])
 		{
-
-			free((*arr)[i]);
+			ft_free((void **)(&(*arr)[i]));
 		}
 		free(*arr);
 		*arr = NULL;
@@ -40,14 +47,6 @@ int skip_whitespaces(char *str, int i)
 	return (i);
 }
 
-// NULL to the pointer after free
-static void ft_free(void **bfree)
-{
-	if (*bfree)
-		free(*bfree);
-	*bfree = NULL;
-}
-
 static char *ft_realloc(char *str, int num, int c)
 {
 	char	*res;
@@ -70,23 +69,6 @@ static char *ft_realloc(char *str, int num, int c)
 	return (res);
 }
 
-// static int	parser_case(char *str, char *str_case, int n)
-// {
-// 	if (ft_strnstr(str, str_case, n))
-// 		return (1);
-// 	return (0);
-// }
-
-// void	switch_case(char *str, char *current)
-// {
-// 	if (parser_case(str, "$", 1))
-// 		(void *)str;
-// 	if (parser_case(str, "\"", 1))
-// 		(void *)str;
-// 	if (parser_case(str, "\'", 1))
-// 		(void *)str;
-// }
-
 int is_separ(char c)
 {
 	if ((c >= 9 && c <= 13) || c == 32)
@@ -94,121 +76,95 @@ int is_separ(char c)
 	return (0);
 }
 
-char *get_env_arg(char *str, t_tsh tsh)
+void enivroment_case(t_tsh tsh, char ***args, int *i, int *current)
 {
-	int i;
 	char *key;
-	char *separs = " 	\'\"=";
+	char *value;
 
 	key = (char *)malloc(1);
 	key[0] = '\0';
-	i = -1;
-	while (str[++i])
+	value = NULL;
+	(*i)++;
+	while (tsh.line[*i])
 	{
-		if (ft_strrchr(separs, str[i]))
+		if (tsh.line[*i] == '$' || is_separ(tsh.line[*i]))
 			break ;
-		ft_realloc(key, 1, str[i]);
+		key = ft_realloc(key, 1, tsh.line[*i]);
+		(*i)++;
 	}
-	printf ("i: %d len: %zu\n", i, ft_strlen(key));
 	while (tsh.env)
 	{
-		if (ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, i))
-		{
-			free(key);
-			key = ((t_dict *)(tsh.env->content))->value;
-		}
+		if (ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
+			value = ((t_dict *)(tsh.env->content))->value;
 		tsh.env = tsh.env->next;
 	}
-	if (!tsh.env)
-		key = NULL;
-	return (key);
+	if (!value)
+		value = ft_strjoin("$", key);
+	(*args)[*current] = ft_strjoin((*args)[*current], value);
+	free(key);
 }
 
-char *double_quotes_case(char *str, t_tsh tsh, int *i)
+void double_qoutes_case2(t_tsh tsh, char ***args, int *i, int *current)
 {
-	char *res;
-	char *env_arg;
-	char *temp;
-
-	res = (char *)malloc(1);
-	res[0] = '\0';
 	(*i)++;
-	while (str[*i] && str[*i] != '\"')
+	while (tsh.line[*i] && tsh.line[*i] != '\"')
 	{
-		if (str[*i] != '$')
-			res = ft_realloc(res, 1, str[*i]);
-		else
+		if (tsh.line[*i] == '$')
+			enivroment_case(tsh, args, i, current);
+		(*args)[*current] = ft_realloc((*args)[*current], 1, tsh.line[*i]);
+		(*i)++;
+	}
+	if (tsh.line[*i] == '\"')
+		(*i)++;
+}
+
+void common_case2(t_tsh tsh, char ***args, int *i, int *current)
+{
+	*i = skip_whitespaces(tsh.line, *i);
+	while (tsh.line[*i])
+	{
+		if (is_separ(tsh.line[*i]))
 		{
-			env_arg = get_env_arg(&(str[*i]), tsh);
-			if (env_arg)
-			{
-				temp = ft_strjoin(res, env_arg);
-				free(res);
-				res = temp;
-			}
+			add_line(args, "\0");
+			(*current)++;
+			return ;
 		}
+		if (tsh.line[*i] == '$' || tsh.line[*i] == '\"' || tsh.line[*i] == '\'')
+			return ;
+		(*args)[*current] = ft_realloc((*args)[*current], 1, tsh.line[*i]);
 		(*i)++;
 	}
-
-	return (res);
 }
 
-char *common_case(char *str, int *i)
+void distributor2(t_tsh tsh, char ***args, int *i, int *current)
 {
-	char *res;
-	res = (char *)malloc(1);
-	res[0] = '\0';
-	while(str[*i] && !is_separ(str[*i]))
-	{
-		res = ft_realloc(res, 1, str[*i]);
-		(*i)++;
-	}
-	(*i) = skip_whitespaces(str, (*i)) - 1;
-	return (res);
-}
-
-int distributor(char *str, t_tsh tsh, char ***args)
-{
-	int i;
-
-	i = 0;
-	if (*str == '\"')
-		add_line(args, double_quotes_case(str, tsh, &i));
-	if (*str != '\"')
-		add_line(args, common_case(str, &i));
-	return (i);
+	if (tsh.line[*i] == '\"')
+		double_qoutes_case2(tsh, args, i, current);
+	if (tsh.line[*i] == '$' )
+		enivroment_case(tsh, args, i, current);
+	if (tsh.line[*i] != '\"' && tsh.line[*i] != '$')
+		common_case2(tsh, args, i, current);
 }
 
 void line_parser(t_tsh tsh)
 {
 	char **args;
-	char *current_arg;
+	int current_arg;
 	int i;
 
-	args = (char **)malloc(sizeof(char *));
-	args[0] = NULL;
-	current_arg = (char *)malloc(1);
-	current_arg[0] = '\0';
-	i = skip_whitespaces(tsh.line, 0) - 1;
-	while (tsh.line[++i])
+	args = (char **)malloc(sizeof(char *) * 2);
+	args[0] = (char *)malloc(1);
+	args[0][0] = '\0';
+	args[1] = NULL;
+	current_arg = 0;
+	i = 0;
+	while (tsh.line[i])
 	{
-		// if (tsh.line[i] != ' ' && tsh.line[i] != '\n') //воткнуть свич кейс на спец символы и кавычки
-		// 	current_arg = ft_realloc(current_arg, 1, tsh.line[i]);
-		// //свич на кавычки с передачей указателя на i
-		// else
-		// {
-		// 	i = skip_whitespaces(tsh.line, i) - 1;
-		// 	add_line(&args, current_arg);
-		// 	ft_free((void **)&current_arg);
-		// 	current_arg = (char *)malloc(1);
-		// 	current_arg[0] = '\0';
-		// }
-		i += distributor(&(tsh.line[i]), tsh, &args);
+		distributor2(tsh, &args, &i, &current_arg);
+		i++;
 	}
 	i = -1;
-	// while (args[++i])
-	// 	printf("args: %s\n", args[i]);
+	while (args[++i])
+		printf("args: %s\n", args[i]);
 	clear_arr(&args);
-	if (current_arg)
-		free(current_arg);
 }
