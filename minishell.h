@@ -24,6 +24,7 @@ typedef	struct		s_msh
 	char			buf[1024];
 	char			*line;
 	char			is_running;
+	char			end_line;
 	int				symbols;
 	int				hfd;
 }					t_tsh;
