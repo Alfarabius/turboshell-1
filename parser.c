@@ -94,8 +94,11 @@ void enivroment_case(t_tsh tsh, char ***args, int *i, int *current)
 	}
 	while (tsh.env)
 	{
-		if (ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
+		if (!ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
+		{
 			value = ((t_dict *)(tsh.env->content))->value;
+			break ;
+		}
 		tsh.env = tsh.env->next;
 	}
 	if (!value)
