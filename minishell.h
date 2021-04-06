@@ -28,6 +28,15 @@ typedef	struct		s_msh
 	int				hfd;
 }					t_tsh;
 
+typedef	struct		s_prsr
+{
+	char			**args;
+	int				l_index;
+	int				current_arg;
+	int				parse_status;
+}					t_prsr;
+
+
 void				line_parser(t_tsh tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					error_handler(char *msg);

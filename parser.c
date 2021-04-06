@@ -76,7 +76,7 @@ int is_separ(char c)
 	return (0);
 }
 
-void enivroment_case(t_tsh tsh, char ***args, int *i, int *current)
+void enivroment_case(t_tsh tsh, t_prsr *prsr)
 {
 	char *key;
 	char *value;
@@ -84,13 +84,18 @@ void enivroment_case(t_tsh tsh, char ***args, int *i, int *current)
 	key = (char *)malloc(1);
 	key[0] = '\0';
 	value = NULL;
-	(*i)++;
-	while (tsh.line[*i])
+	(prsr->l_index)++;
+	while (tsh.line[prsr->l_index])
 	{
-		if (tsh.line[*i] == '$' || is_separ(tsh.line[*i]))
+		if (tsh.line[prsr->l_index] == '\n')
+		{
+			prsr->parse_status = 0;
 			break ;
-		key = ft_realloc(key, 1, tsh.line[*i]);
-		(*i)++;
+		}
+		if (tsh.line[prsr->l_index] == '$' || is_separ(tsh.line[prsr->l_index]))
+			break ;
+		key = ft_realloc(key, 1, tsh.line[prsr->l_index]);
+		(prsr->l_index)++;
 	}
 	while (tsh.env)
 	{
@@ -103,71 +108,83 @@ void enivroment_case(t_tsh tsh, char ***args, int *i, int *current)
 	}
 	if (!value)
 		value = ft_strjoin("$", key);
-	(*args)[*current] = ft_strjoin((*args)[*current], value);
+	(prsr->args)[prsr->current_arg] = ft_strjoin((prsr->args)[prsr->current_arg], value);
 	free(key);
 }
 
-void double_qoutes_case2(t_tsh tsh, char ***args, int *i, int *current)
+void double_qoutes_case2(t_tsh tsh, t_prsr *prsr)
 {
-	(*i)++;
-	while (tsh.line[*i] && tsh.line[*i] != '\"')
+	(prsr->l_index)++;
+	while (tsh.line[prsr->l_index] && tsh.line[prsr->l_index] != '\"')
 	{
-		if (tsh.line[*i] == '$')
-			enivroment_case(tsh, args, i, current);
-		(*args)[*current] = ft_realloc((*args)[*current], 1, tsh.line[*i]);
-		(*i)++;
+		if (tsh.line[prsr->l_index] == '\n')
+		{
+			prsr->parse_status = 0;
+			break ;
+		}
+		if (tsh.line[prsr->l_index] == '$')
+			enivroment_case(tsh, prsr);
+		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
+		(prsr->l_index)++;
 	}
-	if (tsh.line[*i] == '\"')
-		(*i)++;
+	if (tsh.line[prsr->l_index] == '\"')
+		(prsr->l_index)++;
 }
 
-void common_case2(t_tsh tsh, char ***args, int *i, int *current)
+void common_case2(t_tsh tsh, t_prsr *prsr)
 {
-	*i = skip_whitespaces(tsh.line, *i);
-	while (tsh.line[*i])
+	prsr->l_index = skip_whitespaces(tsh.line, prsr->l_index);
+	while (tsh.line[prsr->l_index])
 	{
-		if (is_separ(tsh.line[*i]))
+		if (tsh.line[prsr->l_index] == '\n')
 		{
-			add_line(args, "\0");
-			(*current)++;
+			prsr->parse_status = 0;
+			break ;
+		}
+		if (is_separ(tsh.line[prsr->l_index]))
+		{
+			add_line(&prsr->args, "\0");
+			(prsr->current_arg)++;
 			return ;
 		}
-		if (tsh.line[*i] == '$' || tsh.line[*i] == '\"' || tsh.line[*i] == '\'')
+		if (tsh.line[prsr->l_index] == '$' || tsh.line[prsr->l_index] == '\"' || tsh.line[prsr->l_index] == '\'')
 			return ;
-		(*args)[*current] = ft_realloc((*args)[*current], 1, tsh.line[*i]);
-		(*i)++;
+		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
+		(prsr->l_index)++;
 	}
 }
 
-void distributor2(t_tsh tsh, char ***args, int *i, int *current)
+void distributor2(t_tsh tsh, t_prsr *prsr)
 {
-	if (tsh.line[*i] == '\"')
-		double_qoutes_case2(tsh, args, i, current);
-	if (tsh.line[*i] == '$' )
-		enivroment_case(tsh, args, i, current);
-	if (tsh.line[*i] != '\"' && tsh.line[*i] != '$')
-		common_case2(tsh, args, i, current);
+	if (tsh.line[prsr->l_index] == '\"')
+		double_qoutes_case2(tsh, prsr);
+	if (tsh.line[prsr->l_index] == '$' )
+		enivroment_case(tsh, prsr);
+	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '$')
+		common_case2(tsh, prsr);
 }
 
 void line_parser(t_tsh tsh)
 {
-	char **args;
-	int current_arg;
-	int i;
+	t_prsr prsr;
 
-	args = (char **)malloc(sizeof(char *) * 2);
-	args[0] = (char *)malloc(1);
-	args[0][0] = '\0';
-	args[1] = NULL;
-	current_arg = 0;
-	i = 0;
-	while (tsh.line[i])
+	prsr.args = (char **)malloc(sizeof(char *) * 2);
+	prsr.args[0] = (char *)malloc(1);
+	prsr.args[0][0] = '\0';
+	prsr.args[1] = NULL;
+	prsr.current_arg = 0;
+	prsr.l_index = 0;
+	prsr.parse_status = 1;
+	while (tsh.line[prsr.l_index] && tsh.line[prsr.l_index] != '\n')
 	{
-		distributor2(tsh, &args, &i, &current_arg);
-		i++;
+		distributor2(tsh, &prsr);
+		if (prsr.l_index >= ft_strlen(tsh.line) || !prsr.parse_status || tsh.line[prsr.l_index] == '\n')
+			break ;
+		prsr.l_index++;
 	}
-	i = -1;
-	while (args[++i])
-		printf("args: %s\n", args[i]);
-	clear_arr(&args);
+	prsr.parse_status = 0;
+	prsr.l_index = -1;
+	while (prsr.args[++prsr.l_index])
+		printf("args: %s\n", prsr.args[prsr.l_index]);
+	clear_arr(&prsr.args);
 }
