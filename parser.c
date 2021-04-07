@@ -41,9 +41,16 @@ static void add_line(char ***arr, char *line)
 	*arr = result_arr;
 }
 
+int is_whitespace(char c)
+{
+	if (c == 9 || c == 32)
+		return (1);
+	return (0);
+}
+
 int skip_whitespaces(char *str, int i)
 {
-	while (str[i] && ((str[i] >= 9 && str[i] <= 13) || str[i] == 32))
+	while (str[i] && is_whitespace(str[i]))
 		i++;
 	return (i);
 }
@@ -68,13 +75,6 @@ static char *ft_realloc(char *str, int num, int c)
 	}
 	ft_free((void **)&str);
 	return (res);
-}
-
-int is_separ(char c)
-{
-	if ((c >= 9 && c <= 13) || c == 32)
-		return (1);
-	return (0);
 }
 
 void enivroment_case(t_tsh tsh, t_prsr *prsr)
@@ -114,7 +114,7 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 	key = (prsr->args)[prsr->current_arg];
 	(prsr->args)[prsr->current_arg] = ft_strjoin((prsr->args)[prsr->current_arg], value);
 	free(key);
-	if (tsh.line[prsr->l_index] && is_separ(tsh.line[prsr->l_index]))
+	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
@@ -134,7 +134,7 @@ void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
 		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
 		(prsr->l_index)++;
 	}
-	if (tsh.line[prsr->l_index] && is_separ(tsh.line[prsr->l_index + 1]))
+	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
@@ -143,6 +143,9 @@ void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
 
 void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 {
+	int shielding;
+
+	shielding = 0;
 	(prsr->l_index)++;
 	while (tsh.line[prsr->l_index] && tsh.line[prsr->l_index] != '\"')
 	{
@@ -151,15 +154,21 @@ void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (tsh.line[prsr->l_index] == '$')
+		if (tsh.line[prsr->l_index] == '\\' && ft_strchr("$\\`\"", tsh.line[prsr->l_index + 1]))
+		{
+			(prsr->l_index)++;
+			shielding = 1;
+		}
+		if (!shielding && tsh.line[prsr->l_index] == '$')
 			enivroment_case(tsh, prsr);
 		else
 		{
 			(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
 			(prsr->l_index)++;
 		}
+		shielding = 0;
 	}
-	if (tsh.line[prsr->l_index] && is_separ(tsh.line[prsr->l_index + 1]))
+	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
@@ -168,6 +177,9 @@ void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 
 void common_case(t_tsh tsh, t_prsr *prsr)
 {
+	int shielding;
+
+	shielding = 0;
 	prsr->l_index = skip_whitespaces(tsh.line, prsr->l_index);
 	while (tsh.line[prsr->l_index])
 	{
@@ -176,16 +188,22 @@ void common_case(t_tsh tsh, t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (is_separ(tsh.line[prsr->l_index]))
+		if (is_whitespace(tsh.line[prsr->l_index]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
 		{
 			add_line(&prsr->args, "\0");
 			(prsr->current_arg)++;
 			return ;
 		}
-		if (tsh.line[prsr->l_index] == '$' || tsh.line[prsr->l_index] == '\"' || tsh.line[prsr->l_index] == '\'')
+		if (tsh.line[prsr->l_index] == '\\')
+		{
+			(prsr->l_index)++;
+			shielding = 1;
+		}
+		if (!shielding && (tsh.line[prsr->l_index] == '$' || tsh.line[prsr->l_index] == '\"' || tsh.line[prsr->l_index] == '\''))
 			return ;
 		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
 		(prsr->l_index)++;
+		shielding = 0;
 	}
 }
 
