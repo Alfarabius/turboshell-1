@@ -9,6 +9,13 @@ typedef	struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+typedef	struct		s_dlst
+{
+	void			*content;
+	struct s_dlst	*next;
+	struct s_dlst	*prev;
+}					t_dlst;
+
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s1, char const *set);
@@ -59,5 +66,7 @@ void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
+t_dlst				*ft_dlst_new(void *content);
+void				ft_dlstadd_back(t_dlst **dlst, t_dlst *new);
 
 #endif
