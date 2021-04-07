@@ -30,6 +30,8 @@ typedef	struct		s_msh
 {
 	struct	termios	term;
 	t_list			*env;
+	t_dlst			*his;
+	t_dlst			*his_ptr;
 	char			buf[1024];
 	char			*line;
 	char			is_running;
@@ -46,6 +48,6 @@ int					termcap_processor(char *line, t_tsh *tsh);
 int					history_up(t_tsh *tsh);
 int					history_down(t_tsh *tsh);
 int					erase_symbol(t_tsh *tsh);
-int					add_to_history(t_tsh tsh);
+int					add_to_history(t_tsh *tsh);
 
 #endif

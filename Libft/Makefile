@@ -46,7 +46,8 @@ SRCS	= ft_isalpha.c \
 		ft_lstlast.c \
 		ft_lstmap.c \
 		ft_lstnew.c \
-		ft_lstsize.c
+		ft_lstsize.c \
+		ft_dlst.c
 
 CFLAG	= -Wall -Werror -Wextra
 HEAD	= libft.h
