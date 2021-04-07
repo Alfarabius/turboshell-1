@@ -80,6 +80,7 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 {
 	char *key;
 	char *value;
+	char *spec_signs = "$\"\',;|<> 	";
 
 	key = (char *)malloc(1);
 	key[0] = '\0';
@@ -92,7 +93,7 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (tsh.line[prsr->l_index] == '$' || is_separ(tsh.line[prsr->l_index]) || tsh.line[prsr->l_index] == '\"')
+		if (ft_strchr(spec_signs, tsh.line[prsr->l_index]))
 			break ;
 		key = ft_realloc(key, 1, tsh.line[prsr->l_index]);
 		(prsr->l_index)++;
@@ -134,7 +135,7 @@ void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
 		}
 }
 
-void double_qoutes_case2(t_tsh tsh, t_prsr *prsr)
+void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 {
 	(prsr->l_index)++;
 	while (tsh.line[prsr->l_index] && tsh.line[prsr->l_index] != '\"')
@@ -161,7 +162,7 @@ void double_qoutes_case2(t_tsh tsh, t_prsr *prsr)
 		}
 }
 
-void common_case2(t_tsh tsh, t_prsr *prsr)
+void common_case(t_tsh tsh, t_prsr *prsr)
 {
 	prsr->l_index = skip_whitespaces(tsh.line, prsr->l_index);
 	while (tsh.line[prsr->l_index])
@@ -184,12 +185,12 @@ void common_case2(t_tsh tsh, t_prsr *prsr)
 	}
 }
 
-void distributor2(t_tsh tsh, t_prsr *prsr)
+void distributor(t_tsh tsh, t_prsr *prsr)
 {
 	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '\'' && tsh.line[prsr->l_index] != '$')
-		common_case2(tsh, prsr);
+		common_case(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '\"')
-		double_qoutes_case2(tsh, prsr);
+		double_qoutes_case(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '\'')
 		single_qoutes_case(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '$' )
@@ -209,7 +210,7 @@ void line_parser(t_tsh tsh)
 	prsr.parse_status = 1;
 	while (tsh.line[prsr.l_index] && tsh.line[prsr.l_index] != '\n')
 	{
-		distributor2(tsh, &prsr);
+		distributor(tsh, &prsr);
 		if (prsr.l_index >= ft_strlen(tsh.line) || !prsr.parse_status || tsh.line[prsr.l_index] == '\n')
 			break ;
 		prsr.l_index++;
