@@ -9,6 +9,14 @@
 # include <term.h>
 # include <curses.h>
 
+typedef	struct		s_prsr
+{
+	char			**args;
+	int				l_index;
+	int				current_arg;
+	int				parse_status;
+}					t_prsr;
+
 typedef	struct		s_dict
 {
 	char			*key;
@@ -29,24 +37,13 @@ typedef	struct		s_msh
 	int				hfd;
 }					t_tsh;
 
-typedef	struct		s_prsr
-{
-	char			**args;
-	int				l_index;
-	int				current_arg;
-	int				parse_status;
-}					t_prsr;
-
-
 void				line_parser(t_tsh tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					error_handler(char *msg);
 int					termcap_processor(char *line, t_tsh *tsh);
 int					history_up(t_tsh *tsh);
 int					history_down(t_tsh *tsh);
-int					move_right_line(t_tsh *tsh);
-int					move_left_line(t_tsh *tsh);
 int					erase_symbol(t_tsh *tsh);
-int					term_clean_up(void);
+int					add_to_history(t_tsh tsh);
 
 #endif

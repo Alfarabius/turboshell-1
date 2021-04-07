@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+static	int	ctrl_d(t_tsh *tsh)
+{
+	tsh->end_line = 1;
+	ft_strlcpy(tsh->line, "exit", 5);
+	return(0);
+}
+
 static	int	init_shell(t_tsh *tsh)
 {
 	tcgetattr(0, &tsh->term);
@@ -7,8 +14,6 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->term.c_lflag &= ~ICANON;
 	tcsetattr(0, TCSANOW, &tsh->term);
 	tgetent(0, TERM_NAME);
-	// tsh->term.c_cc[VMIN] = 2;
-	// tsh->term.c_cc[VTIME] = 0;
 	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR, 0755);
 	tsh->is_running = 1;
 	tsh->symbols = 0;
@@ -45,16 +50,14 @@ int	main(int argc, char **argv, char **env)
 			termcap_processor(tsh.buf, &tsh);
 			if (tsh.buf[tsh.symbols - 1] == '\n')
 				tsh.end_line = 1;
-			if (!ft_strcmp(tsh.buf, "\4"))
-			{
-				tsh.end_line = 1;
-				tsh.is_running = 0;
-			}
-			tmp = ft_strjoin(tsh.line, tsh.buf);
+			tmp = ft_strjoin(tsh.line, tsh.buf); // refactor
 			free(tsh.line);
 			tsh.line = tmp;
+			if (!ft_strcmp(tsh.line, "\4"))
+				ctrl_d(&tsh);
 		}
 		line_parser(tsh);
+		add_to_history(tsh.line);
 		ft_bzero(tsh.buf, 1024);
 		ft_bzero(tsh.line, ft_strlen(tsh.line));
 		tsh.end_line = 0;
