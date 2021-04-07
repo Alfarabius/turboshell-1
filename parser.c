@@ -37,6 +37,7 @@ static void add_line(char ***arr, char *line)
 	result_arr[len] = ft_strdup(line);
 	while (--len >= 0)
 		result_arr[len] = (*arr)[len];
+	free(*arr);
 	*arr = result_arr;
 }
 
@@ -109,8 +110,15 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 	}
 	if (!value)
 		value = "";
+	free(key);
+	key = (prsr->args)[prsr->current_arg];
 	(prsr->args)[prsr->current_arg] = ft_strjoin((prsr->args)[prsr->current_arg], value);
 	free(key);
+	if (tsh.line[prsr->l_index] && is_separ(tsh.line[prsr->l_index]))
+	{
+		add_line(&prsr->args, "\0");
+		(prsr->current_arg)++;
+	}
 }
 
 void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
@@ -126,13 +134,11 @@ void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
 		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
 		(prsr->l_index)++;
 	}
-	if (tsh.line[prsr->l_index] == '\'')
-		(prsr->l_index)++;
-	if (is_separ(tsh.line[prsr->l_index]))
-		{
-			add_line(&prsr->args, "\0");
-			(prsr->current_arg)++;
-		}
+	if (tsh.line[prsr->l_index] && is_separ(tsh.line[prsr->l_index + 1]))
+	{
+		add_line(&prsr->args, "\0");
+		(prsr->current_arg)++;
+	}
 }
 
 void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
@@ -153,13 +159,11 @@ void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 			(prsr->l_index)++;
 		}
 	}
-	if (tsh.line[prsr->l_index] == '\"')
-		(prsr->l_index)++;
-	if (is_separ(tsh.line[prsr->l_index]))
-		{
-			add_line(&prsr->args, "\0");
-			(prsr->current_arg)++;
-		}
+	if (tsh.line[prsr->l_index] && is_separ(tsh.line[prsr->l_index + 1]))
+	{
+		add_line(&prsr->args, "\0");
+		(prsr->current_arg)++;
+	}
 }
 
 void common_case(t_tsh tsh, t_prsr *prsr)
@@ -197,6 +201,12 @@ void distributor(t_tsh tsh, t_prsr *prsr)
 		enivroment_case(tsh, prsr);
 }
 
+void func_distributor(t_prsr *prsr)
+{
+	if (!ft_strcmp("exit", prsr->args[0]))
+		ft_exit();
+}
+
 void line_parser(t_tsh tsh)
 {
 	t_prsr prsr;
@@ -219,5 +229,6 @@ void line_parser(t_tsh tsh)
 	prsr.l_index = -1;
 	while (prsr.args[++prsr.l_index])
 		printf("args: %s\n", prsr.args[prsr.l_index]);
+	func_distributor(&prsr);
 	clear_arr(&prsr.args);
 }

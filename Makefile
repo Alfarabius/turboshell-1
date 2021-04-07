@@ -8,7 +8,8 @@ SRCS	=	minishell.c \
 			termcap_utils.c \
 			error.c \
 			utils.c \
-			env_processor.c
+			env_processor.c \
+			builtins.c
 
 all:
 	Make -C ./libft/

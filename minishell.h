@@ -8,6 +8,7 @@
 # include "./Libft/libft.h"
 # include <term.h>
 # include <curses.h>
+# include <stdlib.h>
 
 typedef	struct		s_prsr
 {
@@ -37,6 +38,7 @@ typedef	struct		s_msh
 	int				hfd;
 }					t_tsh;
 
+void				ft_exit(void);
 void				line_parser(t_tsh tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					error_handler(char *msg);

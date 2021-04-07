@@ -57,7 +57,7 @@ int	main(int argc, char **argv, char **env)
 				ctrl_d(&tsh);
 		}
 		line_parser(tsh);
-		add_to_history(tsh.line);
+		add_to_history(tsh);
 		ft_bzero(tsh.buf, 1024);
 		ft_bzero(tsh.line, ft_strlen(tsh.line));
 		tsh.end_line = 0;
