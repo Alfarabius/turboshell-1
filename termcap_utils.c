@@ -10,24 +10,28 @@ static	int	term_clean_up(void)
 int	history_up(t_tsh *tsh)
 {
 	term_clean_up();
-	if (tsh->his && tsh->his->prev)
+	if (tsh->his_ptr && tsh->his_ptr->prev)
 	{
-		tsh->his_ptr = tsh->his->prev;
-		tsh->line = ft_strdup(tsh->his_ptr->prev->content);
+		tsh->his_ptr = tsh->his_ptr->prev;
+		tsh->line = ft_strdup((char *)tsh->his_ptr->content);
+		if (!tsh->line)
+			return(error_handler("memmory doesn't allocated"));
 	}
-	ft_putstr_fd(tsh->line, 1);
+	write(1, tsh->line, ft_strlen(tsh->line) - 1);
 	return (0);
 }
 
 int	history_down(t_tsh *tsh)
 {
 	term_clean_up();
-	if (tsh->his && tsh->his->next)
+	if (tsh->his_ptr && tsh->his_ptr->next)
 	{
-		tsh->his_ptr = tsh->his->next;
-		tsh->line = ft_strdup(tsh->his_ptr->next->content);
+		tsh->his_ptr = tsh->his_ptr->next;
+		tsh->line = ft_strdup((char *)tsh->his_ptr->content);
+		if (!tsh->line)
+			return(error_handler("memmory doesn't allocated"));
 	}
-	ft_putstr_fd(tsh->line, 1);
+	write(1, tsh->line, ft_strlen(tsh->line) - 1);
 	return (0);
 }
 

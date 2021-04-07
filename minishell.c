@@ -17,11 +17,11 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->term.c_lflag &= ~ICANON;
 	tcsetattr(0, TCSANOW, &tsh->term);
 	tgetent(0, TERM_NAME);
-	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR, 0755);
+	tsh->hfd = open("tsh_history", O_CREAT | O_WRONLY | O_APPEND, 0755);
 	tsh->is_running = 1;
 	tsh->symbols = 0;
 	tsh->end_line = 0;
-	tsh->line = malloc(1);
+	tsh->line = (char *)malloc(1);
 	if (!tsh->line)
 		return(error_handler("memmory doesn't allocated"));
 	tsh->line[0] = '\0';
@@ -55,12 +55,12 @@ int	main(int argc, char **argv, char **env)
 			write(1, tsh.buf, tsh.symbols);
 			if (tsh.buf[tsh.symbols - 1] == '\n')
 				tsh.end_line = 1;
+			termcap_processor(tsh.buf, &tsh);
 			tmp = ft_strjoin(tsh.line, tsh.buf); // refactor
 			free(tsh.line);
 			tsh.line = tmp;
 			if (!ft_strcmp(tsh.line, "\4"))
 				ctrl_d(&tsh);
-			termcap_processor(tsh.buf, &tsh);
 		}
 		if (ft_strcmp(tsh.line, "\n"))
 		{
