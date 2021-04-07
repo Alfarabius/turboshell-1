@@ -92,7 +92,7 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (tsh.line[prsr->l_index] == '$' || is_separ(tsh.line[prsr->l_index]))
+		if (tsh.line[prsr->l_index] == '$' || is_separ(tsh.line[prsr->l_index]) || tsh.line[prsr->l_index] == '\"')
 			break ;
 		key = ft_realloc(key, 1, tsh.line[prsr->l_index]);
 		(prsr->l_index)++;
@@ -107,9 +107,31 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 		tsh.env = tsh.env->next;
 	}
 	if (!value)
-		value = ft_strjoin("$", key);
+		value = "";
 	(prsr->args)[prsr->current_arg] = ft_strjoin((prsr->args)[prsr->current_arg], value);
 	free(key);
+}
+
+void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
+{
+	(prsr->l_index)++;
+	while (tsh.line[prsr->l_index] && tsh.line[prsr->l_index] != '\'')
+	{
+		if (tsh.line[prsr->l_index] == '\n')
+		{
+			prsr->parse_status = 0;
+			break ;
+		}
+		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
+		(prsr->l_index)++;
+	}
+	if (tsh.line[prsr->l_index] == '\'')
+		(prsr->l_index)++;
+	if (is_separ(tsh.line[prsr->l_index]))
+		{
+			add_line(&prsr->args, "\0");
+			(prsr->current_arg)++;
+		}
 }
 
 void double_qoutes_case2(t_tsh tsh, t_prsr *prsr)
@@ -124,11 +146,19 @@ void double_qoutes_case2(t_tsh tsh, t_prsr *prsr)
 		}
 		if (tsh.line[prsr->l_index] == '$')
 			enivroment_case(tsh, prsr);
-		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
-		(prsr->l_index)++;
+		else
+		{
+			(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
+			(prsr->l_index)++;
+		}
 	}
 	if (tsh.line[prsr->l_index] == '\"')
 		(prsr->l_index)++;
+	if (is_separ(tsh.line[prsr->l_index]))
+		{
+			add_line(&prsr->args, "\0");
+			(prsr->current_arg)++;
+		}
 }
 
 void common_case2(t_tsh tsh, t_prsr *prsr)
@@ -156,12 +186,14 @@ void common_case2(t_tsh tsh, t_prsr *prsr)
 
 void distributor2(t_tsh tsh, t_prsr *prsr)
 {
+	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '\'' && tsh.line[prsr->l_index] != '$')
+		common_case2(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '\"')
 		double_qoutes_case2(tsh, prsr);
+	if (tsh.line[prsr->l_index] == '\'')
+		single_qoutes_case(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '$' )
 		enivroment_case(tsh, prsr);
-	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '$')
-		common_case2(tsh, prsr);
 }
 
 void line_parser(t_tsh tsh)
