@@ -134,7 +134,7 @@ void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
 		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
 		(prsr->l_index)++;
 	}
-	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
+	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index + 1)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
@@ -168,7 +168,7 @@ void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 		}
 		shielding = 0;
 	}
-	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
+	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index + 1)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
