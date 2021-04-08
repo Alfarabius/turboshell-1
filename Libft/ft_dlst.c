@@ -43,3 +43,15 @@ int	ft_dlstsize(t_dlst *dlst)
 	}
 	return (size);
 }
+
+t_dlst	*ft_dlstlast(t_dlst *dlst)
+{
+	t_dlst	*ptr;
+
+	if (!dlst)
+		return (dlst);
+	ptr = dlst;
+	while (ptr->next != NULL)
+		ptr = ptr->next;
+	return (ptr);
+}

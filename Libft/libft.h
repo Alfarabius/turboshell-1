@@ -69,5 +69,6 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 t_dlst				*ft_dlst_new(void *content);
 void				ft_dlstadd_back(t_dlst **dlst, t_dlst *new);
 int					ft_dlstsize(t_dlst *dlst);
+t_dlst				*ft_dlstlast(t_dlst *dlst);
 
 #endif

@@ -7,7 +7,7 @@ static	int	term_clean_up(void)
 	return (0);
 }
 
-int	history_down(t_tsh *tsh)
+int	history_up(t_tsh *tsh)
 {
 	size_t	len;
 
@@ -26,7 +26,7 @@ int	history_down(t_tsh *tsh)
 	return (1);
 }
 
-int	history_up(t_tsh *tsh)
+int	history_down(t_tsh *tsh)
 {
 	size_t	len;
 

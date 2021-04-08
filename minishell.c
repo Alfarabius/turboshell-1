@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		write(1, TSH_NAME, 27);
 		tputs(save_cursor, 1, ft_putchar);
-		tsh.his_ptr = tsh.his;
+		tsh.his_ptr = ft_dlstlast(tsh.his);
 		while (!tsh.end_line)
 		{
 			tsh.is_termcap = 0;
