@@ -12,11 +12,18 @@ static	int	ctrl_d(t_tsh *tsh)
 
 static	int	init_shell(t_tsh *tsh)
 {
+	char *term_type;
+
+	term_type = getenv("TERM");
 	tcgetattr(0, &tsh->term);
 	tsh->term.c_lflag &= ~ECHO;
 	tsh->term.c_lflag &= ~ICANON;
+	tsh->term.c_lflag &= ~ISIG;
+	tsh->term.c_cc[VMIN] = 1;
+	tsh->term.c_cc[VTIME] = 1;
 	tcsetattr(0, TCSANOW, &tsh->term);
-	tgetent(0, TERM_NAME);
+	if (!term_type || tgetent(0, TERM_NAME) != 1) // term_type -> TERM  term_type -> !term_type
+		return (error_handler("Can not find terminal or termcap base."));
 	tsh->hfd = open("tsh_history", O_CREAT | O_WRONLY | O_APPEND, 0755);
 	tsh->is_running = 1;
 	tsh->symbols = 0;
@@ -50,15 +57,21 @@ int	main(int argc, char **argv, char **env)
 		tsh.his_ptr = tsh.his;
 		while (!tsh.end_line)
 		{
+			tsh.is_termcap = 0;
 			tsh.symbols = read(0, tsh.buf, 1024);
 			tsh.buf[tsh.symbols] = '\0';
 			write(1, tsh.buf, tsh.symbols);
 			if (tsh.buf[tsh.symbols - 1] == '\n')
 				tsh.end_line = 1;
 			termcap_processor(tsh.buf, &tsh);
-			tmp = ft_strjoin(tsh.line, tsh.buf); // refactor
-			free(tsh.line);
-			tsh.line = tmp;
+			if(!tsh.is_termcap)
+			{
+				tmp = ft_strjoin(tsh.line, tsh.buf); // refactor
+				free(tsh.line);
+				tsh.line = tmp;
+			}
+			else
+				ft_bzero(tsh.buf, 1024);
 			if (!ft_strcmp(tsh.line, "\4"))
 				ctrl_d(&tsh);
 		}

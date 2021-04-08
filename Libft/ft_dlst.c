@@ -30,3 +30,16 @@ void	ft_dlstadd_back(t_dlst **dlst, t_dlst *new)
 	curr->next = last;
 	last->prev = curr;
 }
+
+int	ft_dlstsize(t_dlst *dlst)
+{
+	int		size;
+
+	size = 0;
+	while (dlst)
+	{
+		size++;
+		dlst = dlst->next;
+	}
+	return (size);
+}

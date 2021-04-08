@@ -36,6 +36,7 @@ typedef	struct		s_msh
 	char			*line;
 	char			is_running;
 	char			end_line;
+	char			is_termcap;
 	int				symbols;
 	int				hfd;
 }					t_tsh;
@@ -49,5 +50,6 @@ int					history_up(t_tsh *tsh);
 int					history_down(t_tsh *tsh);
 int					erase_symbol(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
+int					ft_putint(int c);
 
 #endif
