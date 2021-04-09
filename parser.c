@@ -114,7 +114,7 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 	key = (prsr->args)[prsr->current_arg];
 	(prsr->args)[prsr->current_arg] = ft_strjoin((prsr->args)[prsr->current_arg], value);
 	free(key);
-	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
+	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index + 1)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
@@ -159,8 +159,6 @@ void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
 			(prsr->l_index)++;
 			shielding = 1;
 		}
-		if (!shielding && tsh.line[prsr->l_index] == '$')
-			enivroment_case(tsh, prsr);
 		else
 		{
 			(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
@@ -209,20 +207,108 @@ void common_case(t_tsh tsh, t_prsr *prsr)
 
 void distributor(t_tsh tsh, t_prsr *prsr)
 {
-	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '\'' && tsh.line[prsr->l_index] != '$')
+	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '\'')
 		common_case(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '\"')
 		double_qoutes_case(tsh, prsr);
 	if (tsh.line[prsr->l_index] == '\'')
 		single_qoutes_case(tsh, prsr);
-	if (tsh.line[prsr->l_index] == '$' )
-		enivroment_case(tsh, prsr);
 }
 
 void func_distributor(t_prsr *prsr)
 {
 	if (!ft_strcmp("exit", prsr->args[0]))
 		ft_exit();
+}
+
+char *get_env(t_tsh tsh, int *i)
+{
+	char *key;
+	char *value;
+	char *spec_signs = "$\"\',;|<> 	";
+
+	key = (char *)malloc(1);
+	key[0] = '\0';
+	value = NULL;
+	(*i)++;
+	if (ft_isdigit(tsh.line[*i]))
+	{
+		(*i)++;
+		return ("");
+	}
+	while (tsh.line[*i])
+	{
+		if (tsh.line[*i] == '\n')
+			break ;
+		if (ft_strchr(spec_signs, tsh.line[*i]))
+			break ;
+		key = ft_realloc(key, 1, tsh.line[*i]);
+		(*i)++;
+	}
+	while (tsh.env && key[0])
+	{
+		if (!ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
+		{
+			value = ((t_dict *)(tsh.env->content))->value;
+			break ;
+		}
+		tsh.env = tsh.env->next;
+	}
+	if (!key[0])
+		value = "$";
+	if (!value)
+		value = "";
+	free(key);
+	return (value);
+}
+
+char *preparser(t_tsh tsh)
+{
+	int		q_flag;
+	int		i;
+	int		j;
+	char	*res;
+	char	*env;
+
+	res = (char *)malloc(1);
+	res[0] = '\0';
+	i = 0;
+	q_flag = 1;
+	while (tsh.line[i])
+	{
+		if (tsh.line[i] == '\'')
+		{
+			if (q_flag == 1)
+				q_flag = 0;
+			else if (q_flag == 0)
+				q_flag = 1;
+		}
+		if (tsh.line[i] == '\"')
+		{
+			if (q_flag == 0)
+				q_flag = 0;
+			else if (q_flag == 1)
+				q_flag = 2;
+			else if (q_flag == 2)
+				q_flag = 1;
+		}
+		if (tsh.line[i] != '$' || !q_flag)
+			res = ft_realloc(res, 1, tsh.line[i]);
+		else if (q_flag && ((i && tsh.line[i - 1] != '\\') || !i))
+		{
+			env = get_env(tsh, &i);
+			j = 0;
+			while (env[j])
+			{
+				res = ft_realloc(res, 1, env[j]);
+				j++;
+			}
+			continue ;
+		}
+		i++;
+	}
+	printf("str: %s\n", res); //Выруби - если не нужно отображать строку "str: ..." в выводе
+	return (res);
 }
 
 void line_parser(t_tsh tsh)
@@ -236,6 +322,7 @@ void line_parser(t_tsh tsh)
 	prsr.current_arg = 0;
 	prsr.l_index = 0;
 	prsr.parse_status = 1;
+	tsh.line = preparser(tsh);
 	while (tsh.line[prsr.l_index] && tsh.line[prsr.l_index] != '\n')
 	{
 		distributor(tsh, &prsr);
