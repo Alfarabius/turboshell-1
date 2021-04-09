@@ -19,8 +19,6 @@ int	add_to_history(t_tsh *tsh)
 
 int	termcap_processor(char *buf, t_tsh *tsh)
 {
-	int	i;
-
 	if (!ft_strcmp(buf, "\033[A"))
 		tsh->is_termcap = history_up(tsh);
 	else if (!ft_strcmp(buf, "\033[B"))
