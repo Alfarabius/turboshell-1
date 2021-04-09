@@ -27,13 +27,13 @@ static	int	elem_to_lst(char *env_elem, t_list **lst)
 	len = keylen(env_elem);
 	content = (t_dict *)malloc(sizeof(t_dict));
 	if (!content)
-		return (error_handler("memmory doesn't allocated"));
+		return (error_handler("memmory doesn't allocated", 1));
 	content->is_set = 1;
 	content->is_separ = is_separ_exist(env_elem);
 	content->key = ft_substr(env_elem, 0, len);
 	content->value = ft_substr(env_elem, len + 1, ft_strlen(env_elem));
 	if (!content->key || !content->value)
-		return (error_handler("memmory doesn't allocated"));
+		return (error_handler("memmory doesn't allocated", 1));
 	ft_lstadd_back(lst, ft_lstnew(content));
 	return (0);
 }

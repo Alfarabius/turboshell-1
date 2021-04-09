@@ -19,7 +19,7 @@ int	history_up(t_tsh *tsh)
 		len = ft_strlen(tsh->his_ptr->content) - 1;
 		tsh->line = (char *)malloc(len);
 		if (!tsh->line)
-			return(error_handler("memmory doesn't allocated"));
+			return(error_handler("memmory doesn't allocated", 0));
 		ft_memcpy(tsh->line, (char *)tsh->his_ptr->content, len);
 	}
 	write(1, tsh->line, len);
@@ -38,7 +38,7 @@ int	history_down(t_tsh *tsh)
 		len = ft_strlen(tsh->his_ptr->content) - 1;
 		tsh->line = (char *)malloc(len);
 		if (!tsh->line)
-			return(error_handler("memmory doesn't allocated"));
+			return(error_handler("memmory doesn't allocated", 0));
 		ft_memcpy(tsh->line, (char *)tsh->his_ptr->content, len);
 	}
 	write(1, tsh->line, len);

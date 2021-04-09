@@ -81,7 +81,7 @@ void enivroment_case(t_tsh tsh, t_prsr *prsr)
 {
 	char *key;
 	char *value;
-	char *spec_signs = "$\"\',;|<> 	";
+	char *spec_signs = "$\"\',;|<> \t";
 
 	key = (char *)malloc(1);
 	key[0] = '\0';
@@ -219,12 +219,6 @@ void distributor(t_tsh tsh, t_prsr *prsr)
 		enivroment_case(tsh, prsr);
 }
 
-void func_distributor(t_prsr *prsr)
-{
-	if (!ft_strcmp("exit", prsr->args[0]))
-		ft_exit();
-}
-
 void line_parser(t_tsh tsh)
 {
 	t_prsr prsr;
@@ -247,6 +241,6 @@ void line_parser(t_tsh tsh)
 	prsr.l_index = -1;
 	while (prsr.args[++prsr.l_index])
 		printf("args: %s\n", prsr.args[prsr.l_index]);
-	func_distributor(&prsr);
+	cmd_processor(&prsr);
 	clear_arr(&prsr.args);
 }
