@@ -9,6 +9,10 @@ SRCS	=	minishell.c \
 			error.c \
 			utils.c \
 			env_processor.c \
+			cmd_processor.c \
+			history.c \
+			get_next_line.c \
+			get_next_line_utils.c \
 			builtins.c
 
 all:

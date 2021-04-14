@@ -12,7 +12,7 @@ int	add_to_history(t_tsh *tsh)
 	tmp = ft_strdup(tsh->line);
 	new = ft_dlst_new(tmp);
 	if (err == -1 || !new || !tmp)
-		return (error_handler("error while add to history"));
+		return (error_handler("error while add to history", 0));
 	ft_dlstadd_back(&tsh->his, new);
 	return (0);
 }
@@ -25,5 +25,15 @@ int	termcap_processor(char *buf, t_tsh *tsh)
 		tsh->is_termcap = history_down(tsh);
 	else if (!ft_strcmp(buf, "\177"))
 		tsh->is_termcap = erase_symbol(tsh);
+	else if (!ft_strcmp(buf, "\033[D"))
+	{
+		tputs(cursor_right, 1, ft_putint);
+		tsh->is_termcap = 1;
+	}
+	else if (!ft_strcmp(buf, "\033[C"))
+	{
+		tputs(cursor_left, 1, ft_putint);
+		tsh->is_termcap = 1;
+	}
 	return (0);
 }

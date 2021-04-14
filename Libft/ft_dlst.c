@@ -31,7 +31,7 @@ void	ft_dlstadd_back(t_dlst **dlst, t_dlst *new)
 	last->prev = curr;
 }
 
-int	ft_dlstsize(t_dlst *dlst)
+int		ft_dlstsize(t_dlst *dlst)
 {
 	int		size;
 
@@ -54,4 +54,17 @@ t_dlst	*ft_dlstlast(t_dlst *dlst)
 	while (ptr->next != NULL)
 		ptr = ptr->next;
 	return (ptr);
+}
+
+void	ft_dlstclear(t_dlst **dlst, void (*del)(void*))
+{
+	t_dlst *acc;
+
+	while (*dlst)
+	{
+		del((*dlst)->content);
+		acc = (*dlst)->prev;
+		free(*dlst);
+		*dlst = acc;
+	}
 }

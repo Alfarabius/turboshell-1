@@ -295,3 +295,4 @@ void line_parser(t_tsh tsh)
 	func_distributor(&prsr);
 	clear_arr(&prsr.args);
 }
+
