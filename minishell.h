@@ -13,6 +13,7 @@
 typedef	struct		s_prsr
 {
 	char			**args;
+	char			*line;
 	int				l_index;
 	int				current_arg;
 	int				parse_status;
@@ -51,5 +52,6 @@ int					history_down(t_tsh *tsh);
 int					erase_symbol(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
 int					ft_putint(int c);
+void				error_checker(int cond, char *msg);
 
 #endif

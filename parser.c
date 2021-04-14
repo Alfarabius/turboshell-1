@@ -77,142 +77,98 @@ static char *ft_realloc(char *str, int num, int c)
 	return (res);
 }
 
-void enivroment_case(t_tsh tsh, t_prsr *prsr)
+void single_qoutes_case(t_prsr *prsr)
 {
-	char *key;
-	char *value;
-	char *spec_signs = "$\"\',;|<> 	";
-
-	key = (char *)malloc(1);
-	key[0] = '\0';
-	value = NULL;
 	(prsr->l_index)++;
-	while (tsh.line[prsr->l_index])
+	while (prsr->line[prsr->l_index] && prsr->line[prsr->l_index] != '\'')
 	{
-		if (tsh.line[prsr->l_index] == '\n')
+		if (prsr->line[prsr->l_index] == '\n')
 		{
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (ft_strchr(spec_signs, tsh.line[prsr->l_index]))
-			break ;
-		key = ft_realloc(key, 1, tsh.line[prsr->l_index]);
+		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, prsr->line[prsr->l_index]);
 		(prsr->l_index)++;
 	}
-	while (tsh.env)
-	{
-		if (!ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
-		{
-			value = ((t_dict *)(tsh.env->content))->value;
-			break ;
-		}
-		tsh.env = tsh.env->next;
-	}
-	if (!value)
-		value = "";
-	free(key);
-	key = (prsr->args)[prsr->current_arg];
-	(prsr->args)[prsr->current_arg] = ft_strjoin((prsr->args)[prsr->current_arg], value);
-	free(key);
-	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index + 1)] != '\n')
+	if (prsr->line[prsr->l_index] && is_whitespace(prsr->line[prsr->l_index + 1]) && prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
 	}
 }
 
-void single_qoutes_case(t_tsh tsh, t_prsr *prsr)
-{
-	(prsr->l_index)++;
-	while (tsh.line[prsr->l_index] && tsh.line[prsr->l_index] != '\'')
-	{
-		if (tsh.line[prsr->l_index] == '\n')
-		{
-			prsr->parse_status = 0;
-			break ;
-		}
-		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
-		(prsr->l_index)++;
-	}
-	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index + 1)] != '\n')
-	{
-		add_line(&prsr->args, "\0");
-		(prsr->current_arg)++;
-	}
-}
-
-void double_qoutes_case(t_tsh tsh, t_prsr *prsr)
+void double_qoutes_case(t_prsr *prsr)
 {
 	int shielding;
 
 	shielding = 0;
 	(prsr->l_index)++;
-	while (tsh.line[prsr->l_index] && tsh.line[prsr->l_index] != '\"')
+	while (prsr->line[prsr->l_index] && prsr->line[prsr->l_index] != '\"')
 	{
-		if (tsh.line[prsr->l_index] == '\n')
+		if (prsr->line[prsr->l_index] == '\n')
 		{
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (tsh.line[prsr->l_index] == '\\' && ft_strchr("$\\`\"", tsh.line[prsr->l_index + 1]))
+		if (prsr->line[prsr->l_index] == '\\' && ft_strchr("$\\`\"", prsr->line[prsr->l_index + 1]))
 		{
 			(prsr->l_index)++;
 			shielding = 1;
 		}
 		else
 		{
-			(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
+			(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, prsr->line[prsr->l_index]);
 			(prsr->l_index)++;
 		}
 		shielding = 0;
 	}
-	if (tsh.line[prsr->l_index] && is_whitespace(tsh.line[prsr->l_index + 1]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index + 1)] != '\n')
+	if (prsr->line[prsr->l_index] && is_whitespace(prsr->line[prsr->l_index + 1]) && prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
 	}
 }
 
-void common_case(t_tsh tsh, t_prsr *prsr)
+void common_case(t_prsr *prsr)
 {
 	int shielding;
 
 	shielding = 0;
-	prsr->l_index = skip_whitespaces(tsh.line, prsr->l_index);
-	while (tsh.line[prsr->l_index])
+	prsr->l_index = skip_whitespaces(prsr->line, prsr->l_index);
+	while (prsr->line[prsr->l_index])
 	{
-		if (tsh.line[prsr->l_index] == '\n')
+		if (prsr->line[prsr->l_index] == '\n')
 		{
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (is_whitespace(tsh.line[prsr->l_index]) && tsh.line[skip_whitespaces(tsh.line, prsr->l_index)] != '\n')
+		if (is_whitespace(prsr->line[prsr->l_index]) && prsr->line[skip_whitespaces(prsr->line, prsr->l_index)] != '\n')
 		{
 			add_line(&prsr->args, "\0");
 			(prsr->current_arg)++;
 			return ;
 		}
-		if (tsh.line[prsr->l_index] == '\\')
+		if (prsr->line[prsr->l_index] == '\\')
 		{
 			(prsr->l_index)++;
 			shielding = 1;
 		}
-		if (!shielding && (tsh.line[prsr->l_index] == '$' || tsh.line[prsr->l_index] == '\"' || tsh.line[prsr->l_index] == '\''))
+		if (!shielding && (prsr->line[prsr->l_index] == '$' || prsr->line[prsr->l_index] == '\"' || prsr->line[prsr->l_index] == '\''))
 			return ;
-		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, tsh.line[prsr->l_index]);
+		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, prsr->line[prsr->l_index]);
 		(prsr->l_index)++;
 		shielding = 0;
 	}
 }
 
-void distributor(t_tsh tsh, t_prsr *prsr)
+void distributor(t_prsr *prsr)
 {
-	if (tsh.line[prsr->l_index] != '\"' && tsh.line[prsr->l_index] != '\'')
-		common_case(tsh, prsr);
-	if (tsh.line[prsr->l_index] == '\"')
-		double_qoutes_case(tsh, prsr);
-	if (tsh.line[prsr->l_index] == '\'')
-		single_qoutes_case(tsh, prsr);
+	if (prsr->line[prsr->l_index] != '\"' && prsr->line[prsr->l_index] != '\'')
+		common_case(prsr);
+	if (prsr->line[prsr->l_index] == '\"')
+		double_qoutes_case(prsr);
+	if (prsr->line[prsr->l_index] == '\'')
+		single_qoutes_case(prsr);
 }
 
 void func_distributor(t_prsr *prsr)
@@ -234,6 +190,7 @@ char *get_env(t_tsh tsh, int *i)
 	if (ft_isdigit(tsh.line[*i]))
 	{
 		(*i)++;
+		free(key);
 		return ("");
 	}
 	while (tsh.line[*i])
@@ -322,10 +279,10 @@ void line_parser(t_tsh tsh)
 	prsr.current_arg = 0;
 	prsr.l_index = 0;
 	prsr.parse_status = 1;
-	tsh.line = preparser(tsh);
+	prsr.line = preparser(tsh);
 	while (tsh.line[prsr.l_index] && tsh.line[prsr.l_index] != '\n')
 	{
-		distributor(tsh, &prsr);
+		distributor(&prsr);
 		if (prsr.l_index >= ft_strlen(tsh.line) || !prsr.parse_status || tsh.line[prsr.l_index] == '\n')
 			break ;
 		prsr.l_index++;
@@ -334,6 +291,7 @@ void line_parser(t_tsh tsh)
 	prsr.l_index = -1;
 	while (prsr.args[++prsr.l_index])
 		printf("args: %s\n", prsr.args[prsr.l_index]);
+	free(prsr.line);
 	func_distributor(&prsr);
 	clear_arr(&prsr.args);
 }
