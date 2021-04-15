@@ -16,7 +16,7 @@ int	history_up(t_tsh *tsh)
 	if (tsh->his_ptr && tsh->his_ptr->prev)
 	{
 		tsh->his_ptr = tsh->his_ptr->prev;
-		len = ft_strlen(tsh->his_ptr->content) - 1;
+		len = ft_strlen(tsh->his_ptr->content);
 		free(tsh->line);
 		tsh->line = (char *)malloc(len);
 		if (!tsh->line)
@@ -36,8 +36,8 @@ int	history_down(t_tsh *tsh)
 	if (tsh->his_ptr && tsh->his_ptr->next)
 	{
 		tsh->his_ptr = tsh->his_ptr->next;
-		len = ft_strlen(tsh->his_ptr->content) - 1;
 		free(tsh->line);
+		len = ft_strlen(tsh->his_ptr->content);
 		tsh->line = (char *)malloc(len);
 		if (!tsh->line)
 			return(error_handler("memmory doesn't allocated", 0));

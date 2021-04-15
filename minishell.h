@@ -45,6 +45,7 @@ typedef	struct		s_msh
 	t_prsr			*prsr;
 	char			buf[1024];
 	char			*line;
+	char			*tmp;
 	char			is_running;
 	char			end_line;
 	char			is_termcap;
@@ -62,6 +63,8 @@ int					error_handler(char *msg, char flg);
 int					termcap_processor(char *line, t_tsh *tsh);
 int					history_up(t_tsh *tsh);
 int					history_down(t_tsh *tsh);
+int					history_editor(t_tsh *tsh);
+int					file_to_history(t_tsh *tsh);
 int					erase_symbol(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
 int					ft_putint(int c);
@@ -72,5 +75,7 @@ char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);
 char				*ft_realloc(char *str, int num, int c);
+void				*ft_memdup(const void* mem, size_t size);
+void				*ft_memjoin(void *s1, void *s2, size_t l1, size_t l2);
 
 #endif

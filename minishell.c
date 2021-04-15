@@ -30,10 +30,11 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->is_running = 1;
 	tsh->symbols = 0;
 	tsh->end_line = 0;
+	tsh->tmp = (char *)malloc(1);
 	tsh->line = (char *)malloc(1);
-	if (!tsh->line)
+	if (!tsh->line || !tsh->tmp)
 		return(error_handler("memmory doesn't allocated", 1));
-	tsh->line[0] = '\0';
+	ft_dlstadd_back(&tsh->his, ft_dlst_new(tsh->tmp));
 	return (0);
 }
 
@@ -71,6 +72,7 @@ int	main(int argc, char **argv, char **env)
 				tmp = ft_strjoin(tsh.line, tsh.buf); // refactor
 				free(tsh.line);
 				tsh.line = tmp;
+				history_editor(&tsh);
 			}
 			ft_bzero(tsh.buf, 1024);
 			if (!ft_strcmp(tsh.line, "\4"))
