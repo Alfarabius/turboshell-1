@@ -19,7 +19,7 @@ static	size_t	keylen(char *env_elem)
 	return (len);
 }
 
-static	int	elem_to_lst(char *env_elem, t_list **lst)
+int			elem_to_lst(char *env_elem, t_list **lst)
 {
 	t_dict	*content;
 	size_t	len;

@@ -57,7 +57,7 @@ int skip_whitespaces(char *str, int i)
 	return (i);
 }
 
-static char *ft_realloc(char *str, int num, int c)
+char *ft_realloc(char *str, int num, int c)
 {
 	char	*res;
 	int		len;
@@ -174,10 +174,10 @@ void distributor(t_prsr *prsr)
 		single_qoutes_case(prsr);
 }
 
-void func_distributor(t_prsr *prsr)
+void func_distributor(t_tsh tsh)
 {
-	if (!ft_strcmp("exit", prsr->args[0]))
-		ft_exit();
+	if (!ft_strcmp("exit", tsh.prsr->args[0]))
+		ft_exit(tsh);
 }
 
 char *get_env(t_tsh tsh, int *i)
@@ -187,7 +187,7 @@ char *get_env(t_tsh tsh, int *i)
 	char *spec_signs = "$\"\',;|<> 	";
 
 	key = (char *)malloc(1);
-	error_checker(key, "memmory doesn't allocated", 1);
+	error_checker(!key, "memmory doesn't allocated", 1);
 	key[0] = '\0';
 	value = NULL;
 	(*i)++;
@@ -277,6 +277,7 @@ void line_parser(t_tsh tsh)
 {
 	t_prsr prsr;
 
+	tsh.prsr = &prsr;
 	prsr.args = (char **)malloc(sizeof(char *) * 2);
 	error_checker(!prsr.args, "memmory doesn't allocated", 1);
 	prsr.args[0] = (char *)malloc(1);
@@ -299,7 +300,7 @@ void line_parser(t_tsh tsh)
 	while (prsr.args[++prsr.l_index])
 		printf("args: %s\n", prsr.args[prsr.l_index]);
 	free(prsr.line);
-	func_distributor(&prsr);
+	cmd_processor(&tsh);
 	clear_arr(&prsr.args);
 }
 
