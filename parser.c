@@ -33,8 +33,10 @@ static void add_line(char ***arr, char *line)
 	while ((*arr)[len] != NULL)
 		len++;
 	result_arr = (char **)malloc(sizeof(char *) * (len + 2));
+	error_checker(!result_arr, "memmory doesn't allocated", 1);
 	result_arr[len + 1] = NULL;
 	result_arr[len] = ft_strdup(line);
+	error_checker(!result_arr[len], "memmory doesn't allocated", 1);
 	while (--len >= 0)
 		result_arr[len] = (*arr)[len];
 	free(*arr);
@@ -64,6 +66,7 @@ static char *ft_realloc(char *str, int num, int c)
 	len =  ft_strlen(str);
 	len += num + 1;
 	res = (char *)malloc(len);
+	error_checker(!res, "memmory doesn't allocated", 1);
 	res[len - 1] = '\0';
 	i = -1;
 	while (str[++i])
@@ -184,6 +187,7 @@ char *get_env(t_tsh tsh, int *i)
 	char *spec_signs = "$\"\',;|<> 	";
 
 	key = (char *)malloc(1);
+	error_checker(key, "memmory doesn't allocated", 1);
 	key[0] = '\0';
 	value = NULL;
 	(*i)++;
@@ -228,6 +232,7 @@ char *preparser(t_tsh tsh)
 	char	*env;
 
 	res = (char *)malloc(1);
+	error_checker(!res, "memmory doesn't allocated", 1);
 	res[0] = '\0';
 	i = 0;
 	q_flag = 1;
@@ -273,7 +278,9 @@ void line_parser(t_tsh tsh)
 	t_prsr prsr;
 
 	prsr.args = (char **)malloc(sizeof(char *) * 2);
+	error_checker(!prsr.args, "memmory doesn't allocated", 1);
 	prsr.args[0] = (char *)malloc(1);
+	error_checker(!prsr.args[0], "memmory doesn't allocated", 1);
 	prsr.args[0][0] = '\0';
 	prsr.args[1] = NULL;
 	prsr.current_arg = 0;
