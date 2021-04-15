@@ -11,8 +11,12 @@ int	file_to_history(t_tsh *tsh)
 	while(get_next_line(fd, &line))
 		if (ft_strcmp(line, "\0"))
 			ft_dlstadd_back(&tsh->his, ft_dlst_new(line));
+		else
+			free(line);
 	if (ft_strcmp(line, "\0"))
 		ft_dlstadd_back(&tsh->his, ft_dlst_new(line));
+	else
+		free(line);
 	return (0);
 }
 
@@ -25,13 +29,25 @@ int	add_to_history(t_tsh *tsh)
 
 	len = ft_strlen(tsh->line) - 1;
 	err = write(tsh->hfd, tsh->line, len + 1);
-	tmp = (char *)malloc(len);
-	if (!tmp)
+	tsh->his->content = (char *)malloc(len);
+	tsh->tmp = (char *)malloc(1);
+	if (!tsh->his->content || !tsh->tmp)
 		return(error_handler("memmory doesn't allocated", 1));
-	ft_memcpy(tmp, tsh->line, len);
-	new = ft_dlst_new(tmp);
-	if (err == -1 || !new)
+	ft_memcpy(tsh->his->content, tsh->line, len);
+	if (err == -1)
 		return (error_handler("error while add to history", 0));
-	ft_dlstadd_back(&tsh->his, new);
+	ft_dlstadd_back(&tsh->his, ft_dlst_new(tsh->tmp));
+	return (0);
+}
+
+int	history_editor(t_tsh *tsh)
+{
+	size_t	len;
+
+	len = ft_strlen(tsh->line);
+	free(tsh->his_ptr->content);
+	tsh->his_ptr->content = (char *)malloc(len);
+	error_checker(!tsh->his->content, "memmory doesn't allocated", 1);
+	ft_memcpy(tsh->his_ptr->content, tsh->line, len);
 	return (0);
 }
