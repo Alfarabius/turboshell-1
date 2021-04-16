@@ -145,7 +145,7 @@ void common_case(t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (is_whitespace(prsr->line[prsr->l_index]) && prsr->line[skip_whitespaces(prsr->line, prsr->l_index)] != '\n')
+		if (is_whitespace(prsr->line[prsr->l_index]))
 		{
 			add_line(&prsr->args, "\0");
 			(prsr->current_arg)++;
@@ -180,7 +180,7 @@ void func_distributor(t_tsh tsh)
 		ft_exit(tsh);
 }
 
-char *get_env(t_tsh tsh, int *i)
+char *get_env(t_tsh *tsh, int *i)
 {
 	char *key;
 	char *value;
@@ -191,29 +191,29 @@ char *get_env(t_tsh tsh, int *i)
 	key[0] = '\0';
 	value = NULL;
 	(*i)++;
-	if (ft_isdigit(tsh.line[*i]))
+	if (ft_isdigit(tsh->line[*i]))
 	{
 		(*i)++;
 		free(key);
 		return ("");
 	}
-	while (tsh.line[*i])
+	while (tsh->line[*i])
 	{
-		if (tsh.line[*i] == '\n')
+		if (tsh->line[*i] == '\n')
 			break ;
-		if (ft_strchr(spec_signs, tsh.line[*i]))
+		if (ft_strchr(spec_signs, tsh->line[*i]))
 			break ;
-		key = ft_realloc(key, 1, tsh.line[*i]);
+		key = ft_realloc(key, 1, tsh->line[*i]);
 		(*i)++;
 	}
-	while (tsh.env && key[0])
+	while (tsh->env && key[0])
 	{
-		if (!ft_strncmp(key, ((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
+		if (!ft_strncmp(key, ((t_dict *)(tsh->env->content))->key, ft_strlen(key)))
 		{
-			value = ((t_dict *)(tsh.env->content))->value;
+			value = ((t_dict *)(tsh->env->content))->value;
 			break ;
 		}
-		tsh.env = tsh.env->next;
+		tsh->env = tsh->env->next;
 	}
 	if (!key[0])
 		value = "$";
@@ -223,7 +223,7 @@ char *get_env(t_tsh tsh, int *i)
 	return (value);
 }
 
-char *preparser(t_tsh tsh)
+char *preparser(t_tsh *tsh)
 {
 	int		q_flag;
 	int		i;
@@ -236,16 +236,16 @@ char *preparser(t_tsh tsh)
 	res[0] = '\0';
 	i = 0;
 	q_flag = 1;
-	while (tsh.line[i])
+	while (tsh->line[i])
 	{
-		if (tsh.line[i] == '\'')
+		if (tsh->line[i] == '\'')
 		{
 			if (q_flag == 1)
 				q_flag = 0;
 			else if (q_flag == 0)
 				q_flag = 1;
 		}
-		if (tsh.line[i] == '\"')
+		if (tsh->line[i] == '\"')
 		{
 			if (q_flag == 0)
 				q_flag = 0;
@@ -254,9 +254,9 @@ char *preparser(t_tsh tsh)
 			else if (q_flag == 2)
 				q_flag = 1;
 		}
-		if (tsh.line[i] != '$' || !q_flag)
-			res = ft_realloc(res, 1, tsh.line[i]);
-		else if (q_flag && ((i && tsh.line[i - 1] != '\\') || !i))
+		if (tsh->line[i] != '$' || !q_flag)
+			res = ft_realloc(res, 1, tsh->line[i]);
+		else if (q_flag && ((i && tsh->line[i - 1] != '\\') || !i))
 		{
 			env = get_env(tsh, &i);
 			j = 0;
@@ -273,11 +273,11 @@ char *preparser(t_tsh tsh)
 	return (res);
 }
 
-void line_parser(t_tsh tsh)
+void line_parser(t_tsh *tsh)
 {
 	t_prsr prsr;
 
-	tsh.prsr = &prsr;
+	tsh->prsr = &prsr;
 	prsr.args = (char **)malloc(sizeof(char *) * 2);
 	error_checker(!prsr.args, "memmory doesn't allocated", 1);
 	prsr.args[0] = (char *)malloc(1);
@@ -288,10 +288,10 @@ void line_parser(t_tsh tsh)
 	prsr.l_index = 0;
 	prsr.parse_status = 1;
 	prsr.line = preparser(tsh);
-	while (tsh.line[prsr.l_index] && tsh.line[prsr.l_index] != '\n')
+	while (tsh->line[prsr.l_index] && tsh->line[prsr.l_index] != '\n')
 	{
 		distributor(&prsr);
-		if (prsr.l_index >= ft_strlen(tsh.line) || !prsr.parse_status || tsh.line[prsr.l_index] == '\n')
+		if (prsr.l_index >= ft_strlen(tsh->line) || !prsr.parse_status || tsh->line[prsr.l_index] == '\n')
 			break ;
 		prsr.l_index++;
 	}
@@ -300,7 +300,7 @@ void line_parser(t_tsh tsh)
 	while (prsr.args[++prsr.l_index])
 		printf("args: %s\n", prsr.args[prsr.l_index]);
 	free(prsr.line);
-	cmd_processor(&tsh);
+	cmd_processor(tsh);
 	clear_arr(&prsr.args);
 }
 

@@ -28,6 +28,6 @@ void *ft_memdup(const void* mem, size_t size)
 
 	new_mem = malloc(size);
 	if(new_mem != NULL)
-		memcpy(new_mem, mem, size);
+		ft_memcpy(new_mem, mem, size);
 	return (new_mem);
 }
