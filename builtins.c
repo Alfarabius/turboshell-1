@@ -81,6 +81,8 @@ void ft_pwd(t_tsh *tsh)
 	char *path;
 
 	path = NULL;
-	getcwd(path, 999);
+	path = getcwd(NULL, 999);
 	printf("%s\n", path);
+	if (path)
+		free(path);
 }
