@@ -31,35 +31,47 @@ void ft_exit(t_tsh tsh)
 
 void ft_env(t_tsh *tsh)
 {
-	int		i;
-	int		j;
-	t_list	*temp;
-	char	**current;
+	t_list *temp;
 
-	i = 1;
-	while (tsh->prsr->args[i])
-		i++;
-	if (i >= 2)
-	{
-		if (tsh->prsr->args[1][0] == '=')
-		{
-			write(2, "env: setenv ", 12);
-			ft_putstr_fd(tsh->prsr->args[1], 2);
-			write(2, ": Invalid argument\n", 19);
-			return ;
-		}
-		elem_to_lst(tsh->prsr->args[1], &tsh->env);
-	}
 	temp = tsh->env;
-	//удалить после выполнения ласт эелемент
-	//отправить на выполнение команду из аргументов
-	//обработка кейса когда отсутсвует =
-	//посмотреть что происходит если встречаются вайтспейсы
 	while (tsh->env)
 	{
 		printf("%s=",((t_dict *)(tsh->env->content))->key);
 		printf("%s\n",((t_dict *)(tsh->env->content))->value);
+		if (!tsh->env->next)
+			break ;
 		tsh->env = tsh->env->next;
 	}
 	tsh->env = temp;
+}
+
+void ft_unset(t_tsh *tsh)
+{
+	int		i;
+	t_list	*current;
+	t_list	*prev;
+
+	i = 0;
+	while (tsh->prsr->args[++i])
+	{
+		current = tsh->env;
+		prev = tsh->env;
+		while (current)
+		{
+			if (!ft_strncmp(((t_dict *)current->content)->key, tsh->prsr->args[i], ft_strlen(((t_dict *)current->content)->key)))
+				break ;
+			prev = current;
+			current = current->next;
+		}
+		if (current)
+		{
+			prev->next = current->next;
+			if (prev == current)
+				tsh->env = current->next;
+			free(((t_dict *)current->content)->key);
+			free(((t_dict *)current->content)->value);
+			free(((t_dict *)current->content));
+			free((t_dict *)current);
+		}
+	}
 }

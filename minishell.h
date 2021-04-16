@@ -55,8 +55,10 @@ typedef	struct		s_msh
 
 void				ft_exit(t_tsh tsh);
 void				ft_env(t_tsh *tsh);
-void				line_parser(t_tsh tsh);
+void				ft_unset(t_tsh *tsh);
+void				line_parser(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
+void				del_elem(void *elem);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);

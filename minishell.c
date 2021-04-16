@@ -70,7 +70,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (ft_strcmp(tsh.line, "\n"))
 		{
-			line_parser(tsh);
+			line_parser(&tsh);
 			add_to_history(&tsh);
 		}
 		ft_bzero(tsh.line, ft_strlen(tsh.line));
