@@ -76,6 +76,6 @@ char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);
 char				*ft_realloc(char *str, int num, int c);
 void				*ft_memdup(const void* mem, size_t size);
-void				*ft_memjoin(void *s1, void *s2, size_t l1, size_t l2);
+char				*ft_memjoin_tsh(char *s1, char *s2);
 
 #endif

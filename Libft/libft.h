@@ -71,5 +71,6 @@ void				ft_dlstadd_back(t_dlst **dlst, t_dlst *new);
 int					ft_dlstsize(t_dlst *dlst);
 t_dlst				*ft_dlstlast(t_dlst *dlst);
 void				ft_dlstclear(t_dlst **dlst, void (*del)(void*));
+void				ft_freen(void *ptr);
 
 #endif
