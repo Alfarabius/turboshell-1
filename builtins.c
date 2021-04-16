@@ -75,3 +75,12 @@ void ft_unset(t_tsh *tsh)
 		}
 	}
 }
+
+void ft_pwd(t_tsh *tsh)
+{
+	char *path;
+
+	path = NULL;
+	getcwd(path, 999);
+	printf("%s\n", path);
+}
