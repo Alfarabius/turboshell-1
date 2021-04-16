@@ -62,7 +62,8 @@ int	main(int argc, char **argv, char **env)
 			if(!tsh.is_termcap)
 			{
 				tsh.line = ft_memjoin_tsh(tsh.line, tsh.buf);
-				history_editor(&tsh);
+				if (tsh.his_ptr && tsh.his_ptr->content)
+					history_editor(&tsh);
 			}
 			ft_bzero(tsh.buf, 1024);
 			if (!ft_strcmp(tsh.line, "\4"))
