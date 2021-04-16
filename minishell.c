@@ -30,11 +30,9 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->is_running = 1;
 	tsh->symbols = 0;
 	tsh->end_line = 0;
-	tsh->tmp = (char *)malloc(1);
 	tsh->line = (char *)malloc(1);
-	if (!tsh->line || !tsh->tmp)
+	if (!tsh->line)
 		return(error_handler("memmory doesn't allocated", 1));
-	ft_dlstadd_back(&tsh->his, ft_dlst_new(tsh->tmp));
 	return (0);
 }
 
@@ -47,17 +45,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	init_shell(&tsh);
 	env_to_lst(&tsh.env, env);
-	// while(tsh.env) // debug
-	// {
-	// 	printf("%s=",((t_dict *)(tsh.env->content))->key);
-	// 	printf("%s\n",((t_dict *)(tsh.env->content))->value);
-	// 	tsh.env = tsh.env->next;
-	// }
 	while (tsh.is_running)
 	{
+		tsh.his_ptr = ft_dlstlast(tsh.his);
 		write(1, TSH_NAME, 27);
 		tputs(save_cursor, 1, ft_putchar);
-		tsh.his_ptr = ft_dlstlast(tsh.his);
 		while (!tsh.end_line)
 		{
 			tsh.is_termcap = 0;
@@ -69,9 +61,7 @@ int	main(int argc, char **argv, char **env)
 			termcap_processor(tsh.buf, &tsh);
 			if(!tsh.is_termcap)
 			{
-				tmp = ft_strjoin(tsh.line, tsh.buf); // refactor
-				free(tsh.line);
-				tsh.line = tmp;
+				tsh.line = ft_memjoin_tsh(tsh.line, tsh.buf);
 				history_editor(&tsh);
 			}
 			ft_bzero(tsh.buf, 1024);
