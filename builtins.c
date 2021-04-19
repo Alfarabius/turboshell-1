@@ -4,7 +4,7 @@ void ft_exit(t_tsh tsh)
 {
 	int i;
 
-	write(1, "\nexit\n", 6);
+	write(1, "exit\n", 6);
 	i = -1;
 	while(tsh.prsr->args[1] && tsh.prsr->args[1][++i])
 	{
@@ -36,8 +36,11 @@ void ft_env(t_tsh *tsh)
 	temp = tsh->env;
 	while (tsh->env)
 	{
-		printf("%s=",((t_dict *)(tsh->env->content))->key);
-		printf("%s\n",((t_dict *)(tsh->env->content))->value);
+		if (((t_dict *)(tsh->env->content))->is_set)
+		{
+			printf("%s=",((t_dict *)(tsh->env->content))->key);
+			printf("%s\n",((t_dict *)(tsh->env->content))->value);
+		}
 		if (!tsh->env->next)
 			break ;
 		tsh->env = tsh->env->next;
@@ -68,10 +71,7 @@ void ft_unset(t_tsh *tsh)
 			prev->next = current->next;
 			if (prev == current)
 				tsh->env = current->next;
-			free(((t_dict *)current->content)->key);
-			free(((t_dict *)current->content)->value);
-			free(((t_dict *)current->content));
-			free((t_dict *)current);
+			((t_dict *)current->content)->is_set = 0;
 		}
 	}
 }

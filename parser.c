@@ -98,6 +98,8 @@ void single_qoutes_case(t_prsr *prsr)
 		add_line(&prsr->args, "\0");
 		(prsr->current_arg)++;
 	}
+	if (prsr->line[prsr->l_index] != '\'')
+		error_handler("Syntax error\n", 1);
 }
 
 void double_qoutes_case(t_prsr *prsr)
@@ -126,6 +128,8 @@ void double_qoutes_case(t_prsr *prsr)
 		}
 		shielding = 0;
 	}
+	if (prsr->line[prsr->l_index] != '\"' && !shielding)
+		error_handler("Syntax error\n", 1);
 	if (prsr->line[prsr->l_index] && is_whitespace(prsr->line[prsr->l_index + 1]) && prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n')
 	{
 		add_line(&prsr->args, "\0");
