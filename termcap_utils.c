@@ -55,7 +55,5 @@ int	erase_symbol(t_tsh *tsh)
 		tputs(delete_character, 1 ,ft_putint);
 		tsh->line[len - 1] = '\0';
 	}
-	if (!ft_strcmp(tsh->line, "\0"))
-		tputs(restore_cursor, 1, ft_putint);
 	return (1);
 }
