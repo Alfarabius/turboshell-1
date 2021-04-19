@@ -16,7 +16,7 @@ static	int	init_shell(t_tsh *tsh)
 
 	term_type = getenv("TERM");
 	tcgetattr(0, &tsh->term);
-	tsh->term.c_lflag &= ~(ECHO|ICANON|ISIG);
+	tsh->term.c_lflag &= ~(ECHO|ICANON);
 	tsh->term.c_cc[VMIN] = 1;
 	tsh->term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &tsh->term);
