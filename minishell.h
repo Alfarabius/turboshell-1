@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # define TERM_NAME "xterm-256color"
-# define TSH_NAME "\x1B[33m turboshell-1.0$ \x1B[0m"
+# define TSH_NAME "\x1B[33mturboshell-1.0$ \x1B[0m"
 # define BUFFER_SIZE 1024
 # include <unistd.h>
 # include <fcntl.h>
@@ -11,6 +11,13 @@
 # include <curses.h>
 # include <stdlib.h>
 # include <signal.h>
+
+typedef struct	s_ppe
+{
+	int			status;
+	int			count;
+	int			fd[2];
+}				t_ppe;
 
 typedef	struct	s_gnl
 {
@@ -43,6 +50,7 @@ typedef	struct		s_msh
 	t_dlst			*his;
 	t_dlst			*his_ptr;
 	t_prsr			*prsr;
+	t_ppe			*pipe;
 	char			buf[1024];
 	char			*line;
 	char			*tmp;
@@ -56,6 +64,7 @@ typedef	struct		s_msh
 void				ft_exit(t_tsh tsh);
 void				ft_env(t_tsh *tsh);
 void				ft_unset(t_tsh *tsh);
+void				ft_echo(t_tsh *tsh);
 void				line_parser(t_tsh *tsh);
 void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
@@ -82,3 +91,4 @@ void				*ft_memdup(const void* mem, size_t size);
 char				*ft_memjoin_tsh(char *s1, char *s2);
 
 #endif
+

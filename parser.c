@@ -175,12 +175,6 @@ void distributor(t_prsr *prsr)
 		single_qoutes_case(prsr);
 }
 
-void func_distributor(t_tsh tsh)
-{
-	if (!ft_strcmp("exit", tsh.prsr->args[0]))
-		ft_exit(tsh);
-}
-
 char *get_env(t_tsh tsh, int *i)
 {
 	char *key;
@@ -265,7 +259,7 @@ char *preparser(t_tsh *tsh)
 		}
 		i++;
 	}
-	printf("str: %s\n", res); //Выруби - если не нужно отображать строку "str: ..." в выводе
+//	printf("str: %s\n", res); //Выруби - если не нужно отображать строку "str: ..." в выводе
 	return (res);
 }
 
@@ -284,17 +278,17 @@ void line_parser(t_tsh *tsh)
 	prsr.l_index = 0;
 	prsr.parse_status = 1;
 	prsr.line = preparser(tsh);
-	while (tsh->line[prsr.l_index] && tsh->line[prsr.l_index] != '\n')
+	while (prsr.line[prsr.l_index] && prsr.line[prsr.l_index] != '\n')
 	{
 		distributor(&prsr);
-		if (prsr.l_index >= ft_strlen(tsh->line) || !prsr.parse_status || tsh->line[prsr.l_index] == '\n')
+		if (prsr.l_index >= ft_strlen(prsr.line) || !prsr.parse_status || prsr.line[prsr.l_index] == '\n')
 			break ;
 		prsr.l_index++;
 	}
 	prsr.parse_status = 0;
 	prsr.l_index = -1;
-	while (prsr.args[++prsr.l_index])
-		printf("args: %s\n", prsr.args[prsr.l_index]);
+	// while (prsr.args[++prsr.l_index])
+	// 	printf("args: %s\n", prsr.args[prsr.l_index]);
 	free(prsr.line);
 	cmd_processor(tsh);
 	clear_arr(&prsr.args);

@@ -86,3 +86,26 @@ void ft_pwd(t_tsh *tsh)
 	if (path)
 		free(path);
 }
+
+void ft_echo(t_tsh *tsh)
+{
+	int cur_arg;
+	int flag_n;
+
+	flag_n = 0;
+	cur_arg = 1;
+	if (tsh->prsr->args[cur_arg] && !ft_strcmp(tsh->prsr->args[cur_arg], "-n"))
+	{
+		flag_n = 1;
+		cur_arg++;
+	}
+	while (tsh->prsr->args[cur_arg])
+	{
+		ft_putstr_fd(tsh->prsr->args[cur_arg], tsh->pipe->fd[1]);
+		if (tsh->prsr->args[cur_arg + 1])
+			write(tsh->pipe->fd[1], " ", 1);
+		cur_arg++;
+	}
+	if (!flag_n)
+		write(tsh->pipe->fd[1], "\n", 1);
+}

@@ -31,6 +31,10 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->is_running = 1;
 	tsh->symbols = 0;
 	tsh->end_line = 0;
+	tsh->pipe = (t_ppe *)malloc(sizeof(t_ppe));
+	error_checker(!tsh->pipe, "memmory doesn't allocated", 1);
+	tsh->pipe->fd[0] = 0;
+	tsh->pipe->fd[1] = 1;
 	tsh->line = (char *)malloc(1);
 	if (!tsh->line)
 		return(error_handler("memmory doesn't allocated", 1));
