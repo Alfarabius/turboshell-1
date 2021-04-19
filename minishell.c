@@ -27,6 +27,7 @@ static	int	init_shell(t_tsh *tsh)
 	if (tsh->hfd == -1)
 		return(error_handler("history file doesn't open", 1));
 	file_to_history(tsh);
+	ft_dlstadd_back(&tsh->his, ft_dlst_new(ft_strdup("\0")));
 	tsh->is_running = 1;
 	tsh->symbols = 0;
 	tsh->end_line = 0;

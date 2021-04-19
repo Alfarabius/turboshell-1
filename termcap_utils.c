@@ -35,7 +35,8 @@ int	history_down(t_tsh *tsh)
 	{
 		tsh->his_ptr = tsh->his_ptr->next;
 		len = ft_strlen(tsh->his_ptr->content);
-		ft_freen(tsh->line);
+		if (tsh->line)
+			ft_freen(tsh->line);
 		tsh->line = ft_strdup((char *)tsh->his_ptr->content);
 		error_checker(!tsh->line, "memmory doesn't allocated", 0);
 	}
