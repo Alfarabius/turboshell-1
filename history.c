@@ -48,5 +48,7 @@ int	history_editor(t_tsh *tsh)
 	tsh->his_ptr->content = ft_strdup(tsh->line);
 	error_checker(!tsh->his_ptr->content, "memmory doesn't allocated", 1);
 	((char *)(tsh->his_ptr->content))[len] = '\0';
+	if (((char *)(tsh->his_ptr->content))[len - 1] == '\n')
+		((char *)(tsh->his_ptr->content))[len - 1] = '\0';
 	return (0);
 }

@@ -89,6 +89,6 @@ char				*ft_nextline(char *rem);
 char				*ft_realloc(char *str, int num, int c);
 void				*ft_memdup(const void* mem, size_t size);
 char				*ft_memjoin_tsh(char *s1, char *s2);
+int					signal_handler(t_tsh *tsh);
 
 #endif
-

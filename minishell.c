@@ -21,8 +21,8 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &tsh->term);
 	tgetent(0, TERM_NAME); // for DEBUG!!!
-	// if (!term_type || tgetent(0, term_type) != 1) // term_type -> TERM  term_type -> !term_type
-	// 	return (error_handler("Can not find terminal or termcap base."));
+	//if (!term_type || tgetent(0, term_type) != 1) // term_type -> TERM  term_type -> !term_type
+	//	return (error_handler("Can not find terminal or termcap base."));
 	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR | O_APPEND, 0755);
 	if (tsh->hfd == -1)
 		return(error_handler("history file doesn't open", 1));
@@ -53,6 +53,7 @@ int	main(int argc, char **argv, char **env)
 	while (tsh.is_running)
 	{
 		tsh.his_ptr = ft_dlstlast(tsh.his);
+		signal_handler(&tsh);
 		write(1, TSH_NAME, 27);
 		tputs(save_cursor, 1, ft_putchar);
 		while (!tsh.end_line)
