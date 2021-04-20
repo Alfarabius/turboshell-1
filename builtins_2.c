@@ -3,9 +3,9 @@
 void	ft_cd(t_tsh *tsh)
 {
 	t_list	*current;
+	t_dict	*pwd;
+	t_dict	*old_pwd;
 	char	*dir;
-	char	*pwd;
-	char	*old_pwd;
 
 	current = tsh->env;
 	old_pwd = NULL;
@@ -21,24 +21,26 @@ void	ft_cd(t_tsh *tsh)
 	while (current)
 	{
 		if (!ft_strcmp("PWD", ((t_dict *)(current->content))->key))
-			pwd = ((t_dict *)(current->content))->value;
+			pwd = (t_dict *)(current->content);
 		if (!ft_strcmp("OLDPWD", ((t_dict *)(current->content))->key))
-			old_pwd = ((t_dict *)(current->content))->value;
+			old_pwd = (t_dict *)(current->content);
+		current = current->next;
 	}
-	if (!old_pwd)
+	if (!old_pwd->value)
 	{
-		old_pwd = ft_strjoin("OLDPWD=", pwd);
-		error_checker(!old_pwd, "memmory doesn't allocated", 1);
-		elem_to_lst(old_pwd, &tsh->env);
+		old_pwd->value = ft_strjoin("OLDPWD=", pwd->value);
+		error_checker(!old_pwd->value, "memmory doesn't allocated", 1);
+		elem_to_lst(old_pwd->value, &tsh->env);
 	}
 	else
 	{
-		free(old_pwd);
-		old_pwd = ft_strdup(pwd);
-		error_checker(!old_pwd, "memmory doesn't allocated", 1);
+		ft_freen (old_pwd->value);
+		old_pwd->value = ft_strdup(pwd->value);
+		error_checker(!old_pwd->value, "memmory doesn't allocated", 1);
 	}
-	free (pwd);
-	pwd = ft_strdup(dir);
+	if (pwd->value)
+		ft_freen (pwd->value);
+	pwd->value = ft_strdup(dir);
 	error_checker(!pwd, "memmory doesn't allocated", 1);
 }
 
