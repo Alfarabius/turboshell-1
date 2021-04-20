@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void ft_exit(t_tsh tsh)
+void	ft_exit(t_tsh tsh)
 {
 	int i;
 
@@ -48,7 +48,7 @@ void ft_env(t_tsh *tsh)
 	tsh->env = temp;
 }
 
-void ft_unset(t_tsh *tsh)
+void	ft_unset(t_tsh *tsh)
 {
 	int		i;
 	t_list	*current;
@@ -76,18 +76,19 @@ void ft_unset(t_tsh *tsh)
 	}
 }
 
-void ft_pwd(t_tsh *tsh)
+void	ft_pwd(t_tsh *tsh)
 {
 	char *path;
 
 	path = NULL;
 	path = getcwd(NULL, 999);
+	error_checker(!path, "memmory doesn't allocated", 1);
 	printf("%s\n", path);
 	if (path)
 		free(path);
 }
 
-void ft_echo(t_tsh *tsh)
+void	ft_echo(t_tsh *tsh)
 {
 	int cur_arg;
 	int flag_n;

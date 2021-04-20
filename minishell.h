@@ -12,19 +12,19 @@
 # include <stdlib.h>
 # include <signal.h>
 
-typedef struct	s_ppe
+typedef struct		s_ppe
 {
-	int			status;
-	int			count;
-	int			fd[2];
-}				t_ppe;
+	int				status;
+	int				count;
+	int				fd[2];
+}					t_ppe;
 
-typedef	struct	s_gnl
+typedef	struct		s_gnl
 {
-	char		*buf;
-	ssize_t		bwr;
-	int			fd;
-}				t_gnl;
+	char			*buf;
+	ssize_t			bwr;
+	int				fd;
+}					t_gnl;
 
 typedef	struct		s_prsr
 {
@@ -65,6 +65,8 @@ void				ft_exit(t_tsh tsh);
 void				ft_env(t_tsh *tsh);
 void				ft_unset(t_tsh *tsh);
 void				ft_echo(t_tsh *tsh);
+void				ft_export(t_tsh *tsh);
+void				ft_cd(t_tsh *tsh);
 void				line_parser(t_tsh *tsh);
 void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
