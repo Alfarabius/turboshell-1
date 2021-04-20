@@ -83,12 +83,12 @@ int					ft_putint(int c);
 int					cmd_processor(t_tsh *tsh);
 int					file_to_history(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
+int					signal_handler(t_tsh *tsh);
 char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);
 char				*ft_realloc(char *str, int num, int c);
-void				*ft_memdup(const void* mem, size_t size);
 char				*ft_memjoin_tsh(char *s1, char *s2);
-int					signal_handler(t_tsh *tsh);
+void				*ft_memdup(const void* mem, size_t size);
 
 #endif

@@ -61,7 +61,7 @@ void ft_unset(t_tsh *tsh)
 		prev = tsh->env;
 		while (current)
 		{
-			if (!ft_strncmp(((t_dict *)current->content)->key, tsh->prsr->args[i], ft_strlen(((t_dict *)current->content)->key)))
+			if (!ft_strcmp(((t_dict *)current->content)->key, tsh->prsr->args[i]))
 				break ;
 			prev = current;
 			current = current->next;
