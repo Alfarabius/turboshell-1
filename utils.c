@@ -15,11 +15,6 @@ char	*ft_memjoin_tsh(char *s1, char *s2)
 	return (str);
 }
 
-void	deinit(t_tsh *tsh)
-{
-	tsh->term.c_lflag |= (ECHO|ICANON);
-	tcsetattr(0, TCSANOW, &tsh->term);
-}
 
 char	*get_env_value(t_tsh tsh, char *key)
 {
@@ -38,6 +33,24 @@ char	*get_env_value(t_tsh tsh, char *key)
 	return (value);
 }
 
+static	char	*dict_to_str(t_dict *elem)
+{
+	char	*str;
+	size_t	len;
+
+	len = ft_strlen(elem->key) + ft_strlen(elem->elem) + 2;
+	str = (char *)malloc(len);
+	error_checker(!str, "memmory doesn't allocated", 1);
+	str[0] = '\0';
+	ft_strlcat(str, elem->key, ft_strlen(elem->key));
+	if (elem->is_separ)
+	{
+		ft_strlcat(str, "=", 1);
+		ft_strlcat(str, elem->value, ft_strlen(elem->value));
+	}
+	return (str);
+}
+
 int		envlist_to_arr(t_tsh *tsh)
 {
 	t_list	*env_ptr;
@@ -50,9 +63,10 @@ int		envlist_to_arr(t_tsh *tsh)
 	tsh->env_arr = (char **)malloc(sizeof(tsh->env_arr));
 	while (env_ptr)
 	{
-		tsh->env_arr[i] = ft_strdup((char *)env_ptr->content);
+		tsh->env_arr[i] = dict_to_str(((t_dict *)(env_ptr->content)));
 		error_checker(!tsh->env_arr[i], "memmory doesn't allocated", 1);
 		env_ptr = env_ptr->next;
+		i++;
 	}
 	return (0);
 }

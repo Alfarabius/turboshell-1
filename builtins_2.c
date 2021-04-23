@@ -5,7 +5,7 @@ void	ft_cd(t_tsh *tsh)
 	t_list	*current;
 	t_dict	*pwd;
 	t_dict	*old_pwd;
-	char	*dir;
+	t_dict	*dir;
 
 	current = tsh->env;
 	old_pwd = NULL;

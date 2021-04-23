@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void	deinit(t_tsh *tsh)
+{
+	tsh->term.c_lflag |= (ECHO|ICANON);
+	tcsetattr(0, TCSANOW, &tsh->term);
+}
+
 t_dict *get_env_elem(t_tsh tsh, char *key)
 {
 	t_dict *elem;
