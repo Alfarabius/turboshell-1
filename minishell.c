@@ -28,6 +28,7 @@ static	int	init_shell(t_tsh *tsh)
 		return(error_handler("history file doesn't open", 1));
 	tsh->env = NULL;
 	tsh->his = NULL;
+	tsh->env_arr = NULL;
 	file_to_history(tsh);
 	ft_dlstadd_back(&tsh->his, ft_dlst_new(ft_strdup("\0")));
 	tsh->is_running = 1;

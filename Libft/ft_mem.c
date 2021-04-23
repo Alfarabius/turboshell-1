@@ -26,3 +26,14 @@ void	*ft_memdup(const void* mem, size_t size)
 		ft_memcpy(new_mem, mem, size);
 	return (new_mem);
 }
+
+char	**ft_freearr(char **arr)
+{
+	size_t i;
+
+	i = 0;
+	while (arr[i])
+		ft_freen(arr[i++]);
+	ft_freen(arr);
+	return (NULL);
+}

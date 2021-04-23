@@ -64,9 +64,9 @@ typedef	struct		s_msh
 	t_prsr			prsr;
 	t_ppe			*pipe;
 	t_dir			dir;
+	char			**env_arr;
 	char			buf[1024];
 	char			*line;
-	char			*tmp;
 	char			is_running;
 	char			end_line;
 	char			is_termcap;
@@ -103,6 +103,7 @@ int					signal_handler(t_tsh *tsh);
 int					path_is_exist(char *path, t_dir *dir);
 int					is_separ_exist(char *env_elem);
 size_t				keylen(char *env_elem);
+int					envlist_to_arr(t_tsh *tsh);
 char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);

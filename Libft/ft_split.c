@@ -15,7 +15,7 @@ static	size_t	ft_amochr(char const *s, char c)
 	return (amount);
 }
 
-static	char	**ft_freearr(char **arr)
+static	char	**ft_sfreearr(char **arr)
 {
 	size_t i;
 
@@ -47,7 +47,7 @@ char			**ft_split(char const *s, char c)
 			last_pos = i + 1;
 		else if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
 			if (!(arr_str[j++] = ft_substr(s, last_pos, (i - last_pos + 1))))
-				return (ft_freearr(arr_str));
+				return (ft_sfreearr(arr_str));
 		i++;
 	}
 	arr_str[j] = NULL;
