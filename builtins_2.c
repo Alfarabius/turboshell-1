@@ -9,7 +9,7 @@ void	ft_cd(t_tsh *tsh)
 
 	current = tsh->env;
 	old_pwd = NULL;
-	dir = tsh->prsr->args[1];
+	dir = tsh->prsr.args[1];
 	if (!dir)
 		while (current)
 		{

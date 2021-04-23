@@ -51,7 +51,7 @@ typedef	struct		s_msh
 	t_list			*env;
 	t_dlst			*his;
 	t_dlst			*his_ptr;
-	t_prsr			*prsr;
+	t_prsr			prsr;
 	t_ppe			*pipe;
 	char			buf[1024];
 	char			*line;

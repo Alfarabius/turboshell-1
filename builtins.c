@@ -6,18 +6,18 @@ void	ft_exit(t_tsh tsh)
 
 	write(1, "exit\n", 6);
 	i = -1;
-	while(tsh.prsr->args[1] && tsh.prsr->args[1][++i])
+	while(tsh.prsr.args[1] && tsh.prsr.args[1][++i])
 	{
-		if (!ft_isdigit(tsh.prsr->args[1][i]))
+		if (!ft_isdigit(tsh.prsr.args[1][i]))
 		{
 			write(2, "turboshell-1.0: exit: ", 23);
-			ft_putstr_fd(tsh.prsr->args[1], 2);
+			ft_putstr_fd(tsh.prsr.args[1], 2);
 			write(2, ": numeric argument required\n", 28);
 			exit (255);
 		}
 	}
 	i = 1;
-	while(tsh.prsr->args[i])
+	while(tsh.prsr.args[i])
 		i++;
 	if (i > 2)
 	{
@@ -25,7 +25,7 @@ void	ft_exit(t_tsh tsh)
 		return ;
 	}
 	if (i == 2)
-		exit(ft_atoi(tsh.prsr->args[1]));
+		exit(ft_atoi(tsh.prsr.args[1]));
 	exit(0);
 }
 
@@ -55,13 +55,13 @@ void	ft_unset(t_tsh *tsh)
 	t_list	*prev;
 
 	i = 0;
-	while (tsh->prsr->args[++i])
+	while (tsh->prsr.args[++i])
 	{
 		current = tsh->env;
 		prev = tsh->env;
 		while (current)
 		{
-			if (!ft_strcmp(((t_dict *)current->content)->key, tsh->prsr->args[i]))
+			if (!ft_strcmp(((t_dict *)current->content)->key, tsh->prsr.args[i]))
 				break ;
 			prev = current;
 			current = current->next;
@@ -95,15 +95,15 @@ void	ft_echo(t_tsh *tsh)
 
 	flag_n = 0;
 	cur_arg = 1;
-	if (tsh->prsr->args[cur_arg] && !ft_strcmp(tsh->prsr->args[cur_arg], "-n"))
+	if (tsh->prsr.args[cur_arg] && !ft_strcmp(tsh->prsr.args[cur_arg], "-n"))
 	{
 		flag_n = 1;
 		cur_arg++;
 	}
-	while (tsh->prsr->args[cur_arg])
+	while (tsh->prsr.args[cur_arg])
 	{
-		ft_putstr_fd(tsh->prsr->args[cur_arg], tsh->pipe->fd[1]);
-		if (tsh->prsr->args[cur_arg + 1])
+		ft_putstr_fd(tsh->prsr.args[cur_arg], tsh->pipe->fd[1]);
+		if (tsh->prsr.args[cur_arg + 1])
 			write(tsh->pipe->fd[1], " ", 1);
 		cur_arg++;
 	}

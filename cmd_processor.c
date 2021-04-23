@@ -43,8 +43,8 @@ static char *get_bpath(int current_path, t_tsh *tsh)
 	}
 	bpath = ft_realloc(bpath, 1, '/');
 	i = -1;
-	while (tsh->prsr->args[0] && tsh->prsr->args[0][++i])
-		bpath = ft_realloc(bpath, 1, tsh->prsr->args[0][i]);
+	while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
+		bpath = ft_realloc(bpath, 1, tsh->prsr.args[0][i]);
 	return (bpath);
 }
 
@@ -75,7 +75,7 @@ int	binary_processor(t_tsh *tsh)
 	while (current_path < len)
 	{
 		binary_path = get_bpath(current_path, tsh);
-		execve(binary_path, &tsh->prsr->args[0], &tsh->prsr->args[1]);
+		execve(binary_path, &tsh->prsr.args[0], &tsh->prsr.args[1]);
 		current_path++;
 	}
 	return(0);
@@ -83,19 +83,19 @@ int	binary_processor(t_tsh *tsh)
 
 int	cmd_processor(t_tsh *tsh)
 {
-	if (tsh->prsr->args[0] && !ft_strcmp("exit", tsh->prsr->args[0]))
+	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(*tsh);
-	else if(tsh->prsr->args[0] && !ft_strcmp("echo", tsh->prsr->args[0]))
+	else if(tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
 		ft_echo(tsh);
-	else if(tsh->prsr->args[0] && !ft_strcmp("cd", tsh->prsr->args[0]))
+	else if(tsh->prsr.args[0] && !ft_strcmp("cd", tsh->prsr.args[0]))
 		ft_cd(tsh);
-	else if(tsh->prsr->args[0] && !ft_strcmp("pwd", tsh->prsr->args[0]))
+	else if(tsh->prsr.args[0] && !ft_strcmp("pwd", tsh->prsr.args[0]))
 		ft_pwd(tsh);
-	else if(tsh->prsr->args[0] && !ft_strcmp("export", tsh->prsr->args[0]))
+	else if(tsh->prsr.args[0] && !ft_strcmp("export", tsh->prsr.args[0]))
 		ft_export(tsh);
-	else if(tsh->prsr->args[0] && !ft_strcmp("unset", tsh->prsr->args[0]))
+	else if(tsh->prsr.args[0] && !ft_strcmp("unset", tsh->prsr.args[0]))
 		ft_unset(tsh);
-	else if(tsh->prsr->args[0] && !ft_strcmp("env", tsh->prsr->args[0]))
+	else if(tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
 		ft_env(tsh);
 	else binary_processor(tsh);
 	return (0);

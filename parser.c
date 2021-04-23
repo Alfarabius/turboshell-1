@@ -248,7 +248,7 @@ char *preparser(t_tsh *tsh)
 			else if (q_flag == 2)
 				q_flag = 1;
 		}
-		if ((tsh->line[i] == '$' && tsh->line[i - 1] == '\\') || !q_flag || tsh->line[i] != '$')
+		else if ((tsh->line[i] == '$' && tsh->line[i - 1] == '\\') || !q_flag || tsh->line[i] != '$')
 			res = ft_realloc(res, 1, tsh->line[i]);
 		else if (q_flag && ((i && tsh->line[i - 1] != '\\') || !i))
 		{
@@ -263,37 +263,33 @@ char *preparser(t_tsh *tsh)
 		}
 		i++;
 	}
-//	printf("str: %s\n", res); //Выруби - если не нужно отображать строку "str: ..." в выводе
 	return (res);
 }
 
 void line_parser(t_tsh *tsh)
 {
-	t_prsr prsr;
-
-	tsh->prsr = &prsr;
-	prsr.args = (char **)malloc(sizeof(char *) * 2);
-	error_checker(!prsr.args, "memmory doesn't allocated", 1);
-	prsr.args[0] = (char *)malloc(1);
-	error_checker(!prsr.args[0], "memmory doesn't allocated", 1);
-	prsr.args[0][0] = '\0';
-	prsr.args[1] = NULL;
-	prsr.current_arg = 0;
-	prsr.l_index = 0;
-	prsr.parse_status = 1;
-	prsr.line = preparser(tsh);
-	while (prsr.line[prsr.l_index] && prsr.line[prsr.l_index] != '\n')
+	tsh->prsr.args = (char **)malloc(sizeof(char *) * 2);
+	error_checker(!tsh->prsr.args, "memmory doesn't allocated", 1);
+	tsh->prsr.args[0] = (char *)malloc(1);
+	error_checker(!tsh->prsr.args[0], "memmory doesn't allocated", 1);
+	tsh->prsr.args[0][0] = '\0';
+	tsh->prsr.args[1] = NULL;
+	tsh->prsr.current_arg = 0;
+	tsh->prsr.l_index = 0;
+	tsh->prsr.parse_status = 1;
+	tsh->prsr.line = preparser(tsh);
+	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
-		distributor(&prsr);
-		if (prsr.l_index >= ft_strlen(prsr.line) || !prsr.parse_status || prsr.line[prsr.l_index] == '\n')
+		distributor(&tsh->prsr);
+		if (tsh->prsr.l_index >= ft_strlen(tsh->prsr.line) || !tsh->prsr.parse_status || tsh->prsr.line[tsh->prsr.l_index] == '\n')
 			break ;
-		prsr.l_index++;
+		tsh->prsr.l_index++;
 	}
-	prsr.parse_status = 0;
-	prsr.l_index = -1;
+	tsh->prsr.parse_status = 0;
+	tsh->prsr.l_index = -1;
 	// while (prsr.args[++prsr.l_index])
 	// 	printf("args: %s\n", prsr.args[prsr.l_index]);
-	free(prsr.line);
+	free(tsh->prsr.line);
 	cmd_processor(tsh);
-	clear_arr(&prsr.args);
+	clear_arr(&tsh->prsr.args);
 }
