@@ -101,11 +101,14 @@ int					file_to_history(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
 int					signal_handler(t_tsh *tsh);
 int					path_is_exist(char *path, t_dir *dir);
+int					is_separ_exist(char *env_elem);
+size_t				keylen(char *env_elem);
 char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);
 char				*ft_realloc(char *str, int num, int c);
 char				*ft_memjoin_tsh(char *s1, char *s2);
+char				*get_env_value(t_tsh tsh, char *key);
 void				*ft_memdup(const void* mem, size_t size);
 
 #endif

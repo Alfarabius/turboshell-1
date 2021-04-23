@@ -1,22 +1,5 @@
 #include "minishell.h"
 
-static char *get_env(t_tsh tsh, char *key)
-{
-	char *value;
-
-	value = NULL;
-	while (tsh.env)
-	{
-		if (!ft_strcmp(key, ((t_dict *)(tsh.env->content))->key))
-		{
-			value = ((t_dict *)(tsh.env->content))->value;
-			break ;
-		}
-		tsh.env = tsh.env->next;
-	}
-	return (value);
-}
-
 static char *get_bpath(int current_path, t_tsh *tsh)
 {
 	char	*bpath;
@@ -27,7 +10,7 @@ static char *get_bpath(int current_path, t_tsh *tsh)
 	bpath = (char *)malloc(1);
 	error_checker(!bpath, "memmory doesn't allocated", 1);
 	bpath[0] = '\0';
-	paths = get_env(*tsh, "PATH");
+	paths = get_env_value(*tsh, "PATH");
 	current = 0;
 	i = 0;
 	while (current < current_path)
@@ -54,7 +37,7 @@ int	path_len(t_tsh *tsh)
 	int		i;
 	int		len;
 
-	path = get_env(*tsh, "PATH");
+	path = get_env_value(*tsh, "PATH");
 	i = -1;
 	len = 1;
 	while (path[++i])

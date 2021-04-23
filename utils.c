@@ -23,3 +23,20 @@ void	deinit(t_tsh *tsh)
 		ft_freen(tsh->dir.wpath);
 	closedir(tsh->dir.curr_dir);
 }
+
+char *get_env_value(t_tsh tsh, char *key)
+{
+	char *value;
+
+	value = NULL;
+	while (tsh.env)
+	{
+		if (!ft_strcmp(key, ((t_dict *)(tsh.env->content))->key))
+		{
+			value = ((t_dict *)(tsh.env->content))->value;
+			break ;
+		}
+		tsh.env = tsh.env->next;
+	}
+	return (value);
+}

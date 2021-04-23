@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static	int		is_separ_exist(char *env_elem)
+int				is_separ_exist(char *env_elem)
 {
 	while(*env_elem != '=')
 		env_elem++;
@@ -9,7 +9,7 @@ static	int		is_separ_exist(char *env_elem)
 	return (0);
 }
 
-static	size_t	keylen(char *env_elem)
+size_t			keylen(char *env_elem)
 {
 	int	len;
 

@@ -55,6 +55,32 @@ void	ft_cd(t_tsh *tsh)
 
 void	ft_export(t_tsh *tsh)
 {
-	t_list current;
+	int current;
+	t_list *temp;
 
+	temp = tsh->env;
+	current = 0;
+	if (!tsh->prsr.args[1])
+	{
+		while (tsh->env)
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(((t_dict *)(tsh->env->content))->key, 1);
+			if (((t_dict *)(tsh->env->content))->is_set)
+			{
+				ft_putstr_fd("=\"", 1);
+				ft_putstr_fd(((t_dict *)(tsh->env->content))->value, 1);
+				ft_putstr_fd("\"", 1);
+			}
+			write(1, "\n", 1);
+			if (!tsh->env->next)
+				break ;
+			tsh->env = tsh->env->next;
+		}
+		tsh->env = temp;
+	}
+	else
+	{
+		
+	}
 }
