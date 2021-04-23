@@ -26,6 +26,8 @@ static	int	init_shell(t_tsh *tsh)
 	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR | O_APPEND, 0755);
 	if (tsh->hfd == -1)
 		return(error_handler("history file doesn't open", 1));
+	tsh->env = NULL;
+	tsh->his = NULL;
 	file_to_history(tsh);
 	ft_dlstadd_back(&tsh->his, ft_dlst_new(ft_strdup("\0")));
 	tsh->is_running = 1;
@@ -35,6 +37,11 @@ static	int	init_shell(t_tsh *tsh)
 	error_checker(!tsh->pipe, "memmory doesn't allocated", 1);
 	tsh->pipe->fd[0] = 0;
 	tsh->pipe->fd[1] = 1;
+	tsh->dir.wpath = getcwd(NULL, 0);
+	error_checker(!tsh->dir.wpath, "getcwd return error", 1);
+	tsh->dir.curr_dir = opendir(tsh->dir.wpath);
+	error_checker(!tsh->dir.curr_dir, "opendir return error", 1);
+	tsh->dir.dir_ptr = tsh->dir.curr_dir;
 	tsh->line = (char *)malloc(1);
 	if (!tsh->line)
 		return(error_handler("memmory doesn't allocated", 1));

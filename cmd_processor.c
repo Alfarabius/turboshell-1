@@ -84,7 +84,7 @@ int	binary_processor(t_tsh *tsh)
 int	cmd_processor(t_tsh *tsh)
 {
 	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
-		ft_exit(*tsh);
+		ft_exit(tsh);
 	else if(tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
 		ft_echo(tsh);
 	else if(tsh->prsr.args[0] && !ft_strcmp("cd", tsh->prsr.args[0]))
