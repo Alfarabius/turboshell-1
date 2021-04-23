@@ -39,6 +39,7 @@ char *get_env_value(t_tsh tsh, char *key)
 		tsh.env = tsh.env->next;
 	}
 	return (value);
+}
 int		envlist_to_arr(t_tsh *tsh)
 {
 	t_list	*env_ptr;
