@@ -5,10 +5,8 @@ CFLAGS	= -Wall -Werror -Wextra
 SRCS	=	minishell.c \
 			parser.c \
 			termcap.c \
-			termcap_utils.c \
 			error.c \
 			utils.c \
-			dir.c \
 			env_processor.c \
 			cmd_processor.c \
 			history.c \
