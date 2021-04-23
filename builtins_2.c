@@ -25,8 +25,6 @@ void	ft_cd(t_tsh *tsh)
 		ft_putendl_fd(": No such file or directory", 1);
 		return ;
 	}
-	tsh->dir.wpath = getcwd(NULL, 0);
-	error_checker(!tsh->dir.wpath, "getcwd return error", 1);
 	while (current)
 	{
 		if (!ft_strcmp("PWD", ((t_dict *)(current->content))->key))

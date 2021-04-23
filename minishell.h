@@ -46,15 +46,6 @@ typedef	struct		s_dict
 	char			is_set;
 }					t_dict;
 
-typedef	struct		s_dir
-{
-	DIR				*curr_dir;
-	DIR				*dir_ptr;
-	char			*wpath;
-	struct	dirent	*entry;
-}					t_dir;
-
-
 typedef	struct		s_msh
 {
 	struct	termios	term;
@@ -63,7 +54,6 @@ typedef	struct		s_msh
 	t_dlst			*his_ptr;
 	t_prsr			prsr;
 	t_ppe			*pipe;
-	t_dir			dir;
 	char			**env_arr;
 	char			buf[1024];
 	char			*line;
@@ -89,18 +79,14 @@ int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
 int					termcap_processor(char *line, t_tsh *tsh);
-int					history_up(t_tsh *tsh);
-int					history_down(t_tsh *tsh);
 int					history_editor(t_tsh *tsh);
 int					file_to_history(t_tsh *tsh);
-int					erase_symbol(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
 int					ft_putint(int c);
 int					cmd_processor(t_tsh *tsh);
 int					file_to_history(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
 int					signal_handler(t_tsh *tsh);
-int					path_is_exist(char *path, t_dir *dir);
 int					is_separ_exist(char *env_elem);
 size_t				keylen(char *env_elem);
 int					envlist_to_arr(t_tsh *tsh);

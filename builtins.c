@@ -79,7 +79,14 @@ void	ft_unset(t_tsh *tsh)
 
 void	ft_pwd(t_tsh *tsh)
 {
-	ft_putendl_fd(tsh->dir.wpath, 1);
+	char	*wpath;
+
+	wpath = NULL;
+	wpath = getcwd(NULL, 0);
+	error_checker(!wpath, "getcwd return error", 1);
+	ft_putendl_fd(wpath, 1);
+	if (wpath)
+		free(wpath);
 }
 
 void	ft_echo(t_tsh *tsh)
