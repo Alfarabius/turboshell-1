@@ -60,6 +60,7 @@ int	binary_processor(t_tsh *tsh)
 		binary_path = get_bpath(current_path, tsh);
 		execve(binary_path, &tsh->prsr.args[0], &tsh->prsr.args[1]);
 		current_path++;
+		ft_freen((void **)&binary_path);
 	}
 	return(0);
 }
