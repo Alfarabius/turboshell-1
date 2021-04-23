@@ -2,6 +2,7 @@
 
 void	ft_freen(void *ptr)
 {
-	free(ptr);
+	if (ptr)
+		free(ptr);
 	ptr = NULL;
 }

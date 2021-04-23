@@ -56,10 +56,11 @@ void	ft_cd(t_tsh *tsh)
 void	ft_export(t_tsh *tsh)
 {
 	int current;
+	char *key;
+	char *value;
 	t_list *temp;
 
 	temp = tsh->env;
-	current = 0;
 	if (!tsh->prsr.args[1])
 	{
 		while (tsh->env)
@@ -81,6 +82,26 @@ void	ft_export(t_tsh *tsh)
 	}
 	else
 	{
-		
+		current = 1;
+		while (tsh->prsr.args[current])
+		{
+			if (is_separ_exist(tsh->prsr.args[current]))
+			{
+				key = ft_substr(tsh->prsr.args[current], 0, keylen(tsh->prsr.args[current]));
+				value = ft_substr(tsh->prsr.args[current], keylen(tsh->prsr.args[current]) + 1, ft_strlen(tsh->prsr.args[current]));
+			}
+			else
+			{
+				key = ft_substr(tsh->prsr.args[current], 0, keylen(tsh->prsr.args[current]));
+				value = NULL;
+			}
+			if (get_env_value(*tsh, key))
+				;
+			else
+				elem_to_lst(tsh->prsr.args[current], &tsh->env);
+			ft_freen(key);
+			ft_freen(value);
+			current++;
+		}
 	}
 }
