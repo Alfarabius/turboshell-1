@@ -14,3 +14,12 @@ char	*ft_memjoin_tsh(char *s1, char *s2)
 	ft_freen(s1);
 	return (str);
 }
+
+void	deinit(t_tsh *tsh)
+{
+	tsh->term.c_lflag |= (ECHO|ICANON);
+	tcsetattr(0, TCSANOW, &tsh->term);
+	if (tsh->dir.wpath)
+		ft_freen(tsh->dir.wpath);
+	closedir(tsh->dir.curr_dir);
+}

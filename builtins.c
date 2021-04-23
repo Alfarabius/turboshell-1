@@ -1,23 +1,24 @@
 #include "minishell.h"
 
-void	ft_exit(t_tsh tsh)
+void	ft_exit(t_tsh *tsh)
 {
 	int i;
 
+	deinit(tsh);
 	write(1, "exit\n", 6);
 	i = -1;
-	while(tsh.prsr->args[1] && tsh.prsr->args[1][++i])
+	while(tsh->prsr->args[1] && tsh->prsr->args[1][++i])
 	{
-		if (!ft_isdigit(tsh.prsr->args[1][i]))
+		if (!ft_isdigit(tsh->prsr->args[1][i]))
 		{
 			write(2, "turboshell-1.0: exit: ", 23);
-			ft_putstr_fd(tsh.prsr->args[1], 2);
+			ft_putstr_fd(tsh->prsr->args[1], 2);
 			write(2, ": numeric argument required\n", 28);
 			exit (255);
 		}
 	}
 	i = 1;
-	while(tsh.prsr->args[i])
+	while(tsh->prsr->args[i])
 		i++;
 	if (i > 2)
 	{
@@ -25,7 +26,7 @@ void	ft_exit(t_tsh tsh)
 		return ;
 	}
 	if (i == 2)
-		exit(ft_atoi(tsh.prsr->args[1]));
+		exit(ft_atoi(tsh->prsr->args[1]));
 	exit(0);
 }
 
@@ -78,14 +79,7 @@ void	ft_unset(t_tsh *tsh)
 
 void	ft_pwd(t_tsh *tsh)
 {
-	char *path;
-
-	path = NULL;
-	path = getcwd(NULL, 999);
-	error_checker(!path, "memmory doesn't allocated", 1);
-	printf("%s\n", path);
-	if (path)
-		free(path);
+	ft_putendl_fd(tsh->dir.wpath, 1);
 }
 
 void	ft_echo(t_tsh *tsh)

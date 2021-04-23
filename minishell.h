@@ -11,6 +11,7 @@
 # include <curses.h>
 # include <stdlib.h>
 # include <signal.h>
+# include <dirent.h>
 
 typedef struct		s_ppe
 {
@@ -43,6 +44,15 @@ typedef	struct		s_dict
 	char			is_set;
 }					t_dict;
 
+typedef	struct		s_dir
+{
+	DIR				*curr_dir;
+	DIR				*dir_ptr;
+	char			*wpath;
+	struct	dirent	*entry;
+}					t_dir;
+
+
 typedef	struct		s_msh
 {
 	struct	termios	term;
@@ -51,6 +61,7 @@ typedef	struct		s_msh
 	t_dlst			*his_ptr;
 	t_prsr			*prsr;
 	t_ppe			*pipe;
+	t_dir			dir;
 	char			buf[1024];
 	char			*line;
 	char			*tmp;
@@ -61,7 +72,7 @@ typedef	struct		s_msh
 	int				hfd;
 }					t_tsh;
 
-void				ft_exit(t_tsh tsh);
+void				ft_exit(t_tsh *tsh);
 void				ft_env(t_tsh *tsh);
 void				ft_unset(t_tsh *tsh);
 void				ft_echo(t_tsh *tsh);
@@ -71,6 +82,7 @@ void				line_parser(t_tsh *tsh);
 void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
 void				del_elem(void *elem);
+void				deinit(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
@@ -86,6 +98,7 @@ int					cmd_processor(t_tsh *tsh);
 int					file_to_history(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
 int					signal_handler(t_tsh *tsh);
+int					path_is_exist(char *path, t_dir *dir);
 char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);

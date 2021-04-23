@@ -18,6 +18,15 @@ void	ft_cd(t_tsh *tsh)
 			current = current->next;
 		}
 	current = tsh->env;
+	if (chdir(dir) == -1)
+	{
+		ft_putstr_fd("turboshell: cd:", 1);
+		ft_putstr_fd(dir, 1);
+		ft_putendl_fd(": No such file or directory", 1);
+		return ;
+	}
+	tsh->dir.wpath = getcwd(NULL, 0);
+	error_checker(!tsh->dir.wpath, "getcwd return error", 1);
 	while (current)
 	{
 		if (!ft_strcmp("PWD", ((t_dict *)(current->content))->key))
@@ -46,5 +55,6 @@ void	ft_cd(t_tsh *tsh)
 
 void	ft_export(t_tsh *tsh)
 {
+	t_list current;
 
 }
