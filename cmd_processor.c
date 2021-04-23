@@ -68,11 +68,16 @@ int	binary_processor(t_tsh *tsh)
 	char	*binary_path;
 	int		current_path;
 	int		len;
+	void	*buf;
 
 	current_path = 0;
 	len = path_len(tsh);
-	binary_path = get_bpath(0, tsh);
-	printf("%s\n", binary_path);
+	while (current_path < len)
+	{
+		binary_path = get_bpath(current_path, tsh);
+		execve(binary_path, &tsh->prsr->args[0], &tsh->prsr->args[1]);
+		current_path++;
+	}
 	return(0);
 }
 
