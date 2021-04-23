@@ -42,11 +42,11 @@ static	char	*dict_to_str(t_dict *elem)
 	str = (char *)malloc(len);
 	error_checker(!str, "memmory doesn't allocated", 1);
 	str[0] = '\0';
-	ft_strlcat(str, elem->key, ft_strlen(elem->key));
+	ft_strlcat(str, elem->key, len);
 	if (elem->is_separ)
 	{
-		ft_strlcat(str, "=", 1);
-		ft_strlcat(str, elem->value, ft_strlen(elem->value));
+		ft_strlcat(str, "=", len);
+		ft_strlcat(str, elem->value, len);
 	}
 	return (str);
 }

@@ -55,10 +55,12 @@ int	binary_processor(t_tsh *tsh)
 
 	current_path = 0;
 	len = path_len(tsh);
+	//Если закоментить вызов этой функции, то все отрабатывает как надо! Хз что тут за магия
+	// envlist_to_arr(tsh);
 	while (current_path < len)
 	{
 		binary_path = get_bpath(current_path, tsh);
-		execve(binary_path, &tsh->prsr.args[0], &tsh->prsr.args[1]);
+		execve(binary_path, &tsh->prsr.args[0], tsh->env_arr);
 		current_path++;
 		ft_freen((void **)&binary_path);
 	}
