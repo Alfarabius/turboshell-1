@@ -71,7 +71,7 @@ void				ft_dlstadd_back(t_dlst **dlst, t_dlst *new);
 int					ft_dlstsize(t_dlst *dlst);
 t_dlst				*ft_dlstlast(t_dlst *dlst);
 void				ft_dlstclear(t_dlst **dlst, void (*del)(void*));
-void				ft_freen(void *ptr);
+void				ft_freen(void **ptr);
 char				**ft_freearr(char **arr);
 void				*ft_memdup(const void* mem, size_t size);
 void				*ft_memjoin(void *s1, void *s2, size_t l1, size_t l2);

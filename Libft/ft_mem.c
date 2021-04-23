@@ -33,7 +33,8 @@ char	**ft_freearr(char **arr)
 
 	i = 0;
 	while (arr[i])
-		ft_freen(arr[i++]);
-	ft_freen(arr);
+		ft_freen((void **)&arr[i++]);
+	if (arr)
+		free(arr);
 	return (NULL);
 }

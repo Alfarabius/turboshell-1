@@ -7,6 +7,7 @@ SRCS	=	minishell.c \
 			termcap.c \
 			error.c \
 			utils.c \
+			utils2.c \
 			env_processor.c \
 			cmd_processor.c \
 			history.c \

@@ -41,65 +41,68 @@ void	ft_cd(t_tsh *tsh)
 	}
 	else
 	{
-		ft_freen (old_pwd->value);
+		ft_freen ((void **)&old_pwd->value);
 		old_pwd->value = ft_strdup(pwd->value);
 		error_checker(!old_pwd->value, "memmory doesn't allocated", 1);
 	}
 	if (pwd->value)
-		ft_freen (pwd->value);
+		ft_freen ((void **)&pwd->value);
 	pwd->value = ft_strdup(dir);
 	error_checker(!pwd, "memmory doesn't allocated", 1);
 }
 
-void	ft_export(t_tsh *tsh)
+static void			write_export(t_tsh *tsh)
 {
-	int current;
-	char *key;
-	char *value;
 	t_list *temp;
 
 	temp = tsh->env;
-	if (!tsh->prsr.args[1])
+	while (tsh->env)
 	{
-		while (tsh->env)
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(((t_dict *)(tsh->env->content))->key, 1);
+		if (((t_dict *)(tsh->env->content))->is_set)
 		{
-			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(((t_dict *)(tsh->env->content))->key, 1);
-			if (((t_dict *)(tsh->env->content))->is_set)
-			{
-				ft_putstr_fd("=\"", 1);
-				ft_putstr_fd(((t_dict *)(tsh->env->content))->value, 1);
-				ft_putstr_fd("\"", 1);
-			}
-			write(1, "\n", 1);
-			if (!tsh->env->next)
-				break ;
-			tsh->env = tsh->env->next;
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(((t_dict *)(tsh->env->content))->value, 1);
+			ft_putstr_fd("\"", 1);
 		}
-		tsh->env = temp;
+		write(1, "\n", 1);
+		if (!tsh->env->next)
+			break ;
+		tsh->env = tsh->env->next;
 	}
+	tsh->env = temp;
+}
+
+void				ft_export(t_tsh *tsh)
+{
+	int current;
+	t_dict *elem;
+	t_list *temp;
+
+	if (!tsh->prsr.args[1])
+		write_export(tsh);
 	else
 	{
-		current = 1;
-		while (tsh->prsr.args[current])
+		current = 0;
+		temp = NULL;
+		while (tsh->prsr.args[++current])
 		{
-			if (is_separ_exist(tsh->prsr.args[current]))
+			elem_to_lst(tsh->prsr.args[current], &temp);
+			elem = get_env_elem(*tsh, ((t_dict *)(temp->content))->key);
+			if (elem)
 			{
-				key = ft_substr(tsh->prsr.args[current], 0, keylen(tsh->prsr.args[current]));
-				value = ft_substr(tsh->prsr.args[current], keylen(tsh->prsr.args[current]) + 1, ft_strlen(tsh->prsr.args[current]));
+				ft_freen((void **)&elem->value);
+				elem->value = ((t_dict *)(temp->content))->value;
 			}
 			else
 			{
-				key = ft_substr(tsh->prsr.args[current], 0, keylen(tsh->prsr.args[current]));
-				value = NULL;
-			}
-			if (get_env_value(*tsh, key))
-				;
-			else
 				elem_to_lst(tsh->prsr.args[current], &tsh->env);
-			ft_freen(key);
-			ft_freen(value);
-			current++;
+				ft_freen((void **)&((t_dict *)(temp->content))->value);
+			}
 		}
+		ft_freen((void **)&((t_dict *)(temp->content))->key);
+		ft_freen((void **)&(temp->content));
+		ft_freen((void **)&temp);
 	}
 }

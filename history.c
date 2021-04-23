@@ -29,7 +29,7 @@ int	add_to_history(t_tsh *tsh)
 	len = ft_strlen(tsh->line);
 	err = write(tsh->hfd, tsh->line, len);
 	dlst = ft_dlstlast(tsh->his);
-	ft_freen(dlst->content);
+	ft_freen((void **)&dlst->content);
 	dlst->content = ft_strdup(tsh->line);
 	error_checker(!dlst->content, "memmory doesn't allocated", 1);
 	((char *)(dlst->content))[len - 1] = '\0';
@@ -45,7 +45,7 @@ int	history_editor(t_tsh *tsh)
 	char	*tmp;
 
 	len = ft_strlen(tsh->line);
-	ft_freen(tsh->his_ptr->content);
+	ft_freen((void **)&tsh->his_ptr->content);
 	tsh->his_ptr->content = ft_strdup(tsh->line);
 	error_checker(!tsh->his_ptr->content, "memmory doesn't allocated", 1);
 	((char *)(tsh->his_ptr->content))[len] = '\0';

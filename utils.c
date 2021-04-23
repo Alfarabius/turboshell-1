@@ -11,7 +11,7 @@ char	*ft_memjoin_tsh(char *s1, char *s2)
 
 	str = ft_strjoin(s1, s2);
 	error_checker(!str, "memmory doesn't allocated", 1);
-	ft_freen(s1);
+	ft_freen((void **)&s1);
 	return (str);
 }
 

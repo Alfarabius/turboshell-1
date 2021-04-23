@@ -1,8 +1,8 @@
 #include "libft.h"
 
-void	ft_freen(void *ptr)
+void	ft_freen(void **ptr)
 {
-	if (ptr)
-		free(ptr);
-	ptr = NULL;
+	if (ptr && *ptr)
+		free(*ptr);
+	*ptr = NULL;
 }
