@@ -38,7 +38,7 @@ static	char	*dict_to_str(t_dict *elem)
 	char	*str;
 	size_t	len;
 
-	len = ft_strlen(elem->key) + ft_strlen(elem->elem) + 2;
+	len = ft_strlen(elem->key) + ft_strlen(elem->value) + 2;
 	str = (char *)malloc(len);
 	error_checker(!str, "memmory doesn't allocated", 1);
 	str[0] = '\0';
