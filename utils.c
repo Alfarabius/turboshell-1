@@ -19,12 +19,9 @@ void	deinit(t_tsh *tsh)
 {
 	tsh->term.c_lflag |= (ECHO|ICANON);
 	tcsetattr(0, TCSANOW, &tsh->term);
-	if (tsh->dir.wpath)
-		ft_freen(tsh->dir.wpath);
-	closedir(tsh->dir.curr_dir);
 }
 
-char *get_env_value(t_tsh tsh, char *key)
+char	*get_env_value(t_tsh tsh, char *key)
 {
 	char *value;
 
@@ -40,6 +37,7 @@ char *get_env_value(t_tsh tsh, char *key)
 	}
 	return (value);
 }
+
 int		envlist_to_arr(t_tsh *tsh)
 {
 	t_list	*env_ptr;

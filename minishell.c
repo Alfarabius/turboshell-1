@@ -38,11 +38,6 @@ static	int	init_shell(t_tsh *tsh)
 	error_checker(!tsh->pipe, "memmory doesn't allocated", 1);
 	tsh->pipe->fd[0] = 0;
 	tsh->pipe->fd[1] = 1;
-	tsh->dir.wpath = getcwd(NULL, 0);
-	error_checker(!tsh->dir.wpath, "getcwd return error", 1);
-	tsh->dir.curr_dir = opendir(tsh->dir.wpath);
-	error_checker(!tsh->dir.curr_dir, "opendir return error", 1);
-	tsh->dir.dir_ptr = tsh->dir.curr_dir;
 	tsh->line = (char *)malloc(1);
 	if (!tsh->line)
 		return(error_handler("memmory doesn't allocated", 1));
