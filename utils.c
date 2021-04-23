@@ -23,3 +23,22 @@ void	deinit(t_tsh *tsh)
 		ft_freen(tsh->dir.wpath);
 	closedir(tsh->dir.curr_dir);
 }
+
+int		envlist_to_arr(t_tsh *tsh)
+{
+	t_list	*env_ptr;
+	int		i;
+
+	i = 0;
+	env_ptr = tsh->env;
+	if (tsh->env_arr)
+		ft_freearr(tsh->env_arr);
+	tsh->env_arr = (char **)malloc(sizeof(tsh->env_arr));
+	while (env_ptr)
+	{
+		tsh->env_arr[i] = ft_strdup((char *)env_ptr->content);
+		error_checker(!tsh->env_arr[i], "memmory doesn't allocated", 1);
+		env_ptr = env_ptr->next;
+	}
+	return (0);
+}
