@@ -15,6 +15,8 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 
+int				g_exit_status;
+
 typedef struct	s_ppe
 {
 	int			status;
@@ -98,6 +100,6 @@ char				*ft_memjoin_tsh(char *s1, char *s2);
 char				*get_env_value(t_tsh tsh, char *key);
 void				*ft_memdup(const void* mem, size_t size);
 t_dict				*get_env_elem(t_tsh tsh, char *key);
-
+char				*dict_to_str(t_dict *elem);
 
 #endif

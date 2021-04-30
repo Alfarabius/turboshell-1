@@ -1,13 +1,5 @@
 # include "minishell.h"
 
-// NULL to the pointer after free
-static void ft_free(void **bfree)
-{
-	if (*bfree)
-		free(*bfree);
-	*bfree = NULL;
-}
-
 void clear_arr(char ***arr)
 {
 	int i;
@@ -17,7 +9,7 @@ void clear_arr(char ***arr)
 	{
 		while ((*arr)[++i])
 		{
-			ft_free((void **)(&(*arr)[i]));
+			ft_freen((void **)(&(*arr)[i]));
 		}
 		free(*arr);
 		*arr = NULL;
@@ -76,7 +68,7 @@ char *ft_realloc(char *str, int num, int c)
 		res[i] = c;
 		i++;
 	}
-	ft_free((void **)&str);
+	ft_freen((void **)&str);
 	return (res);
 }
 

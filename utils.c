@@ -15,7 +15,6 @@ char	*ft_memjoin_tsh(char *s1, char *s2)
 	return (str);
 }
 
-
 char	*get_env_value(t_tsh tsh, char *key)
 {
 	char *value;
@@ -33,7 +32,7 @@ char	*get_env_value(t_tsh tsh, char *key)
 	return (value);
 }
 
-static	char	*dict_to_str(t_dict *elem)
+char	*dict_to_str(t_dict *elem)
 {
 	char	*str;
 	size_t	len;
@@ -54,19 +53,20 @@ static	char	*dict_to_str(t_dict *elem)
 int		envlist_to_arr(t_tsh *tsh)
 {
 	t_list	*env_ptr;
+	t_dict	*curr_dict;
 	int		i;
 
 	i = 0;
 	env_ptr = tsh->env;
 	if (tsh->env_arr)
 		ft_freearr(tsh->env_arr);
-	tsh->env_arr = (char **)malloc(sizeof(tsh->env_arr));
+	tsh->env_arr = (char **)malloc(sizeof(*tsh->env_arr) * ft_lstsize(tsh->env));
 	while (env_ptr)
 	{
-		tsh->env_arr[i] = dict_to_str(((t_dict *)(env_ptr->content)));
-		error_checker(!tsh->env_arr[i], "memmory doesn't allocated", 1);
+		curr_dict = ((t_dict *)(env_ptr->content));
+		tsh->env_arr[i++] = dict_to_str(curr_dict);
 		env_ptr = env_ptr->next;
-		i++;
 	}
+	tsh->env_arr[i] = NULL;
 	return (0);
 }

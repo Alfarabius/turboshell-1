@@ -75,5 +75,6 @@ void				ft_freen(void **ptr);
 char				**ft_freearr(char **arr);
 void				*ft_memdup(const void* mem, size_t size);
 void				*ft_memjoin(void *s1, void *s2, size_t l1, size_t l2);
+void				print_arr(char **arr);
 
 #endif

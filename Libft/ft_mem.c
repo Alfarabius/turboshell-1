@@ -32,9 +32,8 @@ char	**ft_freearr(char **arr)
 	size_t i;
 
 	i = 0;
-	while (arr && arr[i])
-		ft_freen((void **)arr[i++]);
-	if (arr)
-		free(arr);
+	while (arr[i])
+		ft_freen((void **)&arr[i++]);
+	free(arr);
 	return (NULL);
 }
