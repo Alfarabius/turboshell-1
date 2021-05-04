@@ -60,7 +60,7 @@ int		envlist_to_arr(t_tsh *tsh)
 	env_ptr = tsh->env;
 	if (tsh->env_arr)
 		tsh->env_arr = ft_freearr(tsh->env_arr);
-	tsh->env_arr = (char **)malloc(sizeof(char *) * ft_lstsize(tsh->env));
+	tsh->env_arr = (char **)malloc(sizeof(char *) * (ft_lstsize(tsh->env) + 1));
 	while (env_ptr)
 	{
 		curr_dict = ((t_dict *)(env_ptr->content));
