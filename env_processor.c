@@ -2,7 +2,7 @@
 
 int				is_separ_exist(char *env_elem)
 {
-	while(*env_elem != '=')
+	while(*env_elem && *env_elem != '=')
 		env_elem++;
 	if (*env_elem == '=')
 		return (1);
@@ -32,7 +32,6 @@ int				elem_to_lst(char *env_elem, t_list **lst)
 	content->is_separ = is_separ_exist(env_elem);
 	content->key = ft_substr(env_elem, 0, len);
 	content->value = ft_substr(env_elem, len + 1, ft_strlen(env_elem));
-	// printf("\nkey = %s value = %s\n", content->key, content->value);
 	if (!content->key || !content->value)
 		return (error_handler("memmory doesn't allocated", 1));
 	ft_lstadd_back(lst, ft_lstnew(content));
