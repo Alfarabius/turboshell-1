@@ -144,8 +144,11 @@ void common_case(t_prsr *prsr)
 		}
 		if (is_whitespace(prsr->line[prsr->l_index]))
 		{
-			add_line(&prsr->args, "\0");
-			(prsr->current_arg)++;
+			if (prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n')
+			{
+				add_line(&prsr->args, "\0");
+				(prsr->current_arg)++;
+			}
 			return ;
 		}
 		if (prsr->line[prsr->l_index] == '\\')
@@ -279,8 +282,8 @@ void line_parser(t_tsh *tsh)
 	}
 	tsh->prsr.parse_status = 0;
 	tsh->prsr.l_index = -1;
-	// while (prsr.args[++prsr.l_index])
-	// 	printf("args: %s\n", prsr.args[prsr.l_index]);
+	while (tsh->prsr.args[++tsh->prsr.l_index])
+		printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
 	free(tsh->prsr.line);
 	cmd_processor(tsh);
 	clear_arr(&tsh->prsr.args);
