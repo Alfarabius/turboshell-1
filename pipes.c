@@ -19,7 +19,7 @@ void go_work(t_tsh *tsh)
 		dup2(fd2[0], 0);
 		close(fd2[0]);
 		close(fd2[1]);
-		waitpid(pid, &status, NULL);
+		waitpid(pid, &status, 0);
 	}
 }
 //встречаем | отправляем сюда

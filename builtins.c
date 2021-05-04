@@ -103,11 +103,11 @@ void	ft_echo(t_tsh *tsh)
 	}
 	while (tsh->prsr.args[cur_arg])
 	{
-		ft_putstr_fd(tsh->prsr.args[cur_arg], tsh->pipe->fd[1]);
+		ft_putstr_fd(tsh->prsr.args[cur_arg], tsh->prsr.pipe.fd[1]);
 		if (tsh->prsr.args[cur_arg + 1])
-			write(tsh->pipe->fd[1], " ", 1);
+			write(tsh->prsr.pipe.fd[1], " ", 1);
 		cur_arg++;
 	}
 	if (!flag_n)
-		write(tsh->pipe->fd[1], "\n", 1);
+		write(tsh->prsr.pipe.fd[1], "\n", 1);
 }

@@ -68,6 +68,7 @@ int	binary_processor(t_tsh *tsh)
 	while (current_path < len)
 	{
 		binary_path = get_bpath(current_path++, tsh);
+		//перед вызовом проверить на существование и если тру форкануть
 		execve(binary_path, tsh->prsr.args, tsh->env_arr);
 		ft_freen((void **)&binary_path);
 	}
