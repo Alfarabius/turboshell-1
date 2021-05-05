@@ -1,6 +1,7 @@
 NAME	= minishell
 RM		= rm -f
 CFLAGS	= -Wall -Werror -Wextra
+SRCS_PATH	= ./
 
 SRCS	=	minishell.c \
 			parser.c \
@@ -33,3 +34,7 @@ fclean: clean
 	@ $(RM) $(NAME)
 	@ make fclean -C ./libft/
 	@ $(RM) tsh_history
+
+norm:
+	@ norminette $(addprefix $(SRCS_PATH)/, $(SRCS)) $(HEAD)
+	@ make norm -C $(LIBFT_PATH)
