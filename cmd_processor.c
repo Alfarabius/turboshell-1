@@ -24,10 +24,6 @@ static char *get_bpath(int current_path, t_tsh *tsh)
 		bpath = ft_realloc(bpath, 1, paths[i]);
 		i++;
 	}
-	bpath = ft_realloc(bpath, 1, '/');
-	i = -1;
-	while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
-		bpath = ft_realloc(bpath, 1, tsh->prsr.args[0][i]);
 	return (bpath);
 }
 
@@ -46,13 +42,24 @@ int	path_len(t_tsh *tsh)
 	return (len);
 }
 
-void	print_dict(t_list *lstd)
+static	int	binary_in_dir(char *path, char* bin)
 {
-	while(lstd)
+	DIR				*dir;
+	struct	dirent	*entry;
+
+	dir = opendir(path);
+	entry = readdir(dir);
+	while(entry)
 	{
-	printf("\nkey = %s value = %s\n", ((t_dict *)(lstd->content))->key, ((t_dict *)(lstd->content))->value);
-	lstd = lstd->next;
+		if (!ft_strcmp(bin, entry->d_name))
+		{
+			closedir(dir);
+			return(1);
+		}
+		entry = readdir(dir);
 	}
+	closedir(dir);
+	return(0);
 }
 
 int	binary_processor(t_tsh *tsh)
@@ -60,6 +67,8 @@ int	binary_processor(t_tsh *tsh)
 	char	*binary_path;
 	int		current_path;
 	int		len;
+	int		i;
+	pid_t	pid;
 	void	*buf;
 
 	current_path = 0;
@@ -68,9 +77,22 @@ int	binary_processor(t_tsh *tsh)
 	while (current_path < len)
 	{
 		binary_path = get_bpath(current_path++, tsh);
-		//перед вызовом проверить на существование и если тру форкануть
-		execve(binary_path, tsh->prsr.args, tsh->env_arr);
-		ft_freen((void **)&binary_path);
+		if (binary_in_dir(binary_path, tsh->prsr.args[0]))
+		{
+			binary_path = ft_realloc(binary_path, 1, '/');
+			i = -1;
+			while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
+			binary_path = ft_realloc(binary_path, 1, tsh->prsr.args[0][i]);
+			pid = fork();
+			if (!pid)
+			{
+				execve(binary_path, tsh->prsr.args, tsh->env_arr);
+				ft_freen((void **)&binary_path);
+				exit(1);
+			}
+			else
+				waitpid(pid, &g_exit_status, 0);
+		}
 	}
 	return(0);
 }
