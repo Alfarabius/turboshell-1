@@ -38,6 +38,7 @@ typedef	struct		s_prsr
 	int				l_index;
 	int				current_arg;
 	int				parse_status;
+	t_ppe			pipe;
 }					t_prsr;
 
 typedef	struct		s_dict
@@ -55,7 +56,6 @@ typedef	struct		s_msh
 	t_dlst			*his;
 	t_dlst			*his_ptr;
 	t_prsr			prsr;
-	t_ppe			*pipe;
 	char			**env_arr;
 	char			buf[1024];
 	char			*line;
@@ -77,6 +77,7 @@ void				del_elem(void *elem);
 void				deinit(t_tsh *tsh);
 void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
+void				go_work(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);

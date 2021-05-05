@@ -8,9 +8,7 @@ void clear_arr(char ***arr)
 	if (*arr)
 	{
 		while ((*arr)[++i])
-		{
 			ft_freen((void **)(&(*arr)[i]));
-		}
 		free(*arr);
 		*arr = NULL;
 	}
@@ -142,6 +140,12 @@ void common_case(t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
+		if (prsr->line[prsr->l_index] == '|')
+		{
+			prsr->pipe.count++;
+			prsr->parse_status = 2;
+			break ;
+		}
 		if (is_whitespace(prsr->line[prsr->l_index]))
 		{
 			if (prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n')
@@ -243,7 +247,7 @@ char *preparser(t_tsh *tsh)
 			else if (q_flag == 2)
 				q_flag = 1;
 		}
-		else if ((tsh->line[i] == '$' && tsh->line[i - 1] == '\\') || !q_flag || tsh->line[i] != '$')
+		if ((tsh->line[i] == '$' && tsh->line[i - 1] == '\\') || !q_flag || tsh->line[i] != '$')
 			res = ft_realloc(res, 1, tsh->line[i]);
 		else if (q_flag && ((i && tsh->line[i - 1] != '\\') || !i))
 		{
@@ -261,7 +265,7 @@ char *preparser(t_tsh *tsh)
 	return (res);
 }
 
-void line_parser(t_tsh *tsh)
+static void		init_parser(t_tsh *tsh)
 {
 	tsh->prsr.args = (char **)malloc(sizeof(char *) * 2);
 	error_checker(!tsh->prsr.args, "memmory doesn't allocated", 1);
@@ -270,14 +274,29 @@ void line_parser(t_tsh *tsh)
 	tsh->prsr.args[0][0] = '\0';
 	tsh->prsr.args[1] = NULL;
 	tsh->prsr.current_arg = 0;
-	tsh->prsr.l_index = 0;
 	tsh->prsr.parse_status = 1;
+}
+
+void			line_parser(t_tsh *tsh)
+{
+	tsh->prsr.l_index = 0;
+	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
+	printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
 		distributor(&tsh->prsr);
 		if (tsh->prsr.l_index >= ft_strlen(tsh->prsr.line) || !tsh->prsr.parse_status || tsh->prsr.line[tsh->prsr.l_index] == '\n')
 			break ;
+		if (tsh->prsr.parse_status == 2)
+		{
+			tsh->prsr.parse_status = 1;
+			printf("eee it's pipe!\n");
+			//вызов функции обработки пайпов будет здесь
+			//go_work(tsh);
+			clear_arr(&tsh->prsr.args);
+			init_parser(tsh);
+		}
 		tsh->prsr.l_index++;
 	}
 	tsh->prsr.parse_status = 0;

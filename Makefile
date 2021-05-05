@@ -16,7 +16,8 @@ SRCS	=	minishell.c \
 			get_next_line_utils.c \
 			builtins.c \
 			builtins_2.c \
-			signals.c
+			signals.c \
+			pipes.c
 
 all:
 	Make -C ./libft/
