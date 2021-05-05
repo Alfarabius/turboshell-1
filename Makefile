@@ -1,7 +1,8 @@
-NAME	= minishell
-RM		= rm -f
-CFLAGS	= -Wall -Werror -Wextra
+NAME		= minishell
+RM			= rm -f
+CFLAGS		= -Wall -Werror -Wextra
 SRCS_PATH	= ./
+HEAD		= minishell.h
 
 SRCS	=	minishell.c \
 			parser.c \
