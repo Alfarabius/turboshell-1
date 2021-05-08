@@ -87,12 +87,12 @@ int	binary_processor(t_tsh *tsh)
 			if (!pid)
 			{
 				execve(binary_path, tsh->prsr.args, tsh->env_arr);
-				ft_freen((void **)&binary_path);
 				exit(1);
 			}
 			else
 				waitpid(pid, &g_exit_status, 0);
 		}
+		ft_freen((void **)&binary_path);
 	}
 	return(0);
 }

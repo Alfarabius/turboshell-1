@@ -19,9 +19,9 @@ int				g_exit_status;
 
 typedef struct	s_ppe
 {
-	int			status;
+	int			current;
 	int			count;
-	int			fd[2];
+	int			fd[1024][2];
 }				t_ppe;
 
 typedef	struct	s_gnl
@@ -64,6 +64,7 @@ typedef	struct		s_msh
 	char			is_termcap;
 	int				symbols;
 	int				hfd;
+	int				original_fd[2];
 }					t_tsh;
 
 void				ft_exit(t_tsh *tsh);
@@ -77,7 +78,8 @@ void				del_elem(void *elem);
 void				deinit(t_tsh *tsh);
 void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
-void				go_work(t_tsh *tsh);
+void				pipe_processor(t_tsh *tsh);
+void				wait_pipes(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);

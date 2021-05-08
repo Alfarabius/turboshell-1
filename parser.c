@@ -148,7 +148,7 @@ void common_case(t_prsr *prsr)
 		}
 		if (is_whitespace(prsr->line[prsr->l_index]))
 		{
-			if (prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n')
+			if (prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n' && prsr->line[skip_whitespaces(prsr->line, prsr->l_index)] != '|')
 			{
 				add_line(&prsr->args, "\0");
 				(prsr->current_arg)++;
@@ -280,9 +280,10 @@ static void		init_parser(t_tsh *tsh)
 void			line_parser(t_tsh *tsh)
 {
 	tsh->prsr.l_index = 0;
+	int i;
 	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
-	printf("prpsr: %s\n", tsh->prsr.line);
+	// printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
 		distributor(&tsh->prsr);
@@ -291,9 +292,11 @@ void			line_parser(t_tsh *tsh)
 		if (tsh->prsr.parse_status == 2)
 		{
 			tsh->prsr.parse_status = 1;
-			printf("eee it's pipe!\n");
 			//вызов функции обработки пайпов будет здесь
 			//go_work(tsh);
+			i = -1;
+
+			pipe_processor(tsh);
 			clear_arr(&tsh->prsr.args);
 			init_parser(tsh);
 		}
@@ -301,9 +304,12 @@ void			line_parser(t_tsh *tsh)
 	}
 	tsh->prsr.parse_status = 0;
 	tsh->prsr.l_index = -1;
-	while (tsh->prsr.args[++tsh->prsr.l_index])
-		printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
+	// while (tsh->prsr.args[++tsh->prsr.l_index])
+	// 	printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
 	free(tsh->prsr.line);
-	cmd_processor(tsh);
+	if (!tsh->prsr.pipe.count)
+		cmd_processor(tsh);
+	else
+		wait_pipes(tsh);
 	clear_arr(&tsh->prsr.args);
 }
