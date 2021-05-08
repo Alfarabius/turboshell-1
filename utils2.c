@@ -2,7 +2,7 @@
 
 void	deinit(t_tsh *tsh)
 {
-	tsh->term.c_lflag |= (ECHO|ICANON);
+	tsh->term.c_lflag |= (ECHO|ICANON|ISIG);
 	tcsetattr(0, TCSANOW, &tsh->term);
 }
 

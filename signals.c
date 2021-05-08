@@ -2,19 +2,26 @@
 
 static	void	interrupt(int segnum)
 {
-	write(1, "CTRL-C", 6);
-	signal(SIGINT, interrupt);
+	g_exit_status = 130;
 }
 
 static	void	quit(int segnum)
 {
-	write(1, "CTRL-\\", 6);
-	signal(SIGQUIT, quit);
+	g_exit_status = 131;
+}
+
+void	swich_signals(t_tsh *tsh)
+{
+	if (tsh->term.c_lflag & ISIG)
+		tsh->term.c_lflag &= ~ISIG;
+	else
+		tsh->term.c_lflag |= ISIG;
+	tcsetattr(0, TCSANOW, &tsh->term);
 }
 
 int	signal_handler(t_tsh *tsh)
 {
-	signal(SIGINT, interrupt); // ctrl-c
-	signal(SIGQUIT, quit);	 /* ctrl-\ */
+	signal(SIGINT, interrupt);
+	signal(SIGQUIT, quit);
 	return (0);
 }

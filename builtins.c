@@ -110,4 +110,5 @@ void	ft_echo(t_tsh *tsh)
 	}
 	if (!flag_n)
 		write(tsh->prsr.pipe.fd[1], "\n", 1);
+	g_exit_status = 0;
 }

@@ -10,13 +10,30 @@ static	int	ctrl_d(t_tsh *tsh)
 	return(0);
 }
 
+static	int	ctrl_c(t_tsh *tsh)
+{
+	ft_bzero(tsh->line, ft_strlen(tsh->line));
+	ft_bzero(tsh->buf, 1024);
+	g_exit_status = 1;
+	write(1, "\n", 1);
+	return(new_prompt(tsh));
+}
+
+int		new_prompt(t_tsh *tsh)
+{
+	tsh->his_ptr = ft_dlstlast(tsh->his);
+	write(1, TSH_NAME, 27);
+	tputs(save_cursor, 1, ft_putchar);
+	return (0);
+}
+
 static	int	init_shell(t_tsh *tsh)
 {
-	char *term_type;
+	char	*term_type;
 
 	term_type = getenv("TERM");
 	tcgetattr(0, &tsh->term);
-	tsh->term.c_lflag &= ~(ECHO|ICANON);
+	tsh->term.c_lflag &= ~(ECHO|ICANON|ISIG);
 	tsh->term.c_cc[VMIN] = 1;
 	tsh->term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &tsh->term);
@@ -54,10 +71,7 @@ int	main(int argc, char **argv, char **env)
 	env_to_lst(&tsh.env, env);
 	while (tsh.is_running)
 	{
-		tsh.his_ptr = ft_dlstlast(tsh.his);
-		signal_handler(&tsh);
-		write(1, TSH_NAME, 27);
-		tputs(save_cursor, 1, ft_putchar);
+		new_prompt(&tsh);
 		while (!tsh.end_line)
 		{
 			tsh.is_termcap = 0;
@@ -66,6 +80,8 @@ int	main(int argc, char **argv, char **env)
 			write(1, tsh.buf, tsh.symbols);
 			if (tsh.buf[tsh.symbols - 1] == '\n')
 				tsh.end_line = 1;
+			if (tsh.buf[tsh.symbols - 1] == '\3')
+				ctrl_c(&tsh);
 			termcap_processor(tsh.buf, &tsh);
 			if(!tsh.is_termcap)
 			{
@@ -79,7 +95,10 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (ft_strcmp(tsh.line, "\n"))
 		{
+			swich_signals(&tsh);
+			signal_handler(&tsh);
 			line_parser(&tsh);
+			swich_signals(&tsh);
 			add_to_history(&tsh);
 		}
 		ft_bzero(tsh.line, ft_strlen(tsh.line));

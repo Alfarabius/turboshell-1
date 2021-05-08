@@ -17,7 +17,7 @@
 
 int				g_exit_status;
 
-typedef struct	s_ppe
+typedef	struct	s_ppe
 {
 	int			status;
 	int			count;
@@ -78,6 +78,7 @@ void				deinit(t_tsh *tsh);
 void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
 void				go_work(t_tsh *tsh);
+void				swich_signals(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
@@ -87,12 +88,12 @@ int					file_to_history(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
 int					ft_putint(int c);
 int					cmd_processor(t_tsh *tsh);
-int					file_to_history(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
 int					signal_handler(t_tsh *tsh);
 int					is_separ_exist(char *env_elem);
-size_t				keylen(char *env_elem);
+int					new_prompt(t_tsh *tsh);
 int					envlist_to_arr(t_tsh *tsh);
+size_t				keylen(char *env_elem);
 char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);
