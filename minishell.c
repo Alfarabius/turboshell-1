@@ -33,7 +33,7 @@ static	int	init_shell(t_tsh *tsh)
 
 	term_type = getenv("TERM");
 	tcgetattr(0, &tsh->term);
-	tsh->term.c_lflag &= ~(ECHO|ICANON|ISIG);
+	// tsh->term.c_lflag &= ~(ECHO|ICANON|ISIG);
 	tsh->term.c_cc[VMIN] = 1;
 	tsh->term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &tsh->term);
@@ -76,6 +76,8 @@ int	main(int argc, char **argv, char **env)
 		new_prompt(&tsh);
 		while (!tsh.end_line)
 		{
+			tsh.term.c_lflag &= ~(ECHO|ICANON|ISIG);
+			tcsetattr(0, TCSANOW, &tsh.term);
 			tsh.is_termcap = 0;
 			tsh.symbols = read(0, tsh.buf, 1024);
 			tsh.buf[tsh.symbols] = '\0';
@@ -85,6 +87,8 @@ int	main(int argc, char **argv, char **env)
 			if (tsh.buf[tsh.symbols - 1] == '\3')
 				ctrl_c(&tsh);
 			termcap_processor(tsh.buf, &tsh);
+			tsh.term.c_lflag |= (ECHO|ICANON|ISIG);
+			tcsetattr(0, TCSANOW, &tsh.term);
 			if(!tsh.is_termcap)
 			{
 				tsh.line = ft_memjoin_tsh(tsh.line, tsh.buf);
@@ -105,6 +109,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		ft_bzero(tsh.line, ft_strlen(tsh.line));
 		tsh.end_line = 0;
+
 	}
 	return (0);
 }

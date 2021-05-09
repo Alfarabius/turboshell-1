@@ -83,14 +83,20 @@ int	binary_processor(t_tsh *tsh)
 			i = -1;
 			while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
 			binary_path = ft_realloc(binary_path, 1, tsh->prsr.args[0][i]);
-			// pid = fork();
-			// if (!pid)
-			// {
+			if (!tsh->prsr.pipe.count)
+			{
+				pid = fork();
+				if (!pid)
+				{
+					execve(binary_path, tsh->prsr.args, tsh->env_arr);
+					exit(1);
+				}
+				else
+					waitpid(pid, &g_exit_status, 0);
+			}
+			else
 				execve(binary_path, tsh->prsr.args, tsh->env_arr);
-				// exit(1);
-			// }
-			// else
-				// waitpid(pid, &g_exit_status, 0);
+
 		}
 		ft_freen((void **)&binary_path);
 	}

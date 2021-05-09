@@ -80,7 +80,6 @@ void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
 void				pipe_processor(t_tsh *tsh);
 void				wait_pipes(t_tsh *tsh);
-void				go_work(t_tsh *tsh);
 void				swich_signals(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
