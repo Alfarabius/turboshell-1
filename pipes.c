@@ -5,7 +5,6 @@ void pipe_processor(t_tsh *tsh)
 	pid_t pid;
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
-
 	pid = fork();
 	if (!pid)
 	{

@@ -33,6 +33,29 @@ static void add_line(char ***arr, char *line)
 	*arr = result_arr;
 }
 
+static void add_redrct(t_redrct ***arr, t_redrct *redrct)
+{
+	int			len;
+	t_redrct	**result_arr;
+
+	len = 0;
+	while ((*arr)[len] != NULL)
+		len++;
+	result_arr = (t_redrct **)malloc(sizeof(t_redrct *) * (len + 2));
+	error_checker(!result_arr, "memmory doesn't allocated", 1);
+	result_arr[len + 1] = NULL;
+	result_arr[len] = (t_redrct *)malloc(sizeof(t_redrct));
+	error_checker(!result_arr[len], "memmory doesn't allocated", 1);
+	result_arr[len]->arg_num = redrct->arg_num;
+	result_arr[len]->fd = redrct->fd;
+	result_arr[len]->file_path = redrct->file_path;
+	result_arr[len]->type = redrct->type;
+	while (--len >= 0)
+		result_arr[len] = (*arr)[len];
+	free(*arr);
+	*arr = result_arr;
+}
+
 int is_whitespace(char c)
 {
 	if (c == 9 || c == 32)
@@ -127,6 +150,37 @@ void double_qoutes_case(t_prsr *prsr)
 	}
 }
 
+void redirect_case(t_prsr *prsr)
+{
+		t_redrct	redrct;
+
+		if (prsr->args[prsr->current_arg][0])
+		{
+			add_line(&prsr->args, "\0");
+			prsr->current_arg++;
+		}
+		redrct.type = 0;
+		redrct.file_path = NULL;
+		redrct.arg_num = prsr->current_arg;
+		redrct.fd = -1;
+		while (prsr->line[prsr->l_index] == '>')
+		{
+			redrct.type++;
+			prsr->l_index++;
+		}
+		prsr->l_index = skip_whitespaces(prsr->line, prsr->l_index);
+		add_redrct(&prsr->redirects, &redrct);
+}
+
+static void print_redirects(t_prsr *prsr)
+{
+		int i;
+
+		i = -1;
+		while (prsr->redirects[++i])
+			printf("%d. type: %d arg: %d file: %s fd: %d\n", i, prsr->redirects[i]->type, prsr->redirects[i]->arg_num, prsr->redirects[i]->file_path, prsr->redirects[i]->fd);
+}
+
 void common_case(t_prsr *prsr)
 {
 	int shielding;
@@ -135,20 +189,27 @@ void common_case(t_prsr *prsr)
 	prsr->l_index = skip_whitespaces(prsr->line, prsr->l_index);
 	while (prsr->line[prsr->l_index])
 	{
-		if (prsr->line[prsr->l_index] == '\n')
-		{
-			prsr->parse_status = 0;
-			break ;
-		}
 		if (prsr->line[prsr->l_index] == '|')
 		{
 			prsr->pipe.count++;
 			prsr->parse_status = 2;
 			break ;
 		}
+		if (prsr->line[prsr->l_index] == ';')
+		{
+			prsr->parse_status = 3;
+			break ;
+		}
+		if (prsr->line[prsr->l_index] == '>')
+			redirect_case(prsr);
+		if (prsr->line[prsr->l_index] == '\n')
+		{
+			prsr->parse_status = 0;
+			break ;
+		}
 		if (is_whitespace(prsr->line[prsr->l_index]))
 		{
-			if (prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)] != '\n' && prsr->line[skip_whitespaces(prsr->line, prsr->l_index)] != '|')
+			if (!ft_strchr("\n|;", prsr->line[skip_whitespaces(prsr->line, prsr->l_index + 1)]))
 			{
 				add_line(&prsr->args, "\0");
 				(prsr->current_arg)++;
@@ -273,6 +334,9 @@ static void		init_parser(t_tsh *tsh)
 	error_checker(!tsh->prsr.args[0], "memmory doesn't allocated", 1);
 	tsh->prsr.args[0][0] = '\0';
 	tsh->prsr.args[1] = NULL;
+	tsh->prsr.redirects = (t_redrct **)malloc(sizeof(t_redrct *));
+	error_checker(!tsh->prsr.redirects, "memmory doesn't allocated", 1);
+	tsh->prsr.redirects[0] = NULL;
 	tsh->prsr.current_arg = 0;
 	tsh->prsr.parse_status = 1;
 }
@@ -280,7 +344,6 @@ static void		init_parser(t_tsh *tsh)
 void			line_parser(t_tsh *tsh)
 {
 	tsh->prsr.l_index = 0;
-	int i;
 	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
 	// printf("prpsr: %s\n", tsh->prsr.line);
@@ -292,11 +355,14 @@ void			line_parser(t_tsh *tsh)
 		if (tsh->prsr.parse_status == 2)
 		{
 			tsh->prsr.parse_status = 1;
-			//вызов функции обработки пайпов будет здесь
-			//go_work(tsh);
-			i = -1;
-
 			pipe_processor(tsh);
+			clear_arr(&tsh->prsr.args);
+			init_parser(tsh);
+		}
+		if (tsh->prsr.parse_status == 3)
+		{
+			tsh->prsr.parse_status = 1;
+			cmd_processor(tsh);
 			clear_arr(&tsh->prsr.args);
 			init_parser(tsh);
 		}
@@ -306,10 +372,15 @@ void			line_parser(t_tsh *tsh)
 	tsh->prsr.l_index = -1;
 	// while (tsh->prsr.args[++tsh->prsr.l_index])
 	// 	printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
+	print_redirects(&tsh->prsr);
 	free(tsh->prsr.line);
 	if (!tsh->prsr.pipe.count)
 		cmd_processor(tsh);
 	else
 		wait_pipes(tsh);
 	clear_arr(&tsh->prsr.args);
+	//После препарсинга отправлять в функцию обработки редиректов. Последняя будет удалять из строки редиректы, открывать и дапить фдшники. <- идея гавно
+	//Работать со спаршенными аргументами. Потребуется немного подправить парсер - сделать символы редиректа разделителем. Каждый спаршенный аргумент проверять на редирект. <- идея в разработке, а так - тоже говно
+	//Создать массив редиректов в котором будет хранится номер аргумента, который нужно открыть через open, а потом удалить из аргументов
+	//Сделать так же проверку синтаксиса отдельной функцией.
 }

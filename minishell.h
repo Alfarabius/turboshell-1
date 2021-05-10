@@ -31,8 +31,17 @@ typedef	struct	s_gnl
 	int			fd;
 }				t_gnl;
 
+typedef	struct		s_redrct
+{
+	int				type;
+	int				fd;
+	int				arg_num;
+	char			*file_path;
+}					t_redrct;
+
 typedef	struct		s_prsr
 {
+	t_redrct		**redirects;
 	char			**args;
 	char			*line;
 	int				l_index;
@@ -65,6 +74,8 @@ typedef	struct		s_msh
 	int				symbols;
 	int				hfd;
 	int				original_fd[2];
+	int				input_fd;
+	int				output_fd;
 }					t_tsh;
 
 void				ft_exit(t_tsh *tsh);

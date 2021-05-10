@@ -82,7 +82,7 @@ int	binary_processor(t_tsh *tsh)
 			binary_path = ft_realloc(binary_path, 1, '/');
 			i = -1;
 			while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
-			binary_path = ft_realloc(binary_path, 1, tsh->prsr.args[0][i]);
+				binary_path = ft_realloc(binary_path, 1, tsh->prsr.args[0][i]);
 			if (!tsh->prsr.pipe.count)
 			{
 				pid = fork();
