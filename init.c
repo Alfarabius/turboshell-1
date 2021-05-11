@@ -43,6 +43,7 @@ static	void	init_pipes(t_tsh *tsh)
 {
 	tsh->prsr.pipe.count = 0;
 	tsh->prsr.pipe.current = 0;
+	tsh->redirect_fd = 0;
 	pipe(tsh->original_fd);
 	dup2(1, tsh->original_fd[1]);
 	dup2(0, tsh->original_fd[0]);

@@ -102,8 +102,46 @@ int	binary_processor(t_tsh *tsh)
 	return (0);
 }
 
+void	open_redirects(t_tsh *tsh)
+{
+	int i;
+
+	i = -1;
+	while (tsh->prsr.redirects[++i])
+	{
+		//проверить на директорию и вообще на валидность
+		if (tsh->prsr.redirects[i]->type == 3)
+			tsh->redirect_fd = open(tsh->prsr.redirects[i]->file_path, O_RDONLY);
+		if (tsh->prsr.redirects[i]->type == 2)
+			tsh->redirect_fd = open(tsh->prsr.redirects[i]->file_path, O_CREAT | O_RDWR | O_APPEND, 0755);
+		if (tsh->prsr.redirects[i]->type == 1)
+			tsh->redirect_fd = open(tsh->prsr.redirects[i]->file_path, O_CREAT | O_RDWR | O_TRUNC, 0755);
+		if (tsh->prsr.redirects[i + 1])
+			close(tsh->redirect_fd);
+	}
+	if (tsh->redirect_fd)
+	{
+		if (tsh->prsr.redirects[i - 1]->type == 3)
+			dup2(tsh->redirect_fd, 0);
+		else
+			dup2(tsh->redirect_fd, 1);
+	}
+}
+
+void	close_redirects(t_tsh *tsh)
+{
+	if (tsh->redirect_fd)
+	{
+		dup2(tsh->original_fd[0], 0);
+		dup2(tsh->original_fd[1], 1);
+		close(tsh->redirect_fd);
+		tsh->redirect_fd = 0;
+	}
+}
+
 int	cmd_processor(t_tsh *tsh)
 {
+	open_redirects(tsh);
 	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
@@ -120,5 +158,6 @@ int	cmd_processor(t_tsh *tsh)
 		ft_env(tsh);
 	else
 		binary_processor(tsh);
+	close_redirects(tsh);
 	return (0);
 }

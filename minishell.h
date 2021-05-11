@@ -76,8 +76,7 @@ typedef struct s_msh
 	int				symbols;
 	int				hfd;
 	int				original_fd[2];
-	int				input_fd;
-	int				output_fd;
+	int				redirect_fd;
 }					t_tsh;
 
 void				ft_exit(t_tsh *tsh);
