@@ -7,12 +7,14 @@ int	file_to_history(t_tsh *tsh)
 
 	fd = open("tsh_history", O_RDONLY);
 	if (fd == -1)
-		return(error_handler("tsh_history file fd = -1", 0));
-	while(get_next_line(fd, &line))
+		return (error_handler("tsh_history file fd = -1", 0));
+	while (get_next_line(fd, &line))
+	{
 		if (ft_strcmp(line, "\0"))
 			ft_dlstadd_back(&tsh->his, ft_dlst_new(line));
 		else
 			free(line);
+	}
 	if (ft_strcmp(line, "\0"))
 		ft_dlstadd_back(&tsh->his, ft_dlst_new(line));
 	else

@@ -1,8 +1,8 @@
-# include "minishell.h"
+#include "minishell.h"
 
-void clear_arr(char ***arr)
+void	clear_arr(char ***arr)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (*arr)
@@ -14,7 +14,7 @@ void clear_arr(char ***arr)
 	}
 }
 
-static void add_line(char ***arr, char *line)
+static	void	add_line(char ***arr, char *line)
 {
 	int		len;
 	char	**result_arr;
@@ -33,7 +33,7 @@ static void add_line(char ***arr, char *line)
 	*arr = result_arr;
 }
 
-static void add_redrct(t_redrct ***arr, t_redrct *redrct)
+static	void	add_redrct(t_redrct ***arr, t_redrct *redrct)
 {
 	int			len;
 	t_redrct	**result_arr;
@@ -56,27 +56,27 @@ static void add_redrct(t_redrct ***arr, t_redrct *redrct)
 	*arr = result_arr;
 }
 
-int is_whitespace(char c)
+int	is_whitespace(char c)
 {
 	if (c == 9 || c == 32)
 		return (1);
 	return (0);
 }
 
-int skip_whitespaces(char *str, int i)
+int	skip_whitespaces(char *str, int i)
 {
 	while (str[i] && is_whitespace(str[i]))
 		i++;
 	return (i);
 }
 
-char *ft_realloc(char *str, int num, int c)
+char	*ft_realloc(char *str, int num, int c)
 {
 	char	*res;
 	int		len;
 	int		i;
 
-	len =  ft_strlen(str);
+	len = ft_strlen(str);
 	len += num + 1;
 	res = (char *)malloc(len);
 	error_checker(!res, "memmory doesn't allocated", 1);
@@ -93,7 +93,7 @@ char *ft_realloc(char *str, int num, int c)
 	return (res);
 }
 
-void single_qoutes_case(t_prsr *prsr)
+void	single_qoutes_case(t_prsr *prsr)
 {
 	(prsr->l_index)++;
 	while (prsr->line[prsr->l_index] && prsr->line[prsr->l_index] != '\'')
@@ -115,9 +115,9 @@ void single_qoutes_case(t_prsr *prsr)
 		error_handler("Syntax error\n", 1);
 }
 
-void double_qoutes_case(t_prsr *prsr)
+void	double_qoutes_case(t_prsr *prsr)
 {
-	int shielding;
+	int	shielding;
 
 	shielding = 0;
 	(prsr->l_index)++;
@@ -150,40 +150,40 @@ void double_qoutes_case(t_prsr *prsr)
 	}
 }
 
-void redirect_case(t_prsr *prsr)
+void	redirect_case(t_prsr *prsr)
 {
-		t_redrct	redrct;
+	t_redrct	redrct;
 
-		if (prsr->args[prsr->current_arg][0])
-		{
-			add_line(&prsr->args, "\0");
-			prsr->current_arg++;
-		}
-		redrct.type = 0;
-		redrct.file_path = NULL;
-		redrct.arg_num = prsr->current_arg;
-		redrct.fd = -1;
-		while (prsr->line[prsr->l_index] == '>')
-		{
-			redrct.type++;
-			prsr->l_index++;
-		}
-		prsr->l_index = skip_whitespaces(prsr->line, prsr->l_index);
-		add_redrct(&prsr->redirects, &redrct);
+	if (prsr->args[prsr->current_arg][0])
+	{
+		add_line(&prsr->args, "\0");
+		prsr->current_arg++;
+	}
+	redrct.type = 0;
+	redrct.file_path = NULL;
+	redrct.arg_num = prsr->current_arg;
+	redrct.fd = -1;
+	while (prsr->line[prsr->l_index] == '>')
+	{
+		redrct.type++;
+		prsr->l_index++;
+	}
+	prsr->l_index = skip_whitespaces(prsr->line, prsr->l_index);
+	add_redrct(&prsr->redirects, &redrct);
 }
 
-static void print_redirects(t_prsr *prsr)
+static	void	print_redirects(t_prsr *prsr)
 {
-		int i;
+	int	i;
 
-		i = -1;
-		while (prsr->redirects[++i])
-			printf("%d. type: %d arg: %d file: %s fd: %d\n", i, prsr->redirects[i]->type, prsr->redirects[i]->arg_num, prsr->redirects[i]->file_path, prsr->redirects[i]->fd);
+	i = -1;
+	while (prsr->redirects[++i])
+		printf("%d. type: %d arg: %d file: %s fd: %d\n", i, prsr->redirects[i]->type, prsr->redirects[i]->arg_num, prsr->redirects[i]->file_path, prsr->redirects[i]->fd);
 }
 
-void common_case(t_prsr *prsr)
+void	common_case(t_prsr *prsr)
 {
-	int shielding;
+	int	shielding;
 
 	shielding = 0;
 	prsr->l_index = skip_whitespaces(prsr->line, prsr->l_index);
@@ -229,7 +229,7 @@ void common_case(t_prsr *prsr)
 	}
 }
 
-void distributor(t_prsr *prsr)
+void	distributor(t_prsr *prsr)
 {
 	if (prsr->line[prsr->l_index] != '\"' && prsr->line[prsr->l_index] != '\'')
 		common_case(prsr);
@@ -239,11 +239,11 @@ void distributor(t_prsr *prsr)
 		single_qoutes_case(prsr);
 }
 
-char *get_env(t_tsh tsh, int *i)
+char	*get_env(t_tsh tsh, int *i)
 {
-	char *key;
-	char *value;
-	char *spec_signs = "$\"\'\\,;|<> 	";
+	char	*key;
+	char	*value;
+	char	*spec_signs = "$\"\'\\,;|<> 	";
 
 	key = (char *)malloc(1);
 	error_checker(!key, "memmory doesn't allocated", 1);
@@ -282,7 +282,7 @@ char *get_env(t_tsh tsh, int *i)
 	return (value);
 }
 
-char *preparser(t_tsh *tsh)
+char	*preparser(t_tsh *tsh)
 {
 	int		q_flag;
 	int		i;
@@ -326,7 +326,7 @@ char *preparser(t_tsh *tsh)
 	return (res);
 }
 
-static void		init_parser(t_tsh *tsh)
+static	void	init_parser(t_tsh *tsh)
 {
 	tsh->prsr.args = (char **)malloc(sizeof(char *) * 2);
 	error_checker(!tsh->prsr.args, "memmory doesn't allocated", 1);
@@ -341,7 +341,7 @@ static void		init_parser(t_tsh *tsh)
 	tsh->prsr.parse_status = 1;
 }
 
-void			line_parser(t_tsh *tsh)
+void	line_parser(t_tsh *tsh)
 {
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);

@@ -12,9 +12,9 @@ void	deinit(t_tsh *tsh)
 	}
 }
 
-t_dict *get_env_elem(t_tsh tsh, char *key)
+t_dict	*get_env_elem(t_tsh tsh, char *key)
 {
-	t_dict *elem;
+	t_dict	*elem;
 
 	elem = NULL;
 	while (tsh.env)

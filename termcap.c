@@ -52,7 +52,7 @@ static	int	erase_symbol(t_tsh *tsh)
 	if (len > 0)
 	{
 		tputs(cursor_left, 1, ft_putint);
-		tputs(delete_character, 1 ,ft_putint);
+		tputs(delete_character, 1, ft_putint);
 		tsh->line[len - 1] = '\0';
 	}
 	return (1);

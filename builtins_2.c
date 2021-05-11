@@ -11,12 +11,14 @@ void	ft_cd(t_tsh *tsh)
 	old_pwd = NULL;
 	dir = tsh->prsr.args[1];
 	if (!dir)
+	{
 		while (current)
 		{
 			if (!ft_strcmp("HOME", ((t_dict *)(current->content))->key))
 				dir = ((t_dict *)(current->content))->value;
 			current = current->next;
 		}
+	}
 	current = tsh->env;
 	if (chdir(dir) == -1)
 	{
@@ -51,9 +53,9 @@ void	ft_cd(t_tsh *tsh)
 	error_checker(!pwd, "memmory doesn't allocated", 1);
 }
 
-static void			write_export(t_tsh *tsh)
+static	void	write_export(t_tsh *tsh)
 {
-	t_list *temp;
+	t_list	*temp;
 
 	temp = tsh->env;
 	while (tsh->env)
@@ -74,11 +76,11 @@ static void			write_export(t_tsh *tsh)
 	tsh->env = temp;
 }
 
-void				ft_export(t_tsh *tsh)
+void	ft_export(t_tsh *tsh)
 {
-	int current;
-	t_dict *elem;
-	t_list *temp;
+	int		current;
+	t_dict	*elem;
+	t_list	*temp;
 
 	if (!tsh->prsr.args[1])
 		write_export(tsh);

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static	int		ft_error_handler(char *mem)
+static	int	ft_error_handler(char *mem)
 {
 	free(mem);
 	return (-1);
@@ -16,7 +16,7 @@ static	char	is_nonl(char *str)
 	return (1);
 }
 
-static	int		create_reminder(char **reminder, t_gnl *gnl)
+static	int	create_reminder(char **reminder, t_gnl *gnl)
 {
 	while (is_nonl(*reminder) && gnl->bwr)
 	{
@@ -32,10 +32,10 @@ static	int		create_reminder(char **reminder, t_gnl *gnl)
 	return (1);
 }
 
-int				get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
-	t_gnl			gnl;
-	static	char	*reminder = NULL;
+	t_gnl		gnl;
+	static char	*reminder = NULL;
 
 	if (!line || fd < 0)
 		return (-1);

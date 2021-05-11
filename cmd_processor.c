@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static char *get_bpath(int current_path, t_tsh *tsh)
+static	char	*get_bpath(int current_path, t_tsh *tsh)
 {
 	char	*bpath;
 	char	*paths;
@@ -42,24 +42,24 @@ int	path_len(t_tsh *tsh)
 	return (len);
 }
 
-static	int	binary_in_dir(char *path, char* bin)
+static	int	binary_in_dir(char *path, char *bin)
 {
 	DIR				*dir;
-	struct	dirent	*entry;
+	struct dirent	*entry;
 
 	dir = opendir(path);
 	entry = readdir(dir);
-	while(entry)
+	while (entry)
 	{
 		if (!ft_strcmp(bin, entry->d_name))
 		{
 			closedir(dir);
-			return(1);
+			return (1);
 		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
-	return(0);
+	return (0);
 }
 
 int	binary_processor(t_tsh *tsh)
@@ -96,29 +96,29 @@ int	binary_processor(t_tsh *tsh)
 			}
 			else
 				execve(binary_path, tsh->prsr.args, tsh->env_arr);
-
 		}
 		ft_freen((void **)&binary_path);
 	}
-	return(0);
+	return (0);
 }
 
 int	cmd_processor(t_tsh *tsh)
 {
 	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh);
-	else if(tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
 		ft_echo(tsh);
-	else if(tsh->prsr.args[0] && !ft_strcmp("cd", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("cd", tsh->prsr.args[0]))
 		ft_cd(tsh);
-	else if(tsh->prsr.args[0] && !ft_strcmp("pwd", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("pwd", tsh->prsr.args[0]))
 		ft_pwd(tsh);
-	else if(tsh->prsr.args[0] && !ft_strcmp("export", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("export", tsh->prsr.args[0]))
 		ft_export(tsh);
-	else if(tsh->prsr.args[0] && !ft_strcmp("unset", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("unset", tsh->prsr.args[0]))
 		ft_unset(tsh);
-	else if(tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
 		ft_env(tsh);
-	else binary_processor(tsh);
+	else
+		binary_processor(tsh);
 	return (0);
 }

@@ -1,25 +1,25 @@
 #include "minishell.h"
 
-int				is_separ_exist(char *env_elem)
+int	is_separ_exist(char *env_elem)
 {
-	while(*env_elem && *env_elem != '=')
+	while (*env_elem && *env_elem != '=')
 		env_elem++;
 	if (*env_elem == '=')
 		return (1);
 	return (0);
 }
 
-size_t			keylen(char *env_elem)
+size_t	keylen(char *env_elem)
 {
 	int	len;
 
 	len = 0;
-	while(env_elem[len] != '=' && env_elem[len])
+	while (env_elem[len] != '=' && env_elem[len])
 		len++;
 	return (len);
 }
 
-int				elem_to_lst(char *env_elem, t_list **lst)
+int	elem_to_lst(char *env_elem, t_list **lst)
 {
 	t_dict	*content;
 	size_t	len;
@@ -38,7 +38,7 @@ int				elem_to_lst(char *env_elem, t_list **lst)
 	return (0);
 }
 
-int				env_to_lst(t_list **lst, char **env)
+int	env_to_lst(t_list **lst, char **env)
 {
 	while (*env)
 	{

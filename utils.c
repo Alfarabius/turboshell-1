@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int		ft_putint(int c)
+int	ft_putint(int c)
 {
 	return (write(1, &c, 1));
 }
 
 char	*ft_memjoin_tsh(char *s1, char *s2)
 {
-	char *str;
+	char	*str;
 
 	str = ft_strjoin(s1, s2);
 	error_checker(!str, "memmory doesn't allocated", 1);
@@ -17,7 +17,7 @@ char	*ft_memjoin_tsh(char *s1, char *s2)
 
 char	*get_env_value(t_tsh tsh, char *key)
 {
-	char *value;
+	char	*value;
 
 	value = NULL;
 	while (tsh.env)
@@ -50,7 +50,7 @@ char	*dict_to_str(t_dict *elem)
 	return (str);
 }
 
-int		envlist_to_arr(t_tsh *tsh)
+int	envlist_to_arr(t_tsh *tsh)
 {
 	t_list	*env_ptr;
 	t_dict	*curr_dict;

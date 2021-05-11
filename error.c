@@ -8,7 +8,7 @@ int	error_handler(char *msg, char flg)
 	return (1);
 }
 
-void error_checker(int cond, char *msg, char flg)
+void	error_checker(int cond, char *msg, char flg)
 {
 	if (cond)
 		error_handler(msg, flg);

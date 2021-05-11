@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void pipe_processor(t_tsh *tsh)
+void	pipe_processor(t_tsh *tsh)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
 	pid = fork();
@@ -23,10 +23,10 @@ void pipe_processor(t_tsh *tsh)
 	tsh->prsr.pipe.current++;
 }
 
-void wait_pipes(t_tsh *tsh)
+void	wait_pipes(t_tsh *tsh)
 {
-	int status;
-	pid_t pid;
+	int		status;
+	pid_t	pid;
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
 	pid = fork();

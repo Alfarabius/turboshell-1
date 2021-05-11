@@ -10,7 +10,8 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	if (s1)
 		s1_length = ft_strlen(s1);
 	length = s1_length + ft_strlen(s2);
-	if (!(joined_string = (char *)malloc(length + 1)))
+	joined_string = (char *)malloc(length + 1);
+	if (!joined_string)
 	{
 		if (s1)
 			free(s1);

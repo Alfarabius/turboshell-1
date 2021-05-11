@@ -19,21 +19,21 @@
 
 int				g_exit_status;
 
-typedef	struct	s_ppe
+typedef struct s_ppe
 {
 	int			current;
 	int			count;
 	int			fd[1024][2];
 }				t_ppe;
 
-typedef	struct	s_gnl
+typedef struct s_gnl
 {
 	char		*buf;
 	ssize_t		bwr;
 	int			fd;
 }				t_gnl;
 
-typedef	struct		s_redrct
+typedef struct s_redrct
 {
 	int				type;
 	int				fd;
@@ -41,7 +41,7 @@ typedef	struct		s_redrct
 	char			*file_path;
 }					t_redrct;
 
-typedef	struct		s_prsr
+typedef struct s_prsr
 {
 	t_redrct		**redirects;
 	char			**args;
@@ -52,7 +52,7 @@ typedef	struct		s_prsr
 	t_ppe			pipe;
 }					t_prsr;
 
-typedef	struct		s_dict
+typedef struct s_dict
 {
 	char			*key;
 	char			*value;
@@ -60,9 +60,9 @@ typedef	struct		s_dict
 	char			is_set;
 }					t_dict;
 
-typedef	struct		s_msh
+typedef struct s_msh
 {
-	struct	termios	term;
+	struct termios	term;
 	t_list			*env;
 	t_dlst			*his;
 	t_dlst			*his_ptr;
@@ -118,7 +118,7 @@ char				*ft_nextline(char *rem);
 char				*ft_realloc(char *str, int num, int c);
 char				*ft_memjoin_tsh(char *s1, char *s2);
 char				*get_env_value(t_tsh tsh, char *key);
-void				*ft_memdup(const void* mem, size_t size);
+void				*ft_memdup(const void *mem, size_t size);
 t_dict				*get_env_elem(t_tsh tsh, char *key);
 char				*dict_to_str(t_dict *elem);
 

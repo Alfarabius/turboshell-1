@@ -2,13 +2,13 @@
 
 void	ft_exit(t_tsh *tsh)
 {
-	int i;
+	int	i;
 
 	deinit(tsh);
 	if (!tsh->prsr.pipe.count)
 		write(1, "exit\n", 6);
 	i = -1;
-	while(tsh->prsr.args[1] && tsh->prsr.args[1][++i])
+	while (tsh->prsr.args[1] && tsh->prsr.args[1][++i])
 	{
 		if (!ft_isdigit(tsh->prsr.args[1][i]))
 		{
@@ -19,7 +19,7 @@ void	ft_exit(t_tsh *tsh)
 		}
 	}
 	i = 1;
-	while(tsh->prsr.args[i])
+	while (tsh->prsr.args[i])
 		i++;
 	if (i > 2)
 	{
@@ -31,17 +31,17 @@ void	ft_exit(t_tsh *tsh)
 	exit(0);
 }
 
-void ft_env(t_tsh *tsh)
+void	ft_env(t_tsh *tsh)
 {
-	t_list *temp;
+	t_list	*temp;
 
 	temp = tsh->env;
 	while (tsh->env)
 	{
 		if (((t_dict *)(tsh->env->content))->is_set)
 		{
-			printf("%s=",((t_dict *)(tsh->env->content))->key);
-			printf("%s\n",((t_dict *)(tsh->env->content))->value);
+			printf("%s=", ((t_dict *)(tsh->env->content))->key);
+			printf("%s\n", ((t_dict *)(tsh->env->content))->value);
 		}
 		if (!tsh->env->next)
 			break ;
@@ -92,8 +92,8 @@ void	ft_pwd(t_tsh *tsh)
 
 void	ft_echo(t_tsh *tsh)
 {
-	int cur_arg;
-	int flag_n;
+	int	cur_arg;
+	int	flag_n;
 
 	flag_n = 0;
 	cur_arg = 1;
