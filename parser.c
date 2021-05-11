@@ -276,6 +276,8 @@ char	*get_env(t_tsh tsh, int *i)
 	}
 	if (!key[0])
 		value = "$";
+	if (key[0] == '?')
+		value = ft_itoa(g_exit_status);
 	if (!value)
 		value = "";
 	free(key);
