@@ -6,8 +6,8 @@ static	int	ctrl_d(t_tsh *tsh)
 	tsh->end_line = 1;
 	tsh->line = ft_strdup("exit");
 	if (!tsh->line)
-		return(error_handler("memmory doesn't allocated", 0));
-	return(0);
+		return (error_handler("memmory doesn't allocated", 0));
+	return (0);
 }
 
 static	int	ctrl_c(t_tsh *tsh)
@@ -16,10 +16,10 @@ static	int	ctrl_c(t_tsh *tsh)
 	ft_bzero(tsh->buf, 1024);
 	g_exit_status = 1;
 	write(1, "\n", 1);
-	return(new_prompt(tsh));
+	return (new_prompt(tsh));
 }
 
-int		new_prompt(t_tsh *tsh)
+int	new_prompt(t_tsh *tsh)
 {
 	tsh->his_ptr = ft_dlstlast(tsh->his);
 	write(1, TSH_NAME, 27);
@@ -33,7 +33,7 @@ static	int	init_shell(t_tsh *tsh)
 
 	term_type = getenv("TERM");
 	tcgetattr(0, &tsh->term);
-	tsh->term.c_lflag &= ~(ECHO|ICANON|ISIG);
+	tsh->term.c_lflag &= ~(ECHO | ICANON | ISIG);
 	tsh->term.c_cc[VMIN] = 1;
 	tsh->term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &tsh->term);
@@ -42,7 +42,7 @@ static	int	init_shell(t_tsh *tsh)
 	//	return (error_handler("Can not find terminal or termcap base."));
 	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR | O_APPEND, 0755);
 	if (tsh->hfd == -1)
-		return(error_handler("history file doesn't open", 1));
+		return (error_handler("history file doesn't open", 1));
 	tsh->env = NULL;
 	tsh->his = NULL;
 	tsh->env_arr = NULL;
@@ -85,7 +85,7 @@ int	main(int argc, char **argv, char **env)
 			if (tsh.buf[tsh.symbols - 1] == '\3')
 				ctrl_c(&tsh);
 			termcap_processor(tsh.buf, &tsh);
-			if(!tsh.is_termcap)
+			if (!tsh.is_termcap)
 			{
 				tsh.line = ft_memjoin_tsh(tsh.line, tsh.buf);
 				if (tsh.his_ptr && tsh.his_ptr->content)
