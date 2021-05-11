@@ -88,7 +88,6 @@ void				line_parser(t_tsh *tsh);
 void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
 void				del_elem(void *elem);
-void				deinit(t_tsh *tsh);
 void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
 void				pipe_processor(t_tsh *tsh);

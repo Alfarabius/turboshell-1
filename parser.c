@@ -128,7 +128,7 @@ void	double_qoutes_case(t_prsr *prsr)
 			prsr->parse_status = 0;
 			break ;
 		}
-		if (prsr->line[prsr->l_index] == '\\' && ft_strchr("$\\`\"", prsr->line[prsr->l_index + 1]))
+		if (prsr->line[prsr->l_index] == '\\' && ft_strchr("$\\`\"", prsr->line[prsr->l_index + 1]) && !shielding)
 		{
 			(prsr->l_index)++;
 			shielding = 1;
@@ -346,7 +346,7 @@ void	line_parser(t_tsh *tsh)
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
-	// printf("prpsr: %s\n", tsh->prsr.line);
+//	printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
 		distributor(&tsh->prsr);

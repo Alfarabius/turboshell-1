@@ -4,7 +4,6 @@ void	ft_exit(t_tsh *tsh)
 {
 	int	i;
 
-	deinit(tsh);
 	if (!tsh->prsr.pipe.count)
 		write(1, "exit\n", 6);
 	i = -1;
