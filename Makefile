@@ -7,17 +7,20 @@ HEAD		= minishell.h
 SRCS	=	minishell.c \
 			parser.c \
 			termcap.c \
+			term.c \
 			error.c \
 			utils.c \
 			utils2.c \
 			env_processor.c \
 			cmd_processor.c \
-			history.c \
+			manual_signals.c \
 			get_next_line.c \
 			get_next_line_utils.c \
 			builtins.c \
 			builtins_2.c \
+			history.c \
 			signals.c \
+			init.c \
 			pipes.c
 
 all:

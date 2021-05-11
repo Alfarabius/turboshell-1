@@ -12,6 +12,8 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <dirent.h>
+# include <errno.h>
+# include <string.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 
@@ -91,7 +93,10 @@ void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
 void				pipe_processor(t_tsh *tsh);
 void				wait_pipes(t_tsh *tsh);
-void				swich_signals(t_tsh *tsh);
+void				switch_term_attr(t_tsh *tsh);
+void				init_shell(t_tsh *tsh);
+void				ctrl_c(t_tsh *tsh);
+void				ctrl_d(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
