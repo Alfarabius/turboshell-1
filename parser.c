@@ -412,6 +412,8 @@ void	line_parser(t_tsh *tsh)
 //	printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
+		if (!tsh->prsr.parse_status)
+			return ;
 		distributor(&tsh->prsr);
 		if (tsh->prsr.l_index >= ft_strlen(tsh->prsr.line) || !tsh->prsr.parse_status || tsh->prsr.line[tsh->prsr.l_index] == '\n')
 			break ;
@@ -436,9 +438,9 @@ void	line_parser(t_tsh *tsh)
 	tsh->prsr.parse_status = 0;
 	tsh->prsr.l_index = -1;
 	redirect_handler(tsh);
-	while (tsh->prsr.args[++tsh->prsr.l_index])
-		printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
-	print_redirects(&tsh->prsr);
+	// while (tsh->prsr.args[++tsh->prsr.l_index])
+	// 	printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
+	// print_redirects(&tsh->prsr);
 	free(tsh->prsr.line);
 	if (!tsh->prsr.pipe.count)
 		cmd_processor(tsh);
@@ -446,8 +448,5 @@ void	line_parser(t_tsh *tsh)
 		wait_pipes(tsh);
 	clear_arr(&tsh->prsr.args);
 	clear_redirects(tsh);
-	//После препарсинга отправлять в функцию обработки редиректов. Последняя будет удалять из строки редиректы, открывать и дапить фдшники. <- идея гавно
-	//Работать со спаршенными аргументами. Потребуется немного подправить парсер - сделать символы редиректа разделителем. Каждый спаршенный аргумент проверять на редирект. <- идея в разработке, а так - тоже говно
-	//Создать массив редиректов в котором будет хранится номер аргумента, который нужно открыть через open, а потом удалить из аргументов
-	//Сделать так же проверку синтаксиса отдельной функцией.
+	//Сделать проверку синтаксиса отдельной функцией.
 }
