@@ -234,8 +234,6 @@ char	*get_env(t_tsh tsh, int *i)
 {
 	char	*key;
 	char	*value;
-	//добавить все знаки
-	char	*spec_signs = "$\"\'\\,.;|<>= 	";
 
 	key = (char *)malloc(1);
 	error_checker(!key, "memmory doesn't allocated", 1);
@@ -252,7 +250,7 @@ char	*get_env(t_tsh tsh, int *i)
 	{
 		if (tsh.line[*i] == '\n')
 			break ;
-		if (ft_strchr(spec_signs, tsh.line[*i]))
+		if (!ft_isalnum(tsh.line[*i]))
 			break ;
 		key = ft_realloc(key, 1, tsh.line[*i]);
 		(*i)++;
@@ -340,7 +338,7 @@ void	line_parser(t_tsh *tsh)
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
-//	printf("prpsr: %s\n", tsh->prsr.line);
+	// printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
 		if (!tsh->prsr.parse_status)
