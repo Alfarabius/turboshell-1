@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-void	clear_arr(char ***arr)
-{
-	int	i;
-
-	i = -1;
-	if (*arr)
-	{
-		while ((*arr)[++i])
-			ft_freen((void **)(&(*arr)[i]));
-		free(*arr);
-		*arr = NULL;
-	}
-}
-
 static	void	add_line(char ***arr, char *line)
 {
 	int		len;
@@ -248,8 +234,6 @@ char	*get_env(t_tsh tsh, int *i)
 {
 	char	*key;
 	char	*value;
-	//добавить все знаки
-	char	*spec_signs = "$\"\'\\,.;|<>= 	";
 
 	key = (char *)malloc(1);
 	error_checker(!key, "memmory doesn't allocated", 1);
@@ -266,7 +250,7 @@ char	*get_env(t_tsh tsh, int *i)
 	{
 		if (tsh.line[*i] == '\n')
 			break ;
-		if (ft_strchr(spec_signs, tsh.line[*i]))
+		if (!ft_isalnum(tsh.line[*i]))
 			break ;
 		key = ft_realloc(key, 1, tsh.line[*i]);
 		(*i)++;
@@ -349,67 +333,12 @@ static	void	init_parser(t_tsh *tsh)
 	tsh->prsr.parse_status = 1;
 }
 
-void	clear_redirects(t_tsh *tsh)
-{
-	int i;
-
-	i = -1;
-	while (tsh->prsr.redirects[++i])
-	{
-		if (tsh->prsr.redirects[i]->file_path)
-			free(tsh->prsr.redirects[i]->file_path);
-		if (tsh->prsr.redirects[i]->fd > 0)
-			close(tsh->prsr.redirects[i]->fd);
-		free(tsh->prsr.redirects[i]);
-	}
-	free(tsh->prsr.redirects[i]);
-	free(tsh->prsr.redirects);
-}
-
-void	redirect_handler(t_tsh *tsh)
-{
-	char	**res_arr;
-	int		len;
-	int		i;
-
-	i = -1;
-	while (tsh->prsr.redirects[++i])
-	{
-		if (!tsh->prsr.redirects[i]->file_path)
-		{
-			tsh->prsr.redirects[i]->file_path = ft_strdup(tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
-			error_checker(!tsh->prsr.redirects[i]->file_path, "memmory doesn't allocated", 1);
-			ft_freen((void **)&tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
-			tsh->prsr.args[tsh->prsr.redirects[i]->arg_num] = ft_strdup("");
-			error_checker(!tsh->prsr.args[tsh->prsr.redirects[i]->arg_num], "memmory doesn't allocated", 1);
-		}
-	}
-	i = -1;
-	len = 0;
-	while (tsh->prsr.args[++i])
-		if (tsh->prsr.args[i][0])
-			len++;
-	res_arr = (char **)malloc(sizeof(char *) * (len + 1));
-	error_checker(!res_arr, "memmory doesn't allocated", 1);
-	res_arr[len] = NULL;
-	i = -1;
-	len = -1;
-	while (tsh->prsr.args[++i])
-		if (tsh->prsr.args[i][0])
-		{
-			res_arr[++len] = ft_strdup(tsh->prsr.args[i]);
-			error_checker(!res_arr[len], "memmory doesn't allocated", 1);
-		}
-	clear_arr(&tsh->prsr.args);
-	tsh->prsr.args = res_arr;
-}
-
 void	line_parser(t_tsh *tsh)
 {
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
-//	printf("prpsr: %s\n", tsh->prsr.line);
+	// printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
 		if (!tsh->prsr.parse_status)
