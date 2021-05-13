@@ -58,6 +58,7 @@ static	void	write_export(t_tsh *tsh)
 	t_list	*temp;
 
 	temp = tsh->env;
+	sort_dict_ascii(&tsh->env);
 	while (tsh->env)
 	{
 		ft_putstr_fd("declare -x ", 1);
