@@ -34,6 +34,8 @@ int	path_len(t_tsh *tsh)
 	int		len;
 
 	path = get_env_value(*tsh, "PATH");
+	if (!path)
+		return (0);
 	i = -1;
 	len = 1;
 	while (path[++i])
@@ -64,7 +66,6 @@ static	int	binary_in_dir(char *path, char *bin)
 
 int	binary_processor(t_tsh *tsh)
 {
-	printf("check!\n");
 	char	*binary_path;
 	int		current_path;
 	int		len;
@@ -74,7 +75,6 @@ int	binary_processor(t_tsh *tsh)
 
 	current_path = 0;
 	len = path_len(tsh);
-	printf("check!\n");
 	envlist_to_arr(tsh);
 	while (current_path < len)
 	{
@@ -176,10 +176,7 @@ int	cmd_processor(t_tsh *tsh)
 	else if (tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
 		ft_env(tsh);
 	else
-	{
-		printf("check!\n");
 		binary_processor(tsh);
-	}
 	close_redirects(tsh);
 	return (0);
 }
