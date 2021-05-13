@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+static	int	check_history_file(t_tsh *tsh)
+{
+	int		check;
+	char	buf;
+
+	check = open("tsh_history", O_RDONLY);
+	if (check == -1)
+	{
+		tsh->hfd = open("tsh_history", O_CREAT | O_RDWR | O_APPEND, 0755);
+		if (tsh->hfd == -1)
+			error_handler("history file doesn't open", 1);
+	}
+	close(check);
+	return(1);
+}
+
 int	file_to_history(t_tsh *tsh)
 {
 	int		fd;
@@ -19,6 +35,7 @@ int	file_to_history(t_tsh *tsh)
 		ft_dlstadd_back(&tsh->his, ft_dlst_new(line));
 	else
 		free(line);
+	close(fd);
 	return (0);
 }
 
@@ -28,6 +45,7 @@ int	add_to_history(t_tsh *tsh)
 	size_t	len;
 	t_dlst	*dlst;
 
+	check_history_file(tsh);
 	len = ft_strlen(tsh->line);
 	err = write(tsh->hfd, tsh->line, len);
 	dlst = ft_dlstlast(tsh->his);
@@ -46,6 +64,7 @@ int	history_editor(t_tsh *tsh)
 	size_t	len;
 	char	*tmp;
 
+	check_history_file(tsh);
 	len = ft_strlen(tsh->line);
 	ft_freen((void **)&tsh->his_ptr->content);
 	tsh->his_ptr->content = ft_strdup(tsh->line);
