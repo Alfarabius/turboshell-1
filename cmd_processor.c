@@ -104,58 +104,6 @@ int	binary_processor(t_tsh *tsh)
 	return (0);
 }
 
-void	open_redirects(t_tsh *tsh)
-{
-	int i;
-
-	i = -1;
-	while (tsh->prsr.redirects[++i])
-	{
-		//проверить на директорию и вообще на валидность
-		if (tsh->input_fd)
-			close(tsh->input_fd);
-		if (tsh->output_fd)
-			close(tsh->output_fd);
-		if (tsh->prsr.redirects[i]->type == 3)
-			tsh->input_fd = open(tsh->prsr.redirects[i]->file_path, O_RDONLY);
-		if (tsh->prsr.redirects[i]->type == 2)
-			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, O_CREAT | O_RDWR | O_APPEND, 0755);
-		if (tsh->prsr.redirects[i]->type == 1)
-			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, O_CREAT | O_RDWR | O_TRUNC, 0755);
-		if (tsh->output_fd < 0 || tsh->input_fd < 0)
-		{
-			ft_putstr_fd("turboshell-1.0: ", 2);
-			ft_putstr_fd(tsh->prsr.redirects[i]->file_path, 2);
-			write(2, ": ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			write(2, "\n", 2);
-			tsh->prsr.parse_status = 99;
-			tsh->output_fd = 0;
-			tsh->input_fd = 0;
-		}
-	}
-	if (tsh->input_fd)
-		dup2(tsh->input_fd, 0);
-	if (tsh->output_fd)
-		dup2(tsh->output_fd, 1);
-}
-
-void	close_redirects(t_tsh *tsh)
-{
-	if (tsh->input_fd)
-	{
-		dup2(tsh->original_fd[0], 0);
-		close(tsh->input_fd);
-		tsh->input_fd = 0;
-	}
-	if (tsh->output_fd)
-	{
-		dup2(tsh->original_fd[1], 1);
-		close(tsh->output_fd);
-		tsh->output_fd = 0;
-	}
-}
-
 int	cmd_processor(t_tsh *tsh)
 {
 	open_redirects(tsh);
@@ -175,7 +123,7 @@ int	cmd_processor(t_tsh *tsh)
 		ft_unset(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
 		ft_env(tsh);
-	else
+	else if (tsh->prsr.args[0])
 		binary_processor(tsh);
 	close_redirects(tsh);
 	return (0);

@@ -96,7 +96,7 @@ void	ft_echo(t_tsh *tsh)
 
 	flag_n = 0;
 	cur_arg = 1;
-	if (tsh->prsr.args[cur_arg] && !ft_strcmp(tsh->prsr.args[cur_arg], "-n"))
+	while (tsh->prsr.args[cur_arg] && !ft_strcmp(tsh->prsr.args[cur_arg], "-n"))
 	{
 		flag_n = 1;
 		cur_arg++;

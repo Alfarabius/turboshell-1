@@ -49,3 +49,17 @@ t_list	*sort_dict_ascii(t_list **dict)
 	}
 	return (*dict);
 }
+
+void	clear_arr(char ***arr)
+{
+	int	i;
+
+	i = -1;
+	if (*arr)
+	{
+		while ((*arr)[++i])
+			ft_freen((void **)(&(*arr)[i]));
+		free(*arr);
+		*arr = NULL;
+	}
+}

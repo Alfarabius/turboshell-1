@@ -21,7 +21,8 @@ SRCS	=	minishell.c \
 			history.c \
 			signals.c \
 			init.c \
-			pipes.c
+			pipes.c \
+			redirects.c
 
 all:
 	Make -C ./libft/
