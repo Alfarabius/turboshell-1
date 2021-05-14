@@ -104,7 +104,10 @@ int	binary_processor(t_tsh *tsh)
 	{
 		binary_path = get_bpath(current_path++, tsh);
 		if (binary_in_dir(binary_path, tsh->prsr.args[0]))
+		{
 			open_binary(tsh, &binary_path);
+			break ;
+		}
 		ft_freen((void **)&binary_path);
 	}
 	return (0);
