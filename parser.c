@@ -212,7 +212,7 @@ void	common_case(t_prsr *prsr)
 			(prsr->l_index)++;
 			shielding = 1;
 		}
-		if (!shielding && (prsr->line[prsr->l_index] == '$' || prsr->line[prsr->l_index] == '\"' || prsr->line[prsr->l_index] == '\''))
+		if (!shielding && ((prsr->line[prsr->l_index] == '$' && ft_isalnum(prsr->line[prsr->l_index + 1])) || prsr->line[prsr->l_index] == '\"' || prsr->line[prsr->l_index] == '\''))
 			return ;
 		(prsr->args)[prsr->current_arg] = ft_realloc((prsr->args)[prsr->current_arg], 1, prsr->line[prsr->l_index]);
 		(prsr->l_index)++;
