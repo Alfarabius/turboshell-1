@@ -250,7 +250,7 @@ char	*get_env(t_tsh tsh, int *i)
 	{
 		if (tsh.line[*i] == '\n')
 			break ;
-		if (!ft_isalnum(tsh.line[*i]))
+		if (!ft_isalnum(tsh.line[*i]) && tsh.line[*i] != '?')
 			break ;
 		key = ft_realloc(key, 1, tsh.line[*i]);
 		(*i)++;
