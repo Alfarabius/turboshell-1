@@ -66,14 +66,14 @@ void	redirect_handler(t_tsh *tsh)
 			tsh->prsr.redirects[i]->file_path = ft_strdup(tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
 			error_checker(!tsh->prsr.redirects[i]->file_path, "memmory doesn't allocated", 1);
 			ft_freen((void **)&tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
-			tsh->prsr.args[tsh->prsr.redirects[i]->arg_num] = ft_strdup("");
+			tsh->prsr.args[tsh->prsr.redirects[i]->arg_num] = ft_strdup("\n");
 			error_checker(!tsh->prsr.args[tsh->prsr.redirects[i]->arg_num], "memmory doesn't allocated", 1);
 		}
 	}
 	i = -1;
 	len = 0;
 	while (tsh->prsr.args[++i])
-		if (tsh->prsr.args[i][0])
+		if (tsh->prsr.args[i][0] != '\n')
 			len++;
 	res_arr = (char **)malloc(sizeof(char *) * (len + 1));
 	error_checker(!res_arr, "memmory doesn't allocated", 1);
@@ -81,7 +81,7 @@ void	redirect_handler(t_tsh *tsh)
 	i = -1;
 	len = -1;
 	while (tsh->prsr.args[++i])
-		if (tsh->prsr.args[i][0])
+		if (tsh->prsr.args[i][0] != '\n')
 		{
 			res_arr[++len] = ft_strdup(tsh->prsr.args[i]);
 			error_checker(!res_arr[len], "memmory doesn't allocated", 1);
