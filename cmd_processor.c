@@ -3,7 +3,7 @@
 int	cmd_processor(t_tsh *tsh)
 {
 	open_redirects(tsh);
-	if (tsh->prsr.parse_status == 99)
+	if (tsh->prsr.parse_status < 0)
 		return (1);
 	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh);

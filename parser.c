@@ -340,7 +340,7 @@ void	line_parser(t_tsh *tsh)
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);
 	tsh->prsr.line = preparser(tsh);
-	printf("prpsr: %s\n", tsh->prsr.line);
+	// printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
 		if (!tsh->prsr.parse_status)
@@ -369,8 +369,8 @@ void	line_parser(t_tsh *tsh)
 	tsh->prsr.parse_status = 0;
 	redirect_handler(tsh);
 	tsh->prsr.l_index = -1;
-	while (tsh->prsr.args[++tsh->prsr.l_index])
-		printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
+	// while (tsh->prsr.args[++tsh->prsr.l_index])
+	// 	printf("args: %s\n", tsh->prsr.args[tsh->prsr.l_index]);
 	// print_redirects(&tsh->prsr);
 	free(tsh->prsr.line);
 	if (!tsh->prsr.pipe.count)

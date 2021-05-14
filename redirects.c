@@ -25,9 +25,10 @@ void	open_redirects(t_tsh *tsh)
 			write(2, ": ", 2);
 			ft_putstr_fd(strerror(errno), 2);
 			write(2, "\n", 2);
-			tsh->prsr.parse_status = 99;
+			tsh->prsr.parse_status = -1;
 			tsh->output_fd = 0;
 			tsh->input_fd = 0;
+			return ;
 		}
 	}
 	if (tsh->input_fd)
