@@ -50,6 +50,8 @@ static	int	binary_in_dir(char *path, char *bin)
 	struct dirent	*entry;
 
 	dir = opendir(path);
+	if (dir == NULL)
+		return (0);
 	entry = readdir(dir);
 	while (entry)
 	{
@@ -64,28 +66,28 @@ static	int	binary_in_dir(char *path, char *bin)
 	return (0);
 }
 
-static	void	open_binary(t_tsh *tsh, char *binary_path)
+static	void	open_binary(t_tsh *tsh, char **binary_path)
 {
 	int		i;
 	pid_t	pid;
 
 	i = -1;
-	binary_path = ft_realloc(binary_path, 1, '/');
+	*binary_path = ft_realloc(*binary_path, 1, '/');
 	while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
-		binary_path = ft_realloc(binary_path, 1, tsh->prsr.args[0][i]);
+		*binary_path = ft_realloc(*binary_path, 1, tsh->prsr.args[0][i]);
 	if (!tsh->prsr.pipe.count)
 	{
 		pid = fork();
 		if (!pid)
 		{
-			execve(binary_path, tsh->prsr.args, tsh->env_arr);
+			execve(*binary_path, tsh->prsr.args, tsh->env_arr);
 			exit(1);
 		}
 		else
 			waitpid(pid, &g_exit_status, 0);
 	}
 	else
-		execve(binary_path, tsh->prsr.args, tsh->env_arr);
+		execve(*binary_path, tsh->prsr.args, tsh->env_arr);
 }
 
 int	binary_processor(t_tsh *tsh)
@@ -102,7 +104,7 @@ int	binary_processor(t_tsh *tsh)
 	{
 		binary_path = get_bpath(current_path++, tsh);
 		if (binary_in_dir(binary_path, tsh->prsr.args[0]))
-			open_binary(tsh, binary_path);
+			open_binary(tsh, &binary_path);
 		ft_freen((void **)&binary_path);
 	}
 	return (0);
