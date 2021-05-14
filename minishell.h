@@ -8,7 +8,7 @@
 # include <stdio.h>
 # include "./Libft/libft.h"
 # include <term.h>
-# include <curses.h>
+//# include <curses.h>
 # include <stdlib.h>
 # include <signal.h>
 # include <dirent.h>
@@ -115,6 +115,7 @@ int					get_next_line(int fd, char **line);
 int					signal_handler(t_tsh *tsh);
 int					is_separ_exist(char *env_elem);
 int					new_prompt(t_tsh *tsh);
+int					binary_processor(t_tsh *tsh);
 int					envlist_to_arr(t_tsh *tsh);
 size_t				keylen(char *env_elem);
 char				*ft_newreminder(char *rem, char *err);

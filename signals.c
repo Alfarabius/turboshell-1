@@ -7,6 +7,7 @@ static	void	interrupt(int segnum)
 
 static	void	quit(int segnum)
 {
+	ft_putendl_fd("quit", 1);
 	g_exit_status = 131;
 }
 

@@ -13,6 +13,7 @@ SRCS	=	minishell.c \
 			utils2.c \
 			env_processor.c \
 			cmd_processor.c \
+			binary_processor.c \
 			manual_signals.c \
 			get_next_line.c \
 			get_next_line_utils.c \
