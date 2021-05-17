@@ -50,7 +50,7 @@ int	cmd_processor(t_tsh *tsh)
 	else if (tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
 		ft_echo(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("cd", tsh->prsr.args[0]))
-		ft_cd(tsh);
+		ft_cd(tsh, tsh->prsr.args[1]);
 	else if (tsh->prsr.args[0] && !ft_strcmp("pwd", tsh->prsr.args[0]))
 		ft_pwd(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("export", tsh->prsr.args[0]))
