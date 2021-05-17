@@ -1,19 +1,15 @@
 #include "minishell.h"
 
-static	void	interrupt(int segnum)
+void	signal_handler(int signum)
 {
-	g_exit_status = 130;
-}
-
-static	void	quit(int segnum)
-{
-	ft_putendl_fd("quit", 1);
-	g_exit_status = 131;
-}
-
-int	signal_handler(t_tsh *tsh)
-{
-	signal(SIGINT, interrupt);
-	signal(SIGQUIT, quit);
-	return (0);
+	if (signum == SIGINT)
+	{
+		write(1, "\n", 1);
+		g_exit_status = 130;
+	}
+	else if (signum == SIGQUIT)
+	{
+		ft_putstr_fd("Quit: 3\n", 1);
+		g_exit_status = 131;
+	}
 }

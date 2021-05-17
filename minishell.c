@@ -49,7 +49,6 @@ static	void	terminal_input(t_tsh *tsh)
 static	void	terminal_output(t_tsh *tsh)
 {
 	switch_term_attr(tsh);
-	signal_handler(tsh);
 	line_parser(tsh);
 	switch_term_attr(tsh);
 	add_to_history(tsh);

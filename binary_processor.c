@@ -81,10 +81,11 @@ static	void	open_binary(t_tsh *tsh, char **binary_path)
 		if (!pid)
 		{
 			execve(*binary_path, tsh->prsr.args, tsh->env_arr);
-			exit(1);
+			exit(0);
 		}
 		else
 			waitpid(pid, &g_exit_status, 0);
+		exit_status_handler();
 	}
 	else
 		execve(*binary_path, tsh->prsr.args, tsh->env_arr);

@@ -13,6 +13,8 @@ static	void	init_term_attr(t_tsh *tsh)
 	tgetent(0, TERM_NAME);
 	// if (!term_type || tgetent(0, term_type) != 1)
 	// 	return (error_handler("Can not find terminal or termcap base.", 1));
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 }
 
 static	void	init_history(t_tsh *tsh)

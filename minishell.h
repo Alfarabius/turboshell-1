@@ -8,7 +8,6 @@
 # include <stdio.h>
 # include "./Libft/libft.h"
 # include <term.h>
-//# include <curses.h>
 # include <stdlib.h>
 # include <signal.h>
 # include <dirent.h>
@@ -17,7 +16,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 
-int				g_exit_status;
+int			g_exit_status;
 
 typedef struct s_ppe
 {
@@ -88,6 +87,7 @@ void				ft_echo(t_tsh *tsh);
 void				line_parser(t_tsh *tsh);
 void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
+void				exit_status_handler();
 void				del_elem(void *elem);
 void				ft_cd(t_tsh *tsh);
 void				ft_export(t_tsh *tsh);
@@ -102,6 +102,7 @@ void				close_redirects(t_tsh *tsh);
 void				redirect_handler(t_tsh *tsh);
 void				clear_redirects(t_tsh *tsh);
 void				clear_arr(char ***arr);
+void				signal_handler(int signum);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
@@ -112,7 +113,6 @@ int					add_to_history(t_tsh *tsh);
 int					ft_putint(int c);
 int					cmd_processor(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
-int					signal_handler(t_tsh *tsh);
 int					is_separ_exist(char *env_elem);
 int					new_prompt(t_tsh *tsh);
 int					binary_processor(t_tsh *tsh);

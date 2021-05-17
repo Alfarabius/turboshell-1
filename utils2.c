@@ -63,3 +63,11 @@ void	clear_arr(char ***arr)
 		*arr = NULL;
 	}
 }
+
+void	exit_status_handler(void)
+{
+	if (WIFEXITED(g_exit_status))
+		g_exit_status = WEXITSTATUS(g_exit_status);
+	else if (WIFSIGNALED(g_exit_status))
+		signal_handler(WTERMSIG(g_exit_status));
+}
