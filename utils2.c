@@ -64,10 +64,15 @@ void	clear_arr(char ***arr)
 	}
 }
 
-void	exit_status_handler(void)
+void	exit_status_handler(pid_t pid)
 {
 	if (WIFEXITED(g_exit_status))
 		g_exit_status = WEXITSTATUS(g_exit_status);
-	else if (WIFSIGNALED(g_exit_status))
-		signal_handler(WTERMSIG(g_exit_status));
+	if (WIFSIGNALED(g_exit_status))
+	{
+		if (WTERMSIG(g_exit_status) == 2)
+			g_exit_status = 130;
+		else if (WTERMSIG(g_exit_status) == 3)
+			g_exit_status = 131;
+	}
 }

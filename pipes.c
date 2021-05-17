@@ -12,7 +12,7 @@ void	pipe_processor(t_tsh *tsh)
 		close(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][0]);
 		close(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][1]);
 		cmd_processor(tsh);
-		exit(1);
+		exit(0);
 	}
 	else
 	{
@@ -25,7 +25,6 @@ void	pipe_processor(t_tsh *tsh)
 
 void	wait_pipes(t_tsh *tsh)
 {
-	int		status;
 	pid_t	pid;
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
@@ -35,14 +34,15 @@ void	wait_pipes(t_tsh *tsh)
 	if (!pid)
 	{
 		cmd_processor(tsh);
-		exit(1);
+		exit(0);
 	}
 	else
 	{
 		dup2(tsh->original_fd[0], 0);
 		while (tsh->prsr.pipe.count)
 		{
-			wait(&status);
+			wait(&g_exit_status);
+			exit_status_handler(pid);
 			tsh->prsr.pipe.count--;
 		}
 	}

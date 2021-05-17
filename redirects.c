@@ -28,6 +28,7 @@ void	open_redirects(t_tsh *tsh)
 			tsh->prsr.parse_status = -1;
 			tsh->output_fd = 0;
 			tsh->input_fd = 0;
+			g_exit_status = 1;
 			return ;
 		}
 	}
