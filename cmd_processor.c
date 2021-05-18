@@ -17,24 +17,38 @@ static void arg_to_lower(t_tsh *tsh)
 	}
 }
 
+//сделать проверку на наличие файла
 static void start_by_path(t_tsh *tsh)
 {
 	pid_t	pid;
+	char	*path_to_exec;
 
+	path_to_exec = NULL;
+	if (tsh->prsr.args[0][0] == '.')
+	{
+		path_to_exec = getcwd(NULL, 0);
+		error_checker(!path_to_exec, "getcwd return error", 1);
+		path_to_exec = ft_strjoin_gnl(path_to_exec, "/");
+		path_to_exec = ft_strjoin_gnl(path_to_exec, tsh->prsr.args[0]);
+	}
+	else
+		path_to_exec = ft_strdup(tsh->prsr.args[0]);
 	if (!tsh->prsr.pipe.count)
 	{
 		pid = fork();
 		if (!pid)
 		{
-			execve(tsh->prsr.args[0], tsh->prsr.args, tsh->env_arr);
+			execve(path_to_exec, tsh->prsr.args, tsh->env_arr);
 			exit(0);
 		}
 		else
 			waitpid(pid, &g_exit_status, 0);
 	}
 	else
-		execve(tsh->prsr.args[0], tsh->prsr.args, tsh->env_arr);
+		execve(path_to_exec, tsh->prsr.args, tsh->env_arr);
 	exit_status_handler(pid);
+	if (path_to_exec)
+		free(path_to_exec);
 }
 
 int	cmd_processor(t_tsh *tsh)
@@ -43,7 +57,8 @@ int	cmd_processor(t_tsh *tsh)
 	arg_to_lower(tsh);
 	if (tsh->prsr.parse_status < 0)
 		return (1);
-	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0] == '.' && tsh->prsr.args[0][0] == '/')))
+	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0]\
+	== '.' && (tsh->prsr.args[0][1] == '/' || tsh->prsr.args[0][1] == '.'))))
 		start_by_path(tsh);
 	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh);
