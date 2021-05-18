@@ -320,6 +320,39 @@ char	*preparser(t_tsh *tsh)
 	return (res);
 }
 
+void	syntax_checker(t_tsh *tsh)
+{
+	int i;
+	int shield;
+	int dquote;
+	int squote;
+	int redrct;
+
+	i = -1;
+	dquote = 0;
+	squote = 0;
+	redrct = 0;
+	shield = 0;
+	while (tsh->line[++i])
+	{
+		if (tsh->line[i] == '\\' && !squote && !shield)
+		{
+			shield = !shield;
+			continue ;
+		}
+		if (tsh->line[i] == '\"' && !squote && !shield)
+			dquote = !dquote;
+		if (tsh->line[i] == '\'' && !dquote && !shield)
+			squote = !squote;
+		shield = 0;
+	}
+	if (dquote || squote)
+	{
+		error_template("turboshell-1.0", "syntax error", "need more quotes");
+		tsh->prsr.parse_status = 0;
+	}
+}
+
 static	void	init_parser(t_tsh *tsh)
 {
 	tsh->prsr.args = (char **)malloc(sizeof(char *) * 2);
@@ -339,6 +372,7 @@ void	line_parser(t_tsh *tsh)
 {
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);
+	syntax_checker(tsh);
 	tsh->prsr.line = preparser(tsh);
 	// printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
