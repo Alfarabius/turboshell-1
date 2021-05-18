@@ -115,5 +115,6 @@ int	binary_processor(t_tsh *tsh)
 	}
 	if (!status)
 		error_template("turboshell-1.0", tsh->prsr.args[0], "command not found");
+	ft_freen((void **)&binary_path);
 	return (0);
 }
