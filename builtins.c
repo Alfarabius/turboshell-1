@@ -45,6 +45,7 @@ void	ft_env(t_tsh *tsh)
 		tsh->env = tsh->env->next;
 	}
 	tsh->env = temp;
+	g_exit_status = 0;
 }
 
 void	ft_unset(t_tsh *tsh)
@@ -73,6 +74,7 @@ void	ft_unset(t_tsh *tsh)
 			((t_dict *)current->content)->is_set = 0;
 		}
 	}
+	g_exit_status = 0;
 }
 
 void	ft_pwd(t_tsh *tsh)
@@ -85,6 +87,7 @@ void	ft_pwd(t_tsh *tsh)
 	ft_putendl_fd(wpath, 1);
 	if (wpath)
 		free(wpath);
+	g_exit_status = 0;
 }
 
 void	ft_echo(t_tsh *tsh)
