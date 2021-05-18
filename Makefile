@@ -23,7 +23,8 @@ SRCS	=	minishell.c \
 			signals.c \
 			init.c \
 			pipes.c \
-			redirects.c
+			redirects.c \
+			cd_built_in.c
 
 all:
 	Make -C ./libft/
