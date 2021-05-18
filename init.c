@@ -19,7 +19,8 @@ static	void	init_term_attr(t_tsh *tsh)
 
 static	void	init_history(t_tsh *tsh)
 {
-	tsh->hfd = open("tsh_history", O_CREAT | O_RDWR | O_APPEND, 0755);
+	tsh->wdir = get_dir_for_history(tsh);
+	tsh->hfd = open(tsh->wdir, O_CREAT | O_RDWR | O_APPEND, 0755);
 	if (tsh->hfd == -1)
 		error_handler("history file doesn't open", 1);
 	tsh->env = NULL;

@@ -5,10 +5,10 @@ static	int	check_history_file(t_tsh *tsh)
 	int		check;
 	char	buf;
 
-	check = open("tsh_history", O_RDONLY);
+	check = open(tsh->wdir, O_RDONLY);
 	if (check == -1)
 	{
-		tsh->hfd = open("tsh_history", O_CREAT | O_RDWR | O_APPEND, 0755);
+		tsh->hfd = open(tsh->wdir, O_CREAT | O_RDWR | O_APPEND, 0755);
 		if (tsh->hfd == -1)
 			error_handler("history file doesn't open", 1);
 	}
@@ -21,7 +21,7 @@ int	file_to_history(t_tsh *tsh)
 	int		fd;
 	char	*line;
 
-	fd = open("tsh_history", O_RDONLY);
+	fd = open(tsh->wdir, O_RDONLY);
 	if (fd == -1)
 		return (error_handler("tsh_history file fd = -1", 0));
 	while (get_next_line(fd, &line))

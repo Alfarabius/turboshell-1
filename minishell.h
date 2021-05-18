@@ -69,6 +69,7 @@ typedef struct s_msh
 	char			**env_arr;
 	char			buf[1024];
 	char			*line;
+	char			*wdir;
 	char			is_running;
 	char			end_line;
 	char			is_termcap;
@@ -118,6 +119,7 @@ int					new_prompt(t_tsh *tsh);
 int					binary_processor(t_tsh *tsh);
 int					envlist_to_arr(t_tsh *tsh);
 size_t				keylen(char *env_elem);
+char				*get_dir_for_history(t_tsh *tsh);
 char				*ft_newreminder(char *rem, char *err);
 char				*ft_strjoin_gnl(char *s1, char *s2);
 char				*ft_nextline(char *rem);
