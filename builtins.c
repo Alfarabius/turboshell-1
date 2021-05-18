@@ -11,9 +11,7 @@ void	ft_exit(t_tsh *tsh)
 	{
 		if (!ft_isdigit(tsh->prsr.args[1][i]))
 		{
-			write(2, "turboshell-1.0: exit: ", 23);
-			ft_putstr_fd(tsh->prsr.args[1], 2);
-			write(2, ": numeric argument required\n", 28);
+			error_template("turboshell-1.0: exit", tsh->prsr.args[1], "numeric argument required");
 			exit (255);
 		}
 	}
@@ -22,7 +20,7 @@ void	ft_exit(t_tsh *tsh)
 		i++;
 	if (i > 2)
 	{
-		write(2, "turboshell-1.0: exit: too many arguments\n", 41);
+		error_template("turboshell-1.0", "exit", "too many arguments");
 		return ;
 	}
 	if (i == 2)

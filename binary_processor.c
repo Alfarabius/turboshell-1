@@ -44,7 +44,7 @@ int	path_len(t_tsh *tsh)
 	return (len);
 }
 
-static	int	binary_in_dir(char *path, char *bin)
+int			binary_in_dir(char *path, char *bin)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -96,20 +96,24 @@ int	binary_processor(t_tsh *tsh)
 	char	*binary_path;
 	int		current_path;
 	int		len;
-	void	*buf;
+	int		status;
 
 	current_path = 0;
+	status = 0;
 	len = path_len(tsh);
 	envlist_to_arr(tsh);
 	while (current_path < len)
 	{
 		binary_path = get_bpath(current_path++, tsh);
-		if (binary_in_dir(binary_path, tsh->prsr.args[0]))
+		status = binary_in_dir(binary_path, tsh->prsr.args[0]);
+		if (status)
 		{
 			open_binary(tsh, &binary_path);
 			break ;
 		}
 		ft_freen((void **)&binary_path);
 	}
+	if (!status)
+		error_template("turboshell-1.0", tsh->prsr.args[0], "command not found");
 	return (0);
 }

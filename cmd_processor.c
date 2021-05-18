@@ -17,24 +17,73 @@ static void arg_to_lower(t_tsh *tsh)
 	}
 }
 
-static void start_by_path(t_tsh *tsh)
+static int	check_bin(char *path_bin)
 {
-	pid_t	pid;
+	char	*path;
+	char	*bin;
+	int		i;
+
+	i = ft_strlen(path_bin);
+	bin = NULL;
+	path = NULL;
+	while (--i >= 0 && path_bin[i] != '/')
+		;
+	i++;
+	bin = ft_strdup(&path_bin[i]);
+	path_bin[i] = '\0';
+	path = ft_strdup(path_bin);
+	path_bin[i] = bin[0];
+	error_checker(!path || !bin, "Memmory doesn't allocated", 1);
+	i = binary_in_dir(path, bin);
+	free(bin);
+	free(path);
+	return(i);
+}
+
+static void start_exec(t_tsh *tsh, char *path)
+{
+	pid_t pid;
 
 	if (!tsh->prsr.pipe.count)
 	{
 		pid = fork();
 		if (!pid)
 		{
-			execve(tsh->prsr.args[0], tsh->prsr.args, tsh->env_arr);
+			execve(path, tsh->prsr.args, tsh->env_arr);
 			exit(0);
 		}
 		else
 			waitpid(pid, &g_exit_status, 0);
 	}
 	else
-		execve(tsh->prsr.args[0], tsh->prsr.args, tsh->env_arr);
+		execve(path, tsh->prsr.args, tsh->env_arr);
 	exit_status_handler(pid);
+}
+
+static void start_by_path(t_tsh *tsh)
+{
+	char	*path_to_exec;
+
+	path_to_exec = NULL;
+	if (tsh->prsr.args[0][0] == '.')
+	{
+		path_to_exec = getcwd(NULL, 0);
+		error_checker(!path_to_exec, "getcwd return error", 1);
+		path_to_exec = ft_strjoin_gnl(path_to_exec, "/");
+		path_to_exec = ft_strjoin_gnl(path_to_exec, tsh->prsr.args[0]);
+	}
+	else
+		path_to_exec = ft_strdup(tsh->prsr.args[0]);
+	if (!check_bin(path_to_exec))
+	{
+		error_template("turboshell-1.0", tsh->prsr.args[0], "No such file or directory");
+		if (path_to_exec)
+			free(path_to_exec);
+		return ;
+	}
+	start_exec(tsh, path_to_exec);
+	if (path_to_exec)
+		free(path_to_exec);
 }
 
 int	cmd_processor(t_tsh *tsh)
@@ -43,7 +92,8 @@ int	cmd_processor(t_tsh *tsh)
 	arg_to_lower(tsh);
 	if (tsh->prsr.parse_status < 0)
 		return (1);
-	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0] == '.' && tsh->prsr.args[0][0] == '/')))
+	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0]\
+	== '.' && (tsh->prsr.args[0][1] == '/' || tsh->prsr.args[0][1] == '.'))))
 		start_by_path(tsh);
 	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh);
