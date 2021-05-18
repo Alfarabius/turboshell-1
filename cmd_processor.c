@@ -17,10 +17,51 @@ static void arg_to_lower(t_tsh *tsh)
 	}
 }
 
-//сделать проверку на наличие файла
+static int	check_bin(char *path_bin)
+{
+	char	*path;
+	char	*bin;
+	int		i;
+
+	i = ft_strlen(path_bin);
+	bin = NULL;
+	path = NULL;
+	while (--i >= 0 && path_bin[i] != '/')
+		;
+	i++;
+	bin = ft_strdup(&path_bin[i]);
+	path_bin[i] = '\0';
+	path = ft_strdup(path_bin);
+	path_bin[i] = bin[0];
+	error_checker(!path || !bin, "Memmory doesn't allocated", 1);
+	i = binary_in_dir(path, bin);
+	free(bin);
+	free(path);
+	return(i);
+}
+
+static void start_exec(t_tsh *tsh, char *path)
+{
+	pid_t pid;
+
+	if (!tsh->prsr.pipe.count)
+	{
+		pid = fork();
+		if (!pid)
+		{
+			execve(path, tsh->prsr.args, tsh->env_arr);
+			exit(0);
+		}
+		else
+			waitpid(pid, &g_exit_status, 0);
+	}
+	else
+		execve(path, tsh->prsr.args, tsh->env_arr);
+	exit_status_handler(pid);
+}
+
 static void start_by_path(t_tsh *tsh)
 {
-	pid_t	pid;
 	char	*path_to_exec;
 
 	path_to_exec = NULL;
@@ -33,20 +74,16 @@ static void start_by_path(t_tsh *tsh)
 	}
 	else
 		path_to_exec = ft_strdup(tsh->prsr.args[0]);
-	if (!tsh->prsr.pipe.count)
+	if (!check_bin(path_to_exec))
 	{
-		pid = fork();
-		if (!pid)
-		{
-			execve(path_to_exec, tsh->prsr.args, tsh->env_arr);
-			exit(0);
-		}
-		else
-			waitpid(pid, &g_exit_status, 0);
+		write(2, "bash: ", 6);
+		ft_putstr_fd(tsh->prsr.args[0], 2);
+		write(2, ": No such file or directory\n", 28);
+		if (path_to_exec)
+			free(path_to_exec);
+		return ;
 	}
-	else
-		execve(path_to_exec, tsh->prsr.args, tsh->env_arr);
-	exit_status_handler(pid);
+	start_exec(tsh, path_to_exec);
 	if (path_to_exec)
 		free(path_to_exec);
 }

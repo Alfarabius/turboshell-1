@@ -44,7 +44,7 @@ int	path_len(t_tsh *tsh)
 	return (len);
 }
 
-static	int	binary_in_dir(char *path, char *bin)
+int			binary_in_dir(char *path, char *bin)
 {
 	DIR				*dir;
 	struct dirent	*entry;
