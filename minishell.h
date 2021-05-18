@@ -104,6 +104,7 @@ void				redirect_handler(t_tsh *tsh);
 void				clear_redirects(t_tsh *tsh);
 void				clear_arr(char ***arr);
 void				signal_handler(int signum);
+void				dictdelone(void *dict);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
@@ -127,8 +128,10 @@ char				*ft_realloc(char *str, int num, int c);
 char				*ft_memjoin_tsh(char *s1, char *s2);
 char				*get_env_value(t_tsh tsh, char *key);
 void				*ft_memdup(const void *mem, size_t size);
+t_dict				*dictdup(t_dict *dict);
 t_dict				*get_env_elem(t_tsh tsh, char *key);
 t_list				*sort_dict_ascii(t_list **dict);
+t_list				*dictlstdup(t_list *lst);
 char				*dict_to_str(t_dict *elem);
 
 #endif

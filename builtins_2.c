@@ -2,26 +2,29 @@
 
 static	void	write_export(t_tsh *tsh)
 {
+	t_list	*sorted;
 	t_list	*temp;
 
-	temp = tsh->env;
-	sort_dict_ascii(&tsh->env);
-	while (tsh->env)
+	sorted = dictlstdup(tsh->env);
+	temp = sorted;
+	sort_dict_ascii(&sorted);
+	while (sorted)
 	{
 		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(((t_dict *)(tsh->env->content))->key, 1);
-		if (((t_dict *)(tsh->env->content))->is_set)
+		ft_putstr_fd(((t_dict *)(sorted->content))->key, 1);
+		if (((t_dict *)(sorted->content))->is_set)
 		{
 			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(((t_dict *)(tsh->env->content))->value, 1);
+			ft_putstr_fd(((t_dict *)(sorted->content))->value, 1);
 			ft_putstr_fd("\"", 1);
 		}
 		write(1, "\n", 1);
-		if (!tsh->env->next)
+		if (!sorted->next)
 			break ;
-		tsh->env = tsh->env->next;
+		sorted = sorted->next;
 	}
-	tsh->env = temp;
+	sorted = temp;
+	ft_lstclear(&sorted, dictdelone);
 }
 
 void	ft_export(t_tsh *tsh)
@@ -55,4 +58,5 @@ void	ft_export(t_tsh *tsh)
 		ft_freen((void **)&(temp->content));
 		ft_freen((void **)&temp);
 	}
+	g_exit_status = 0;
 }
