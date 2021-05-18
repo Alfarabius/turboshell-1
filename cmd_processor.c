@@ -76,9 +76,7 @@ static void start_by_path(t_tsh *tsh)
 		path_to_exec = ft_strdup(tsh->prsr.args[0]);
 	if (!check_bin(path_to_exec))
 	{
-		write(2, "bash: ", 6);
-		ft_putstr_fd(tsh->prsr.args[0], 2);
-		write(2, ": No such file or directory\n", 28);
+		error_template("turboshell-1.0", tsh->prsr.args[0], "No such file or directory");
 		if (path_to_exec)
 			free(path_to_exec);
 		return ;

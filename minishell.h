@@ -104,6 +104,7 @@ void				redirect_handler(t_tsh *tsh);
 void				clear_redirects(t_tsh *tsh);
 void				clear_arr(char ***arr);
 void				signal_handler(int signum);
+void				error_template(char *head, char *arg, char *error);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);
