@@ -11,6 +11,7 @@ SRCS	=	minishell.c \
 			error.c \
 			utils.c \
 			utils2.c \
+			utils3.c \
 			env_processor.c \
 			cmd_processor.c \
 			binary_processor.c \
