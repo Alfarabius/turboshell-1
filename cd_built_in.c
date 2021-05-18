@@ -1,15 +1,13 @@
 #include "minishell.h"
 
-void	ft_cd(t_tsh *tsh)
+void	ft_cd(t_tsh *tsh, char *dir)
 {
 	t_list	*current;
 	t_dict	*pwd;
 	t_dict	*old_pwd;
-	char	*dir;
 
 	current = tsh->env;
 	old_pwd = NULL;
-	dir = tsh->prsr.args[1];
 	if (!dir)
 	{
 		while (current)

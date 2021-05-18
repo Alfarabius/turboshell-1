@@ -39,6 +39,8 @@ void	wait_pipes(t_tsh *tsh)
 	else
 	{
 		dup2(tsh->original_fd[0], 0);
+		close(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][1]);
+		close(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][0]);
 		while (tsh->prsr.pipe.count)
 		{
 			wait(&g_exit_status);

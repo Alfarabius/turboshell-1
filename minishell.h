@@ -89,7 +89,7 @@ void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
 void				exit_status_handler(pid_t pid);
 void				del_elem(void *elem);
-void				ft_cd(t_tsh *tsh);
+void				ft_cd(t_tsh *tsh, char *dir);
 void				ft_export(t_tsh *tsh);
 void				pipe_processor(t_tsh *tsh);
 void				wait_pipes(t_tsh *tsh);
