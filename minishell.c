@@ -62,6 +62,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	init_shell(&tsh);
 	env_to_lst(&tsh.env, env);
+	envlist_to_arr(&tsh);
 	while (tsh.is_running)
 	{
 		new_prompt(&tsh);

@@ -95,7 +95,7 @@ int	cmd_processor(t_tsh *tsh)
 	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0]\
 	== '.' && (tsh->prsr.args[0][1] == '/' || tsh->prsr.args[0][1] == '.'))))
 		start_by_path(tsh);
-	if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
+	else if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("echo", tsh->prsr.args[0]))
 		ft_echo(tsh);
