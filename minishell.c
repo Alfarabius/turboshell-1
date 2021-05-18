@@ -60,8 +60,9 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	init_shell(&tsh);
+	tsh.env = NULL;
 	env_to_lst(&tsh.env, env);
+	init_shell(&tsh);
 	envlist_to_arr(&tsh);
 	while (tsh.is_running)
 	{
