@@ -38,14 +38,12 @@ char	*get_dir_for_history(t_tsh *tsh)
 	char *ptr;
 	char *value;
 
-	value = get_env_value(*tsh, "_");
+	value = get_env_value(*tsh, "HOME");
 	if (value)
 	{
 		tmp = ft_strdup(value);
 		error_checker(!tmp, "memmory doesn't allocated", 1);
-		ptr = ft_strrchr(tmp, '.');
-		*ptr = '\0';
-		dir = ft_strjoin(tmp, "tsh_history");
+		dir = ft_strjoin(tmp, "/tsh_history");
 		free(tmp);
 	}
 	else

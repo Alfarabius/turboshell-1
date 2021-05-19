@@ -23,7 +23,6 @@ static	void	init_history(t_tsh *tsh)
 	tsh->hfd = open(tsh->wdir, O_CREAT | O_RDWR | O_APPEND, 0755);
 	if (tsh->hfd == -1)
 		error_handler("history file doesn't open", 1);
-	tsh->env = NULL;
 	tsh->his = NULL;
 	tsh->env_arr = NULL;
 	file_to_history(tsh);

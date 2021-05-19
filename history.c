@@ -64,7 +64,7 @@ int	history_editor(t_tsh *tsh)
 	size_t	len;
 	char	*tmp;
 
-	check_history_file(tsh);
+	//check_history_file(tsh);
 	len = ft_strlen(tsh->line);
 	ft_freen((void **)&tsh->his_ptr->content);
 	tsh->his_ptr->content = ft_strdup(tsh->line);
