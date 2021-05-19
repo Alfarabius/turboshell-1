@@ -12,7 +12,7 @@ static	void	write_export(t_tsh *tsh)
 	{
 		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(((t_dict *)(sorted->content))->key, 1);
-		if (((t_dict *)(sorted->content))->is_set)
+		if (((t_dict *)(sorted->content))->is_separ)
 		{
 			ft_putstr_fd("=\"", 1);
 			ft_putstr_fd(((t_dict *)(sorted->content))->value, 1);
@@ -53,10 +53,10 @@ void	ft_export(t_tsh *tsh)
 				elem_to_lst(tsh->prsr.args[current], &tsh->env);
 				ft_freen((void **)&((t_dict *)(temp->content))->value);
 			}
+			ft_freen((void **)&((t_dict *)(temp->content))->key);
+			ft_freen((void **)&(temp->content));
+			ft_freen((void **)&temp);
 		}
-		ft_freen((void **)&((t_dict *)(temp->content))->key);
-		ft_freen((void **)&(temp->content));
-		ft_freen((void **)&temp);
 	}
 	g_exit_status = 0;
 }

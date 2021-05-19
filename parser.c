@@ -230,7 +230,7 @@ void	distributor(t_prsr *prsr)
 		single_qoutes_case(prsr);
 }
 
-char	*get_env(t_tsh tsh, int *i)
+char	*get_env(t_tsh tsh, int *i, char *line)
 {
 	char	*key;
 	char	*value;
@@ -240,21 +240,21 @@ char	*get_env(t_tsh tsh, int *i)
 	key[0] = '\0';
 	value = NULL;
 	(*i)++;
-	if (ft_isdigit(tsh.line[*i]))
+	if (ft_isdigit(line[*i]))
 	{
 		(*i)++;
 		free(key);
 		return ("");
 	}
-	while (tsh.line[*i])
+	while (line[*i])
 	{
-		if (tsh.line[*i] == '\n')
+		if (line[*i] == '\n')
 			break ;
-		if (!ft_isalnum(tsh.line[*i]) && tsh.line[*i] != '?')
+		if (!ft_isalnum(line[*i]) && line[*i] != '?')
 			break ;
-		key = ft_realloc(key, 1, tsh.line[*i]);
+		key = ft_realloc(key, 1, line[*i]);
 		(*i)++;
-		if (tsh.line[*i - 1] == '?')
+		if (line[*i - 1] == '?')
 			break ;
 	}
 	while (tsh.env && key[0])
@@ -276,7 +276,7 @@ char	*get_env(t_tsh tsh, int *i)
 	return (value);
 }
 
-char	*preparser(t_tsh *tsh)
+char	*preparser(char **line, t_tsh *tsh)
 {
 	int		q_flag;
 	int		i;
@@ -289,11 +289,11 @@ char	*preparser(t_tsh *tsh)
 	res[0] = '\0';
 	i = 0;
 	q_flag = 1;
-	while (tsh->line[i])
+	while ((*line)[i])
 	{
-		if (tsh->line[i] == '\'')
+		if ((*line)[i] == '\'')
 			q_flag = !q_flag;
-		if (tsh->line[i] == '\"')
+		if ((*line)[i] == '\"')
 		{
 			if (q_flag == 0)
 				q_flag = 0;
@@ -302,11 +302,16 @@ char	*preparser(t_tsh *tsh)
 			else if (q_flag == 2)
 				q_flag = 1;
 		}
-		if ((tsh->line[i] == '$' && tsh->line[i - 1] == '\\') || !q_flag || tsh->line[i] != '$')
-			res = ft_realloc(res, 1, tsh->line[i]);
-		else if (q_flag && ((i && tsh->line[i - 1] != '\\') || !i))
+		if ((*line)[i] == ';' && q_flag == 1 && i && (*line)[i - 1] != '\\')
 		{
-			env = get_env(*tsh, &i);
+			res = ft_realloc(res, 1, (*line)[i]);
+			break ;
+		}
+		if (((*line)[i] == '$' && (*line)[i - 1] == '\\') || !q_flag || (*line)[i] != '$')
+			res = ft_realloc(res, 1, (*line)[i]);
+		else if (q_flag && ((i && (*line)[i - 1] != '\\') || !i))
+		{
+			env = get_env(*tsh, &i, *line);
 			j = 0;
 			while (env[j])
 			{
@@ -317,6 +322,9 @@ char	*preparser(t_tsh *tsh)
 		}
 		i++;
 	}
+	env = *line;
+	*line = ft_strdup(&((*line)[i + 1]));
+	free(env);
 	return (res);
 }
 
@@ -328,11 +336,20 @@ void	syntax_checker(t_tsh *tsh)
 	int squote;
 	int redrct;
 
-	i = -1;
+	i = skip_whitespaces(tsh->line, 0);
+	if (tsh->line[i] == ';' || tsh->line[i] == '|')
+	{
+		write(2, "turboshell-1.0: syntax error near unexpected token `", 52);
+		write(2, &tsh->line[i], 1);
+		write(2, "'\n", 2);
+		tsh->prsr.parse_status = 0;
+		return ;
+	}
 	dquote = 0;
 	squote = 0;
 	redrct = 0;
 	shield = 0;
+	i = -1;
 	while (tsh->line[++i])
 	{
 		if (tsh->line[i] == '\\' && !squote && !shield)
@@ -344,6 +361,13 @@ void	syntax_checker(t_tsh *tsh)
 			dquote = !dquote;
 		if (tsh->line[i] == '\'' && !dquote && !shield)
 			squote = !squote;
+		if (tsh->line[i] == '|' && !dquote && !squote && !shield)
+			if (tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\n' || tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\0')
+			{
+				error_template("turboshell-1.0", "syntax error", "need more commands");
+				tsh->prsr.parse_status = 0;
+				return ;
+			}
 		shield = 0;
 	}
 	if (dquote || squote)
@@ -370,10 +394,14 @@ static	void	init_parser(t_tsh *tsh)
 
 void	line_parser(t_tsh *tsh)
 {
+	int		i;
+	char	*current_line;
+
+	current_line = ft_strdup(tsh->line);
 	tsh->prsr.l_index = 0;
 	init_parser(tsh);
 	syntax_checker(tsh);
-	tsh->prsr.line = preparser(tsh);
+	tsh->prsr.line = preparser(&current_line, tsh);
 	// printf("prpsr: %s\n", tsh->prsr.line);
 	while (tsh->prsr.line[tsh->prsr.l_index] && tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
@@ -397,6 +425,8 @@ void	line_parser(t_tsh *tsh)
 			cmd_processor(tsh);
 			clear_arr(&tsh->prsr.args);
 			init_parser(tsh);
+			tsh->prsr.line = preparser(&current_line, tsh);
+			tsh->prsr.l_index = -1;
 		}
 		tsh->prsr.l_index++;
 	}
@@ -414,4 +444,5 @@ void	line_parser(t_tsh *tsh)
 	clear_arr(&tsh->prsr.args);
 	clear_redirects(tsh);
 	//Сделать проверку синтаксиса отдельной функцией.
+	//echo $ppp ; export ppp=ls ; $ppp - Разобраться с этим говном. Вроде чек, но надо тестить не поломалось ли еще что нибудь.
 }
