@@ -25,8 +25,12 @@ SRCS	=	minishell.c \
 			init.c \
 			pipes.c \
 			redirects.c \
-			cd_built_in.c
-
+			cd_built_in.c \
+			parser_utils.c \
+			parser_utils2.c \
+			parser_cases.c \
+			preparser.c \
+			syntax_checker.c
 all:
 	Make -C ./libft/
 	gcc $(CFLAGS) -I ./ $(SRCS) -o $(NAME) ./libft/libft.a -ltermcap
