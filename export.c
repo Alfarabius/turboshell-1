@@ -45,8 +45,14 @@ void	ft_export(t_tsh *tsh)
 			elem = get_env_elem(*tsh, ((t_dict *)(temp->content))->key);
 			if (elem)
 			{
-				ft_freen((void **)&elem->value);
-				elem->value = ((t_dict *)(temp->content))->value;
+				if (elem->value[0] == 0 && ((t_dict *)(temp->content))->is_separ)
+				{
+					ft_freen((void **)&elem->value);
+					elem->value = ((t_dict *)(temp->content))->value;
+					elem->is_separ = ((t_dict *)(temp->content))->is_separ;
+				}
+				else
+					ft_freen((void **)&((t_dict *)(temp->content))->value);
 			}
 			else
 			{
