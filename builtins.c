@@ -11,7 +11,8 @@ void	ft_exit(t_tsh *tsh)
 	{
 		if (!ft_isdigit(tsh->prsr.args[1][i]))
 		{
-			error_template("turboshell-1.0: exit", tsh->prsr.args[1], "numeric argument required");
+			error_template("turboshell-1.0: exit", \
+			tsh->prsr.args[1], "numeric argument required");
 			exit (255);
 		}
 	}

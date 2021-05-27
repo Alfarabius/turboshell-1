@@ -44,7 +44,7 @@ int	path_len(t_tsh *tsh)
 	return (len);
 }
 
-int			binary_in_dir(char *path, char *bin)
+int	binary_in_dir(char *path, char *bin)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -114,7 +114,8 @@ int	binary_processor(t_tsh *tsh)
 		ft_freen((void **)&binary_path);
 	}
 	if (!status)
-		error_template("turboshell-1.0", tsh->prsr.args[0], "command not found");
+		error_template("turboshell-1.0", \
+		tsh->prsr.args[0], "command not found");
 	ft_freen((void **)&binary_path);
 	return (0);
 }
