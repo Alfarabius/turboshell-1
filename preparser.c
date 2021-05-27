@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "parser.h"
 
 static void	set_qflag(char **line, int i, int *q_flag)
 {

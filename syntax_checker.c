@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "parser.h"
 
 static int	set_flags(char c, int *shield, int *dquote, int *squote)
 {
