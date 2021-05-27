@@ -63,6 +63,7 @@ typedef struct s_msh
 {
 	struct termios	term;
 	t_list			*env;
+	t_dlst			*curr_his;
 	t_dlst			*his;
 	t_dlst			*his_ptr;
 	t_prsr			prsr;
@@ -89,6 +90,7 @@ void				line_parser(t_tsh *tsh);
 void				ft_pwd(t_tsh *tsh);
 void				error_checker(int cond, char *msg, char flg);
 void				exit_status_handler(pid_t pid);
+void				save_history_exit(int status, t_tsh *tsh);
 void				del_elem(void *elem);
 void				ft_cd(t_tsh *tsh, char *dir);
 void				ft_export(t_tsh *tsh);
@@ -114,6 +116,7 @@ int					termcap_processor(char *line, t_tsh *tsh);
 int					history_editor(t_tsh *tsh);
 int					file_to_history(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
+void				history_to_file(t_tsh *tsh);
 int					ft_putint(int c);
 int					cmd_processor(t_tsh *tsh);
 int					get_next_line(int fd, char **line);

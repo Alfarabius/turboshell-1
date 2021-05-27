@@ -12,7 +12,7 @@ static	void	init_term_attr(t_tsh *tsh)
 	tsh->term.c_cc[VTIME] = 0;
 	tgetent(0, TERM_NAME);
 	// if (!term_type || tgetent(0, term_type) != 1)
-	// 	return (error_handler("Can not find terminal or termcap base.", 1));
+	// 	error_handler("Can not find terminal or termcap base.", 1);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 }
@@ -29,6 +29,7 @@ static	void	init_history(t_tsh *tsh)
 	ft_dlstadd_back(&tsh->his, ft_dlst_new(ft_strdup("\0")));
 	if (!tsh->his || !tsh->his->content)
 		error_handler("memmory doesn't allocated", 1);
+	tsh->curr_his = ft_dlstlast(tsh->his);
 }
 
 static	void	init_line(t_tsh *tsh)

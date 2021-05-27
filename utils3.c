@@ -48,8 +48,14 @@ char	*get_dir_for_history(t_tsh *tsh)
 	}
 	else
 	{
-		dir = ft_strdup("./tsh_history");
+		dir = ft_strdup("Users/history/tsh_history");
 		error_checker(!dir, "memmory doesn't allocated", 1);
 	}
 	return (dir);
+}
+
+void	save_history_exit(int status, t_tsh *tsh)
+{
+	history_to_file(tsh);
+	exit(status);
 }

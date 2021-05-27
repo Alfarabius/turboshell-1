@@ -13,7 +13,7 @@ void	ft_exit(t_tsh *tsh)
 		{
 			error_template("turboshell-1.0: exit", \
 			tsh->prsr.args[1], "numeric argument required");
-			exit (255);
+			save_history_exit(255, tsh);
 		}
 	}
 	i = 1;
@@ -25,8 +25,8 @@ void	ft_exit(t_tsh *tsh)
 		return ;
 	}
 	if (i == 2)
-		exit(ft_atoi(tsh->prsr.args[1]));
-	exit(0);
+		save_history_exit(ft_atoi(tsh->prsr.args[1]), tsh);
+	save_history_exit(0, tsh);
 }
 
 void	ft_env(t_tsh *tsh)

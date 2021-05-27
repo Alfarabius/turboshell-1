@@ -41,21 +41,16 @@ int	file_to_history(t_tsh *tsh)
 
 int	add_to_history(t_tsh *tsh)
 {
-	int		err;
 	size_t	len;
 	t_dlst	*dlst;
 
-	check_history_file(tsh);
 	len = ft_strlen(tsh->line);
-	err = write(tsh->hfd, tsh->line, len);
 	dlst = ft_dlstlast(tsh->his);
 	ft_freen((void **)&dlst->content);
 	dlst->content = ft_strdup(tsh->line);
 	error_checker(!dlst->content, "memmory doesn't allocated", 1);
 	((char *)(dlst->content))[len - 1] = '\0';
 	ft_dlstadd_back(&tsh->his, ft_dlst_new(ft_strdup("\0")));
-	if (err == -1)
-		return (error_handler("error while add to history", 0));
 	return (0);
 }
 
@@ -64,7 +59,6 @@ int	history_editor(t_tsh *tsh)
 	size_t	len;
 	char	*tmp;
 
-	//check_history_file(tsh);
 	len = ft_strlen(tsh->line);
 	ft_freen((void **)&tsh->his_ptr->content);
 	tsh->his_ptr->content = ft_strdup(tsh->line);
@@ -73,4 +67,20 @@ int	history_editor(t_tsh *tsh)
 	if (((char *)(tsh->his_ptr->content))[len - 1] == '\n')
 		((char *)(tsh->his_ptr->content))[len - 1] = '\0';
 	return (0);
+}
+
+void	history_to_file(t_tsh *tsh)
+{
+	t_dlst	*ptr;
+
+	if (tsh->curr_his)
+	{
+		ptr = tsh->curr_his;
+		check_history_file(tsh);
+		while(ptr->next)
+		{
+			ft_putendl_fd(ptr->content, tsh->hfd);
+			ptr = ptr->next;
+		}
+	}
 }
