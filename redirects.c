@@ -32,25 +32,31 @@ void	open_redirects(t_tsh *tsh)
 			return ;
 		}
 	}
-	if (tsh->input_fd)
-		dup2(tsh->input_fd, 0);
-	if (tsh->output_fd)
-		dup2(tsh->output_fd, 1);
+	if (i)
+	{
+		if (tsh->input_fd)
+			dup2(tsh->input_fd, 0);
+		if (tsh->output_fd)
+			dup2(tsh->output_fd, 1);
+	}
 }
 
 void	close_redirects(t_tsh *tsh)
 {
-	if (tsh->input_fd)
+	if (tsh->prsr.redirects[0])
 	{
-		dup2(tsh->original_fd[0], 0);
-		close(tsh->input_fd);
-		tsh->input_fd = 0;
-	}
-	if (tsh->output_fd)
-	{
-		dup2(tsh->original_fd[1], 1);
-		close(tsh->output_fd);
-		tsh->output_fd = 0;
+		if (tsh->input_fd)
+		{
+			dup2(tsh->original_fd[0], 0);
+			close(tsh->input_fd);
+			tsh->input_fd = 0;
+		}
+		if (tsh->output_fd)
+		{
+			dup2(tsh->original_fd[1], 1);
+			close(tsh->output_fd);
+			tsh->output_fd = 0;
+		}
 	}
 }
 
