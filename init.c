@@ -17,9 +17,9 @@ static	void	init_term_attr(t_tsh *tsh)
 	signal(SIGQUIT, signal_handler);
 }
 
-static	void	init_history(t_tsh *tsh)
+static	void	init_history(t_tsh *tsh, char *path)
 {
-	tsh->wdir = get_dir_for_history(tsh);
+	tsh->wdir = get_dir_for_history(tsh, path);
 	tsh->hfd = open(tsh->wdir, O_CREAT | O_RDWR | O_APPEND, 0755);
 	if (tsh->hfd == -1)
 		error_handler("history file doesn't open", 1);
@@ -55,10 +55,10 @@ static	void	init_pipes(t_tsh *tsh)
 	dup2(0, tsh->original_fd[0]);
 }
 
-void	init_shell(t_tsh *tsh)
+void	init_shell(t_tsh *tsh, char *path)
 {
 	init_term_attr(tsh);
-	init_history(tsh);
+	init_history(tsh, path);
 	init_line(tsh);
 	init_pipes(tsh);
 }

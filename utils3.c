@@ -31,7 +31,7 @@ void	dictdelone(void *dict)
 	free(dict);
 }
 
-char	*get_dir_for_history(t_tsh *tsh)
+char	*get_dir_for_history(t_tsh *tsh, char *path)
 {
 	char *dir;
 	char *tmp;
@@ -48,9 +48,12 @@ char	*get_dir_for_history(t_tsh *tsh)
 	}
 	else
 	{
-		dir = ft_strdup("Users/history/tsh_history");
-		error_checker(!dir, "memmory doesn't allocated", 1);
+		tmp = ft_strtrim(path, "minishell");
+		error_checker(!tmp, "memmory doesn't allocated", 1);
+		dir = ft_strjoin(tmp, "/tsh_history");
+		free(tmp);
 	}
+	error_checker(!dir, "memmory doesn't allocated", 1);
 	return (dir);
 }
 
