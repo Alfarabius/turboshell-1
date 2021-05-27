@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void arg_to_lower(t_tsh *tsh)
+void	arg_to_lower(t_tsh *tsh)
 {
 	int		len;
 	char	*res;
@@ -74,6 +74,13 @@ static void start_by_path(t_tsh *tsh)
 	}
 	else
 		path_to_exec = ft_strdup(tsh->prsr.args[0]);
+	if (opendir(path_to_exec))
+	{
+		error_template("turboshell-1.0", tsh->prsr.args[0], "is a directory");
+		if (path_to_exec)
+			free(path_to_exec);
+		return ;
+	}
 	if (!check_bin(path_to_exec))
 	{
 		error_template("turboshell-1.0", tsh->prsr.args[0], "No such file or directory");
@@ -89,7 +96,6 @@ static void start_by_path(t_tsh *tsh)
 int	cmd_processor(t_tsh *tsh)
 {
 	open_redirects(tsh);
-	arg_to_lower(tsh);
 	if (tsh->prsr.parse_status < 0)
 		return (1);
 	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0]\

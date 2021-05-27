@@ -7,6 +7,7 @@ static	char	*get_bpath(int current_path, t_tsh *tsh)
 	int		i;
 	int		current;
 
+	arg_to_lower(tsh);
 	bpath = (char *)malloc(1);
 	error_checker(!bpath, "memmory doesn't allocated", 1);
 	bpath[0] = '\0';
