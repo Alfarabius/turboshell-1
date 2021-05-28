@@ -28,6 +28,8 @@ static void	pipes_redirects(t_tsh *tsh, char **current_line)
 		tsh->prsr.parse_status = 1;
 		redirect_handler(tsh);
 		pipe_processor(tsh);
+		if (tsh->prsr.parse_status == 0)
+			return ;
 		clear_parser(tsh);
 		init_parser(tsh);
 	}

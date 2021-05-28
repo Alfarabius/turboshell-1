@@ -47,6 +47,8 @@ static void start_exec(t_tsh *tsh, char *path)
 	if (!tsh->prsr.pipe.count)
 	{
 		pid = fork();
+		if (pid < 0)
+			return (error_template_prsr("turboshell-1.0: ", "", strerror(errno), tsh));
 		if (!pid)
 		{
 			execve(path, tsh->prsr.args, tsh->env_arr);

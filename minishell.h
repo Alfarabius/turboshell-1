@@ -109,6 +109,7 @@ void				clear_arr(char ***arr);
 void				signal_handler(int signum);
 void				dictdelone(void *dict);
 void				error_template(char *head, char *arg, char *error);
+void				error_template_prsr(char *head, char *arg, char *error, t_tsh *tsh);
 void				arg_to_lower(t_tsh *tsh);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);

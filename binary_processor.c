@@ -79,6 +79,8 @@ static	void	open_binary(t_tsh *tsh, char **binary_path)
 	if (!tsh->prsr.pipe.count)
 	{
 		pid = fork();
+		if (pid < 0)
+			return (error_template_prsr("turboshell-1.0: ", "", strerror(errno), tsh));
 		if (!pid)
 		{
 			execve(*binary_path, tsh->prsr.args, tsh->env_arr);

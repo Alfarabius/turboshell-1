@@ -6,6 +6,22 @@ void	pipe_processor(t_tsh *tsh)
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
 	pid = fork();
+	if (pid < 0)
+	{
+		dup2(tsh->original_fd[1], 1);
+		dup2(tsh->original_fd[0], 0);
+		close(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][1]);
+		close(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][0]);
+		(error_template_prsr("turboshell-1.0: ", "", strerror(errno), tsh));
+		tsh->prsr.pipe.current = 0;
+		while (tsh->prsr.pipe.count)
+		{
+			wait(&g_exit_status);
+			exit_status_handler(pid);
+			tsh->prsr.pipe.count--;
+		}
+		return ;
+	}
 	if (!pid)
 	{
 		dup2(tsh->prsr.pipe.fd[tsh->prsr.pipe.current][1], 1);
@@ -29,6 +45,8 @@ void	wait_pipes(t_tsh *tsh)
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
 	pid = fork();
+	if (pid < 0)
+		return (error_template_prsr("turboshell-1.0: ", "", strerror(errno), tsh));
 	tsh->prsr.pipe.count++;
 	dup2(tsh->original_fd[1], 1);
 	if (!pid)

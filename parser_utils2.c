@@ -34,10 +34,11 @@ void	redirect_case(t_prsr *prsr)
 	add_redrct(&prsr->redirects, &redrct);
 }
 
-static char	*find_key(int *i, char *line)
+static char	*find_key(int *i, char *line, char **value)
 {
 	char	*key;
 
+	*value = NULL;
 	key = (char *)malloc(1);
 	error_checker(!key, "memmory doesn't allocated", 1);
 	key[0] = '\0';
@@ -45,7 +46,7 @@ static char	*find_key(int *i, char *line)
 	{
 		(*i)++;
 		free(key);
-		return ("");
+		return (NULL);
 	}
 	while (line[*i])
 	{
@@ -67,8 +68,8 @@ char	*get_env(t_tsh tsh, int *i, char *line)
 	char	*value;
 
 	(*i)++;
-	key = find_key(i, line);
-	if (ft_isdigit(line[*i]))
+	key = find_key(i, line, &value);
+	if (ft_isdigit(line[*i]) || !key)
 		return ("");
 	while (tsh.env && key[0])
 	{
