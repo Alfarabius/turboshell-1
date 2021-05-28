@@ -57,7 +57,7 @@ static void start_exec(t_tsh *tsh, char *path)
 	}
 	else
 		execve(path, tsh->prsr.args, tsh->env_arr);
-	exit_status_handler(pid);
+	exit_status_handler();
 }
 
 static void start_by_path(t_tsh *tsh)
@@ -108,7 +108,7 @@ int	cmd_processor(t_tsh *tsh)
 	else if (tsh->prsr.args[0] && !ft_strcmp("cd", tsh->prsr.args[0]))
 		ft_cd(tsh, tsh->prsr.args[1]);
 	else if (tsh->prsr.args[0] && !ft_strcmp("pwd", tsh->prsr.args[0]))
-		ft_pwd(tsh);
+		ft_pwd();
 	else if (tsh->prsr.args[0] && !ft_strcmp("export", tsh->prsr.args[0]))
 		ft_export(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("unset", tsh->prsr.args[0]))

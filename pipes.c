@@ -45,7 +45,7 @@ void	wait_pipes(t_tsh *tsh)
 		while (tsh->prsr.pipe.count)
 		{
 			wait(&g_exit_status);
-			exit_status_handler(pid);
+			exit_status_handler();
 			tsh->prsr.pipe.count--;
 		}
 	}

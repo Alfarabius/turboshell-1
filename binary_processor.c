@@ -89,7 +89,7 @@ static	void	open_binary(t_tsh *tsh, char **binary_path)
 	}
 	else
 		execve(*binary_path, tsh->prsr.args, tsh->env_arr);
-	exit_status_handler(pid);
+	exit_status_handler();
 }
 
 int	binary_processor(t_tsh *tsh)

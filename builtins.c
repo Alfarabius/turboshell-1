@@ -78,7 +78,7 @@ void	ft_unset(t_tsh *tsh)
 	g_exit_status = 0;
 }
 
-void	ft_pwd(t_tsh *tsh)
+void	ft_pwd(void)
 {
 	char	wpath[PATH_MAX];
 

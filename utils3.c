@@ -35,7 +35,6 @@ char	*get_dir_for_history(t_tsh *tsh, char *path)
 {
 	char *dir;
 	char *tmp;
-	char *ptr;
 	char *value;
 
 	value = get_env_value(*tsh, "HOME");

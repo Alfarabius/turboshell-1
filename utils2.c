@@ -64,7 +64,7 @@ void	clear_arr(char ***arr)
 	}
 }
 
-void	exit_status_handler(pid_t pid)
+void	exit_status_handler(void)
 {
 	if (WIFEXITED(g_exit_status))
 		g_exit_status = WEXITSTATUS(g_exit_status);

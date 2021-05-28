@@ -3,7 +3,6 @@
 static	int	check_history_file(t_tsh *tsh)
 {
 	int		check;
-	char	buf;
 
 	check = open(tsh->wdir, O_RDONLY);
 	if (check == -1)
@@ -57,8 +56,7 @@ int	add_to_history(t_tsh *tsh)
 int	history_editor(t_tsh *tsh)
 {
 	size_t	len;
-	char	*tmp;
-
+	
 	len = ft_strlen(tsh->line);
 	ft_freen((void **)&tsh->his_ptr->content);
 	tsh->his_ptr->content = ft_strdup(tsh->line);
