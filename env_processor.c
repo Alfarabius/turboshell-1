@@ -29,6 +29,7 @@ int	elem_to_lst(char *env_elem, t_list **lst)
 	if (!content)
 		return (error_handler("memmory doesn't allocated", 1));
 	content->is_separ = is_separ_exist(env_elem);
+	content->is_set = 0;
 	if (content->is_separ)
 		content->is_set = 1;
 	content->key = ft_substr(env_elem, 0, len);

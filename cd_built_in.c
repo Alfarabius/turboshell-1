@@ -33,7 +33,11 @@ void	ft_cd(t_tsh *tsh, char *dir)
 	current = tsh->env;
 	old_pwd = NULL;
 	if (!dir)
+	{
 		dir = get_env_value(*tsh, "HOME");
+		if (!dir)
+			return (builtin_error("HOME not set", "", "cd: "));
+	}
 	current = tsh->env;
 	if (chdir(dir) == -1)
 		return (builtin_error(": No such file or directory", dir, "cd: "));
