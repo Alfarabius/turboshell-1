@@ -1,8 +1,10 @@
-NAME		= minishell
-RM			= rm -f
-CFLAGS		= -Wall -Werror -Wextra
-SRCS_PATH	= ./
-HEAD		= minishell.h
+NAME		=	minishell
+SRCS_PATH	=	./
+OBJS_PATH	=	./objs
+INC_PATH	=	./
+HEAD		=	minishell.h
+LIBFT_PATH	=	./Libft
+LIBFT		=	$(LIBFT_PATH)/libft.a
 
 SRCS	=	minishell.c \
 			parser.c \
@@ -31,13 +33,32 @@ SRCS	=	minishell.c \
 			parser_cases.c \
 			preparser.c \
 			syntax_checker.c
-all:
-	Make -C ./libft/
-	gcc $(CFLAGS) -I ./ $(SRCS) -o $(NAME) ./libft/libft.a -ltermcap
+
+OBJS		=	$(addprefix $(OBJS_PATH)/, $(SRCS:.c=.o))
+RM			=	rm -f
+RM_DIR		=	rm -rf
+CFLAGS		=	-Wall -Werror -Wextra
+CC			=	gcc
+INC			=	-I $(INC_PATH)
+
+.PHONY: all init clean fclean re debug norm
+
+all: init $(NAME)
+
+$(OBJS_PATH)/%.o:	$(SRCS_PATH)/%.c $(HEAD)
+	@ echo "compile $@"
+	@ $(CC) $(CFLAGS) $(INC) -c $< -o $@ -g
+
+$(NAME):	$(HEAD)	$(OBJS)	$(LIBFT)
+	@ $(CC) $(CFLAGS) $(INC) $(OBJS) -o $(NAME) $(LIBFT) -ltermcap
+
+init:
+	@ mkdir -p $(OBJS_PATH)
+	@ make -C $(LIBFT_PATH)
 
 debug:
-	Make -C ./libft/
-	gcc -g -I ./ $(SRCS) -o $(NAME) ./libft/libft.a -ltermcap
+	Make -C ./Libft/
+	$(CC) -g $(INC) $(SRCS) -o $(NAME) $(LIBFT) -ltermcap
 
 clean:
 	@ echo "clean"
