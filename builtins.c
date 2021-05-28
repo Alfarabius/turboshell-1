@@ -61,6 +61,11 @@ void	ft_unset(t_tsh *tsh)
 	i = 0;
 	while (tsh->prsr.args[++i])
 	{
+		if (!ft_isalpha(tsh->prsr.args[i][0]))
+		{
+			builtin_error("` not a valid identifier", tsh->prsr.args[i], "unset: '");
+			continue ;
+		}
 		current = tsh->env;
 		prev = tsh->env;
 		while (current)

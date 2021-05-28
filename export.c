@@ -41,6 +41,11 @@ void	ft_export(t_tsh *tsh)
 		temp = NULL;
 		while (tsh->prsr.args[++current])
 		{
+			if (!ft_isalpha(tsh->prsr.args[current][0]))
+			{
+				builtin_error("` not a valid identifier", tsh->prsr.args[current], "export: '");
+				continue ;
+			}
 			elem_to_lst(tsh->prsr.args[current], &temp);
 			elem = get_env_elem(*tsh, ((t_dict *)(temp->content))->key);
 			if (elem)
