@@ -7,6 +7,9 @@ void	ft_exit(t_tsh *tsh)
 	if (!tsh->prsr.pipe.count)
 		write(1, "exit\n", 6);
 	i = -1;
+	if(tsh->prsr.args[1] &&
+	(tsh->prsr.args[1][0] == '-' || tsh->prsr.args[1][0] == '+'))
+		i = 0;
 	while (tsh->prsr.args[1] && tsh->prsr.args[1][++i])
 	{
 		if (!ft_isdigit(tsh->prsr.args[1][i]))
@@ -21,8 +24,8 @@ void	ft_exit(t_tsh *tsh)
 		i++;
 	if (i > 2)
 	{
-		error_template("turboshell-1.0", "exit", "too many arguments");
-		return ;
+		g_exit_status = 1;
+		return (error_template("turboshell-1.0", "exit", "too many arguments"));
 	}
 	if (i == 2)
 		save_history_exit(ft_atoi(tsh->prsr.args[1]), tsh);

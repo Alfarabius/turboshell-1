@@ -21,6 +21,7 @@ static int	general_check(int i, t_tsh *tsh, int flags)
 		if (tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\n' \
 		|| tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\0')
 		{
+			g_exit_status = 2;
 			if (tsh->line[i] == '|')
 				error_template("turboshell-1.0", \
 				"syntax error", "need more commands");
@@ -41,6 +42,7 @@ static int	check_first_symbol(t_tsh *tsh)
 	i = skip_whitespaces(tsh->line, 0);
 	if (tsh->line[i] == ';' || tsh->line[i] == '|')
 	{
+		g_exit_status = 2;
 		write(2, "turboshell-1.0: syntax error near unexpected token `", 52);
 		write(2, &tsh->line[i], 1);
 		write(2, "'\n", 2);
@@ -73,6 +75,7 @@ void	syntax_checker(t_tsh *tsh)
 	}
 	if (dquote || squote)
 	{
+		g_exit_status = 2;
 		error_template("turboshell-1.0", "syntax error", "need more quotes");
 		tsh->prsr.parse_status = 0;
 	}

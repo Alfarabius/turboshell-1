@@ -42,8 +42,10 @@ static int	check_bin(char *path_bin)
 
 static void start_exec(t_tsh *tsh, char *path)
 {
-	pid_t pid;
+	pid_t	pid;
+	int		status;
 
+	status = 0;
 	if (!tsh->prsr.pipe.count)
 	{
 		pid = fork();
@@ -53,11 +55,11 @@ static void start_exec(t_tsh *tsh, char *path)
 			exit(0);
 		}
 		else
-			waitpid(pid, &g_exit_status, 0);
+			waitpid(pid, &status, 0);
 	}
 	else
 		execve(path, tsh->prsr.args, tsh->env_arr);
-	exit_status_handler();
+	exit_status_handler(status);
 }
 
 static void start_by_path(t_tsh *tsh)
@@ -76,6 +78,7 @@ static void start_by_path(t_tsh *tsh)
 		path_to_exec = ft_strdup(tsh->prsr.args[0]);
 	if (opendir(path_to_exec))
 	{
+		g_exit_status = 126;
 		error_template("turboshell-1.0", tsh->prsr.args[0], "is a directory");
 		if (path_to_exec)
 			free(path_to_exec);

@@ -58,6 +58,7 @@ char	*get_dir_for_history(t_tsh *tsh, char *path)
 
 void	save_history_exit(int status, t_tsh *tsh)
 {
+	add_to_history(tsh);
 	history_to_file(tsh);
 	exit(status);
 }

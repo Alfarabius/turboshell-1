@@ -64,15 +64,15 @@ void	clear_arr(char ***arr)
 	}
 }
 
-void	exit_status_handler(void)
+void	exit_status_handler(int status)
 {
-	if (WIFEXITED(g_exit_status))
-		g_exit_status = WEXITSTATUS(g_exit_status);
-	if (WIFSIGNALED(g_exit_status))
+	if (WIFEXITED(status))
+		g_exit_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(g_exit_status) == 2)
+		if (WTERMSIG(status) == 2)
 			g_exit_status = 130;
-		else if (WTERMSIG(g_exit_status) == 3)
+		else if (WTERMSIG(status) == 3)
 			g_exit_status = 131;
 	}
 }

@@ -34,7 +34,7 @@ static	void	terminal_input(t_tsh *tsh)
 {
 	get_next_symbol(tsh);
 	termcap_processor(tsh->buf, tsh);
-	write(1, tsh->buf, tsh->symbols);
+	write(0, tsh->buf, tsh->symbols);
 	if (!tsh->is_termcap)
 	{
 		tsh->line = ft_memjoin_tsh(tsh->line, tsh->buf);
