@@ -80,14 +80,10 @@ void	ft_unset(t_tsh *tsh)
 
 void	ft_pwd(t_tsh *tsh)
 {
-	char	*wpath;
+	char	wpath[PATH_MAX];
 
-	wpath = NULL;
-	wpath = getcwd(NULL, 0);
-	error_checker(!wpath, "getcwd return error", 1);
+	getcwd((char *)wpath, PATH_MAX);
 	ft_putendl_fd(wpath, 1);
-	if (wpath)
-		free(wpath);
 	g_exit_status = 0;
 }
 
