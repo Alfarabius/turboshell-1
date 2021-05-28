@@ -28,8 +28,9 @@ int	elem_to_lst(char *env_elem, t_list **lst)
 	content = (t_dict *)malloc(sizeof(t_dict));
 	if (!content)
 		return (error_handler("memmory doesn't allocated", 1));
-	content->is_set = 1;
 	content->is_separ = is_separ_exist(env_elem);
+	if (content->is_separ)
+		content->is_set = 1;
 	content->key = ft_substr(env_elem, 0, len);
 	content->value = ft_substr(env_elem, len + 1, ft_strlen(env_elem));
 	if (!content->key || !content->value)
