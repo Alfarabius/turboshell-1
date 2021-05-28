@@ -77,7 +77,7 @@ void	line_parser(t_tsh *tsh)
 			return ;
 		}
 		distributor(&tsh->prsr);
-		if (tsh->prsr.l_index >= ft_strlen(tsh->prsr.line) || \
+		if (tsh->prsr.l_index >= (int)ft_strlen(tsh->prsr.line) || \
 		!tsh->prsr.parse_status || tsh->prsr.line[tsh->prsr.l_index] == '\n')
 			break ;
 		pipes_redirects(tsh, &current_line);
