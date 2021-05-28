@@ -111,6 +111,7 @@ void				error_template(char *head, char *arg, char *error);
 void				error_template_prsr(char *head, char *arg, char *error, t_tsh *tsh);
 void				arg_to_lower(t_tsh *tsh);
 void				exit_status_handler(int status);
+void				builtin_error(char *msg, char *name, char *btin);
 int					env_to_lst(t_list **lst, char **env);
 int					elem_to_lst(char *env_elem, t_list **lst);
 int					error_handler(char *msg, char flg);

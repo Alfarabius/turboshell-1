@@ -13,8 +13,9 @@ static void	wait_error_pipes(t_tsh *tsh)
 	dup2(tsh->original_fd[1], 1);
 	dup2(tsh->original_fd[0], 0);
 	close_pipes_fd(tsh);
-	(error_template_prsr("turboshell-1.0: ", "", strerror(errno), tsh));
+	builtin_error(strerror(errno), "", "fork: ");
 	tsh->prsr.pipe.current = 0;
+	tsh->prsr.parse_status = 0;
 	while (tsh->prsr.pipe.count)
 	{
 		wait(&status);
