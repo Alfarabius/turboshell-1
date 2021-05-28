@@ -6,8 +6,6 @@ static	void	ctrl_char_handler(t_tsh *tsh)
 		tsh->buf[tsh->symbols - 1] = 0;
 	else if (tsh->buf[tsh->symbols - 1] == 126)
 		ft_bzero(tsh->buf, 1024);
-	else if (!ft_strcmp(tsh->buf, "\177"))
-		return ;
 	else if (tsh->buf[tsh->symbols - 1] < 0)
 		ft_bzero(tsh->buf, 1024);
 	else if (tsh->buf[tsh->symbols - 1] > 127)
@@ -17,6 +15,8 @@ static	void	ctrl_char_handler(t_tsh *tsh)
 	else if (tsh->buf[tsh->symbols - 1] == '\3')
 		ctrl_c(tsh);
 	else if (tsh->buf[tsh->symbols - 1] == '\4')
+		return ;
+	else if (!ft_strcmp(tsh->buf, "\177"))
 		return ;
 	else if (!ft_isprint(tsh->buf[tsh->symbols - 1]))
 		tsh->buf[tsh->symbols - 1] = 0;
@@ -28,13 +28,13 @@ static	void	get_next_symbol(t_tsh *tsh)
 	tsh->symbols = read(0, tsh->buf, 1024);
 	tsh->buf[tsh->symbols] = '\0';
 	ctrl_char_handler(tsh);
-	write(1, tsh->buf, tsh->symbols);
 }
 
 static	void	terminal_input(t_tsh *tsh)
 {
 	get_next_symbol(tsh);
 	termcap_processor(tsh->buf, tsh);
+	write(1, tsh->buf, tsh->symbols);
 	if (!tsh->is_termcap)
 	{
 		tsh->line = ft_memjoin_tsh(tsh->line, tsh->buf);
