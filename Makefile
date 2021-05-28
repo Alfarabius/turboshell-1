@@ -74,3 +74,5 @@ fclean: clean
 norm:
 	@ norminette $(addprefix $(SRCS_PATH)/, $(SRCS)) $(HEAD)
 	@ make norm -C $(LIBFT_PATH)
+
+re: fclean all

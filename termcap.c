@@ -2,7 +2,7 @@
 
 static	int	term_clean_up(void)
 {
-		tputs(restore_cursor, 1, ft_putint);
+	tputs(restore_cursor, 1, ft_putint);
 	tputs("\033[J", 1, ft_putint);
 	return (0);
 }

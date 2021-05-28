@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "minishell.h"
 
 void	distributor(t_prsr *prsr)
 {

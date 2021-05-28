@@ -7,7 +7,6 @@ void	open_redirects(t_tsh *tsh)
 	i = -1;
 	while (tsh->prsr.redirects[++i])
 	{
-		//проверить на директорию и вообще на валидность
 		if (tsh->input_fd)
 			close(tsh->input_fd);
 		if (tsh->output_fd)

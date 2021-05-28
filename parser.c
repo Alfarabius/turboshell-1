@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "minishell.h"
 
 static void	clear_parser(t_tsh *tsh)
 {
