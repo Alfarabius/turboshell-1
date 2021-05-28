@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "minishell.h"
 
 void	single_qoutes_case(t_prsr *prsr)
 {

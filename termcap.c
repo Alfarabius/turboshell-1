@@ -11,6 +11,7 @@ static	int	history_up(t_tsh *tsh)
 {
 	size_t	len;
 
+	ft_bzero(tsh->buf, 1024);
 	len = ft_strlen(tsh->line);
 	term_clean_up();
 	if (tsh->his_ptr && tsh->his_ptr->prev)
@@ -29,6 +30,7 @@ static	int	history_down(t_tsh *tsh)
 {
 	size_t	len;
 
+	ft_bzero(tsh->buf, 1024);
 	len = ft_strlen(tsh->line);
 	term_clean_up();
 	if (tsh->his_ptr && tsh->his_ptr->next)
@@ -48,6 +50,7 @@ static	int	erase_symbol(t_tsh *tsh)
 {
 	size_t	len;
 
+	ft_bzero(tsh->buf, 1024);
 	len = ft_strlen(tsh->line);
 	if (len > 0)
 	{
@@ -64,7 +67,7 @@ int	termcap_processor(char *buf, t_tsh *tsh)
 		tsh->is_termcap = history_up(tsh);
 	else if (!ft_strcmp(buf, "\033[B"))
 		tsh->is_termcap = history_down(tsh);
-	else if (!ft_strcmp(buf, "\177"))
+	else if (!ft_strcmp(buf, "\177") || !ft_strcmp(buf, key_backspace))
 		tsh->is_termcap = erase_symbol(tsh);
 	else if (!ft_strcmp(buf, "\033[D"))
 	{

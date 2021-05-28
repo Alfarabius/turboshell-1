@@ -47,7 +47,7 @@ all: init $(NAME)
 
 $(OBJS_PATH)/%.o:	$(SRCS_PATH)/%.c $(HEAD)
 	@ echo "compile $@"
-	@ $(CC) $(CFLAGS) $(INC) -c $< -o $@ -g
+	@ $(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 $(NAME):	$(HEAD)	$(OBJS)	$(LIBFT)
 	@ $(CC) $(CFLAGS) $(INC) $(OBJS) -o $(NAME) $(LIBFT) -ltermcap
@@ -57,18 +57,22 @@ init:
 	@ make -C $(LIBFT_PATH)
 
 debug:
-	Make -C ./Libft/
+	Make -C $(LIBFT_PATH)
 	$(CC) -g $(INC) $(SRCS) -o $(NAME) $(LIBFT) -ltermcap
 
 clean:
 	@ echo "clean"
-	@ make clean -C ./libft/
+	@ make clean -C $(LIBFT_PATH)
+	@ $(RM) $(OBJS)
+	@ $(RM_DIR) $(OBJS_PATH)
 
 fclean: clean
 	@ $(RM) $(NAME)
 	@ make fclean -C ./libft/
-	@ $(RM) tsh_history
+	@ $(RM) ./tsh_history
 
 norm:
 	@ norminette $(addprefix $(SRCS_PATH)/, $(SRCS)) $(HEAD)
 	@ make norm -C $(LIBFT_PATH)
+
+re: fclean all

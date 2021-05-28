@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "minishell.h"
 
 void	add_line(char ***arr, char *line, t_prsr *prsr)
 {

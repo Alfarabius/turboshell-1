@@ -6,13 +6,13 @@ static	void	init_term_attr(t_tsh *tsh)
 
 	term_type = getenv("TERM");
 	if (tcgetattr(0, &tsh->term) == -1)
-		error_handler("error in tcgetattr", 1);
+		error_handler("error in tcgetattr", 0);
 	switch_term_attr(tsh);
 	tsh->term.c_cc[VMIN] = 1;
 	tsh->term.c_cc[VTIME] = 0;
-	tgetent(0, TERM_NAME);
-	// if (!term_type || tgetent(0, term_type) != 1)
-	// 	error_handler("Can not find terminal or termcap base.", 1);
+	//tgetent(0, TERM_NAME);
+	if (!term_type || tgetent(0, term_type) != 1)
+		error_handler("Can not find terminal or termcap base.", 1);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 }

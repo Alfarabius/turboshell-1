@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "minishell.h"
 
 static void	clear_parser(t_tsh *tsh)
 {
@@ -86,5 +86,4 @@ void	line_parser(t_tsh *tsh)
 		tsh->prsr.l_index++;
 	}
 	ending(tsh, &current_line);
-	//echo $ppp ; export ppp=ls ; $ppp - Разобраться с этим говном. Вроде чек, но надо тестить не поломалось ли еще что нибудь.
 }

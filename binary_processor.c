@@ -70,9 +70,11 @@ int	binary_in_dir(char *path, char *bin)
 static	void	open_binary(t_tsh *tsh, char **binary_path)
 {
 	int		i;
+	int		status;
 	pid_t	pid;
 
 	i = -1;
+	status = 0;
 	*binary_path = ft_realloc(*binary_path, 1, '/');
 	while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
 		*binary_path = ft_realloc(*binary_path, 1, tsh->prsr.args[0][i]);
@@ -87,11 +89,11 @@ static	void	open_binary(t_tsh *tsh, char **binary_path)
 			exit(0);
 		}
 		else
-			waitpid(pid, &g_exit_status, 0);
+			waitpid(pid, &status, 0);
 	}
 	else
 		execve(*binary_path, tsh->prsr.args, tsh->env_arr);
-	exit_status_handler(pid);
+	exit_status_handler(status);
 }
 
 int	binary_processor(t_tsh *tsh)
@@ -117,8 +119,11 @@ int	binary_processor(t_tsh *tsh)
 		ft_freen((void **)&binary_path);
 	}
 	if (!status)
+	{
+		g_exit_status = 127;
 		error_template("turboshell-1.0", \
 		tsh->prsr.args[0], "command not found");
+	}
 	ft_freen((void **)&binary_path);
 	return (0);
 }

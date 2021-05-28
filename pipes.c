@@ -42,6 +42,7 @@ void	pipe_processor(t_tsh *tsh)
 void	wait_pipes(t_tsh *tsh)
 {
 	pid_t	pid;
+	int		status;
 
 	pipe(tsh->prsr.pipe.fd[tsh->prsr.pipe.current]);
 	pid = fork();
@@ -52,7 +53,7 @@ void	wait_pipes(t_tsh *tsh)
 	if (!pid)
 	{
 		cmd_processor(tsh);
-		exit(0);
+		exit(g_exit_status);
 	}
 	else
 	{
@@ -62,8 +63,8 @@ void	wait_pipes(t_tsh *tsh)
 		tsh->prsr.pipe.current = 0;
 		while (tsh->prsr.pipe.count)
 		{
-			wait(&g_exit_status);
-			exit_status_handler(pid);
+			wait(&status);
+			exit_status_handler(status);
 			tsh->prsr.pipe.count--;
 		}
 	}
