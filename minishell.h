@@ -83,7 +83,7 @@ typedef struct s_msh
 	int				output_fd;
 }					t_tsh;
 
-void				ft_exit(t_tsh *tsh);
+void				ft_exit(t_tsh *tsh, int i);
 void				ft_env(t_tsh *tsh);
 void				ft_unset(t_tsh *tsh);
 void				ft_echo(t_tsh *tsh);
@@ -108,7 +108,8 @@ void				clear_arr(char ***arr);
 void				signal_handler(int signum);
 void				dictdelone(void *dict);
 void				error_template(char *head, char *arg, char *error);
-void				error_template_prsr(char *head, char *arg, char *error, t_tsh *tsh);
+void				error_template_prsr(char *head, char *arg, \
+					char *error, t_tsh *tsh);
 void				arg_to_lower(t_tsh *tsh);
 void				exit_status_handler(int status);
 void				builtin_error(char *msg, char *name, char *btin);
@@ -125,7 +126,7 @@ int					cmd_processor(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
 int					is_separ_exist(char *env_elem);
 int					new_prompt(t_tsh *tsh);
-int					binary_processor(t_tsh *tsh);
+void				binary_processor(t_tsh *tsh, int status);
 int					envlist_to_arr(t_tsh *tsh);
 int					binary_in_dir(char *path, char *bin);
 size_t				keylen(char *env_elem);

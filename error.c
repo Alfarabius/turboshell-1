@@ -3,7 +3,6 @@
 int	error_handler(char *msg, char flg)
 {
 	ft_putstr_fd(msg, 2);
-	// g_exit_status = 1;
 	if (flg)
 		exit(g_exit_status);
 	return (1);

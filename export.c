@@ -43,7 +43,8 @@ void	ft_export(t_tsh *tsh)
 		{
 			if (!ft_isalpha(tsh->prsr.args[current][0]))
 			{
-				builtin_error("` not a valid identifier", tsh->prsr.args[current], "export: '");
+				builtin_error("` not a valid identifier", \
+				tsh->prsr.args[current], "export: '");
 				continue ;
 			}
 			elem_to_lst(tsh->prsr.args[current], &temp);

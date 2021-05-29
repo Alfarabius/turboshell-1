@@ -48,7 +48,6 @@ void	ft_cd(t_tsh *tsh, char *dir)
 	change_oldpwd(!old_pwd->value, tsh, &old_pwd, pwd);
 	if (pwd->value)
 		ft_freen ((void **)&pwd->value);
-	// pwd->value = ft_strdup(dir);
 	pwd->value = getcwd(NULL, 0);
 	error_checker(!pwd, "memmory doesn't allocated", 1);
 }

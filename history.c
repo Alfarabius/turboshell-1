@@ -12,7 +12,7 @@ static	int	check_history_file(t_tsh *tsh)
 			error_handler("history file doesn't open", 1);
 	}
 	close(check);
-	return(1);
+	return (1);
 }
 
 int	file_to_history(t_tsh *tsh)
@@ -56,7 +56,7 @@ int	add_to_history(t_tsh *tsh)
 int	history_editor(t_tsh *tsh)
 {
 	size_t	len;
-	
+
 	len = ft_strlen(tsh->line);
 	ft_freen((void **)&tsh->his_ptr->content);
 	tsh->his_ptr->content = ft_strdup(tsh->line);
@@ -75,7 +75,7 @@ void	history_to_file(t_tsh *tsh)
 	{
 		ptr = tsh->curr_his;
 		check_history_file(tsh);
-		while(ptr->next)
+		while (ptr->next)
 		{
 			ft_putendl_fd(ptr->content, tsh->hfd);
 			ptr = ptr->next;

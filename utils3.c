@@ -7,7 +7,7 @@ t_list	*dictlstdup(t_list *lst)
 	t_dict	*dict_copy;
 
 	lst_copy = NULL;
-	while(lst)
+	while (lst)
 	{
 		dict = ((t_dict *)(lst->content));
 		dict_copy = (t_dict *)malloc(sizeof(t_dict));
@@ -33,9 +33,9 @@ void	dictdelone(void *dict)
 
 char	*get_dir_for_history(t_tsh *tsh, char *path)
 {
-	char *dir;
-	char *tmp;
-	char *value;
+	char	*dir;
+	char	*tmp;
+	char	*value;
 
 	value = get_env_value(*tsh, "HOME");
 	if (value)

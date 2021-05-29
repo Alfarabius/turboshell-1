@@ -67,14 +67,12 @@ int	binary_in_dir(char *path, char *bin)
 	return (0);
 }
 
-static	void	open_binary(t_tsh *tsh, char **binary_path)
+static	void	open_binary(t_tsh *tsh, char **binary_path, int status)
 {
 	int		i;
-	int		status;
 	pid_t	pid;
 
 	i = -1;
-	status = 0;
 	*binary_path = ft_realloc(*binary_path, 1, '/');
 	while (tsh->prsr.args[0] && tsh->prsr.args[0][++i])
 		*binary_path = ft_realloc(*binary_path, 1, tsh->prsr.args[0][i]);
@@ -82,7 +80,8 @@ static	void	open_binary(t_tsh *tsh, char **binary_path)
 	{
 		pid = fork();
 		if (pid < 0)
-			return (error_template_prsr("turboshell-1.0: ", "", strerror(errno), tsh));
+			return (error_template_prsr("turboshell-1.0: ", \
+			"", strerror(errno), tsh));
 		if (!pid)
 		{
 			execve(*binary_path, tsh->prsr.args, tsh->env_arr);
@@ -96,15 +95,13 @@ static	void	open_binary(t_tsh *tsh, char **binary_path)
 	exit_status_handler(status);
 }
 
-int	binary_processor(t_tsh *tsh)
+void	binary_processor(t_tsh *tsh, int status)
 {
 	char	*binary_path;
 	int		current_path;
 	int		len;
-	int		status;
 
 	current_path = 0;
-	status = 0;
 	len = path_len(tsh);
 	envlist_to_arr(tsh);
 	while (current_path < len)
@@ -113,7 +110,7 @@ int	binary_processor(t_tsh *tsh)
 		status = binary_in_dir(binary_path, tsh->prsr.args[0]);
 		if (status)
 		{
-			open_binary(tsh, &binary_path);
+			open_binary(tsh, &binary_path, 0);
 			break ;
 		}
 		ft_freen((void **)&binary_path);
@@ -125,5 +122,4 @@ int	binary_processor(t_tsh *tsh)
 		tsh->prsr.args[0], "command not found");
 	}
 	ft_freen((void **)&binary_path);
-	return (0);
 }

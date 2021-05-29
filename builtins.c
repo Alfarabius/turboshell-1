@@ -1,13 +1,10 @@
 #include "minishell.h"
 
-void	ft_exit(t_tsh *tsh)
+void	ft_exit(t_tsh *tsh, int i)
 {
-	int	i;
-
 	if (!tsh->prsr.pipe.count)
 		write(1, "exit\n", 6);
-	i = -1;
-	if(tsh->prsr.args[1] &&
+	if (tsh->prsr.args[1] && \
 	(tsh->prsr.args[1][0] == '-' || tsh->prsr.args[1][0] == '+'))
 		i = 0;
 	while (tsh->prsr.args[1] && tsh->prsr.args[1][++i])
@@ -63,14 +60,16 @@ void	ft_unset(t_tsh *tsh)
 	{
 		if (!ft_isalpha(tsh->prsr.args[i][0]))
 		{
-			builtin_error("` not a valid identifier", tsh->prsr.args[i], "unset: '");
+			builtin_error("` not a valid identifier", \
+			tsh->prsr.args[i], "unset: '");
 			continue ;
 		}
 		current = tsh->env;
 		prev = tsh->env;
 		while (current)
 		{
-			if (!ft_strcmp(((t_dict *)current->content)->key, tsh->prsr.args[i]))
+			if (!ft_strcmp(((t_dict *)current->content)->key, \
+			tsh->prsr.args[i]))
 				break ;
 			prev = current;
 			current = current->next;

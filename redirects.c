@@ -2,7 +2,7 @@
 
 void	open_redirects(t_tsh *tsh)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (tsh->prsr.redirects[++i])
@@ -14,16 +14,17 @@ void	open_redirects(t_tsh *tsh)
 		if (tsh->prsr.redirects[i]->type == 3)
 			tsh->input_fd = open(tsh->prsr.redirects[i]->file_path, O_RDONLY);
 		if (tsh->prsr.redirects[i]->type == 2)
-			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, O_CREAT | O_RDWR | O_APPEND, 0755);
+			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, \
+			O_CREAT | O_RDWR | O_APPEND, 0755);
 		if (tsh->prsr.redirects[i]->type == 1)
-			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, O_CREAT | O_RDWR | O_TRUNC, 0755);
+			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, \
+			O_CREAT | O_RDWR | O_TRUNC, 0755);
 		if (tsh->output_fd < 0 || tsh->input_fd < 0)
 		{
 			ft_putstr_fd("turboshell-1.0: ", 2);
 			ft_putstr_fd(tsh->prsr.redirects[i]->file_path, 2);
 			write(2, ": ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			write(2, "\n", 2);
+			ft_putendl_fd(strerror(errno), 2);
 			tsh->prsr.parse_status = -1;
 			tsh->output_fd = 0;
 			tsh->input_fd = 0;
@@ -70,11 +71,14 @@ void	redirect_handler(t_tsh *tsh)
 	{
 		if (!tsh->prsr.redirects[i]->file_path)
 		{
-			tsh->prsr.redirects[i]->file_path = ft_strdup(tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
-			error_checker(!tsh->prsr.redirects[i]->file_path, "memmory doesn't allocated", 1);
+			tsh->prsr.redirects[i]->file_path = \
+			ft_strdup(tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
+			error_checker(!tsh->prsr.redirects[i]->file_path, \
+			"memmory doesn't allocated", 1);
 			ft_freen((void **)&tsh->prsr.args[tsh->prsr.redirects[i]->arg_num]);
 			tsh->prsr.args[tsh->prsr.redirects[i]->arg_num] = ft_strdup("\n");
-			error_checker(!tsh->prsr.args[tsh->prsr.redirects[i]->arg_num], "memmory doesn't allocated", 1);
+			error_checker(!tsh->prsr.args[tsh->prsr.redirects[i]->arg_num], \
+			"memmory doesn't allocated", 1);
 		}
 	}
 	i = -1;
@@ -88,18 +92,20 @@ void	redirect_handler(t_tsh *tsh)
 	i = -1;
 	len = -1;
 	while (tsh->prsr.args[++i])
+	{
 		if (tsh->prsr.args[i][0] != '\n')
 		{
 			res_arr[++len] = ft_strdup(tsh->prsr.args[i]);
 			error_checker(!res_arr[len], "memmory doesn't allocated", 1);
 		}
+	}
 	clear_arr(&tsh->prsr.args);
 	tsh->prsr.args = res_arr;
 }
 
 void	clear_redirects(t_tsh *tsh)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (tsh->prsr.redirects[++i])
