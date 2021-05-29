@@ -2,10 +2,10 @@
 
 void	builtin_error(char *msg, char *name, char *btin)
 {
-	ft_putstr_fd("turboshell: ", 1);
-	ft_putstr_fd(btin, 1);
-	ft_putstr_fd(name, 1);
-	ft_putendl_fd(msg, 1);
+	ft_putstr_fd("turboshell: ", 2);
+	ft_putstr_fd(btin, 2);
+	ft_putstr_fd(name, 2);
+	ft_putendl_fd(msg, 2);
 }
 
 void	change_oldpwd(int cond, t_tsh *tsh, t_dict **old_pwd, t_dict *pwd)
@@ -29,6 +29,7 @@ void	ft_cd(t_tsh *tsh, char *dir)
 	t_list	*current;
 	t_dict	*pwd;
 	t_dict	*old_pwd;
+	char	buf[PATH_MAX];
 
 	current = tsh->env;
 	old_pwd = NULL;
@@ -48,6 +49,7 @@ void	ft_cd(t_tsh *tsh, char *dir)
 	change_oldpwd(!old_pwd->value, tsh, &old_pwd, pwd);
 	if (pwd->value)
 		ft_freen ((void **)&pwd->value);
-	pwd->value = getcwd(NULL, 0);
-	error_checker(!pwd, "memmory doesn't allocated", 1);
+	getcwd(buf, PATH_MAX);
+	pwd->value = ft_strdup(buf);
+	error_checker(!pwd->value, "memmory doesn't allocated", 1);
 }
