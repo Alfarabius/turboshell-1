@@ -14,20 +14,20 @@ static int	set_flags(char c, int *shield, int *dquote, int *squote)
 	return (1);
 }
 
-static int	general_check(int i, t_tsh *tsh, int flags)
+static int	semicolon_check(int i, t_tsh *tsh, int flags)
 {
-	if (ft_strchr("|><", tsh->line[i]) && !flags)
+	char	*spec_char;
+
+	spec_char = "|;";
+	if (ft_strchr(";", tsh->line[i]) && !flags)
 	{
-		if (tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\n' \
-		|| tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\0')
+		if (ft_strchr(spec_char, \
+		tsh->line[skip_whitespaces(tsh->line, i + 1)]) || !i)
 		{
-			g_exit_status = 2;
-			if (tsh->line[i] == '|')
-				error_template("turboshell-1.0", \
-				"syntax error", "need more commands");
+			if (tsh->line[skip_whitespaces(tsh->line, i + 1)] == ';' || !i)
+				print_syntax_error(i, tsh);
 			else
-				write(2, "turboshell-1.0: syntax error near unexpected token `newline'\n", \
-				61);
+				print_syntax_error(skip_whitespaces(tsh->line, i + 1), tsh);
 			tsh->prsr.parse_status = 0;
 			return (0);
 		}
@@ -35,19 +35,49 @@ static int	general_check(int i, t_tsh *tsh, int flags)
 	return (1);
 }
 
-static int	check_first_symbol(t_tsh *tsh)
+static int	pipes_check(int i, t_tsh *tsh, int flags)
 {
-	int	i;
+	char	*spec_char;
 
-	i = skip_whitespaces(tsh->line, 0);
-	if (tsh->line[i] == ';' || tsh->line[i] == '|')
+	spec_char = "|;\n";
+	if (ft_strchr("|", tsh->line[i]) && !flags)
 	{
-		g_exit_status = 2;
-		write(2, "turboshell-1.0: syntax error near unexpected token `", 52);
-		write(2, &tsh->line[i], 1);
-		write(2, "'\n", 2);
-		tsh->prsr.parse_status = 0;
-		return (0);
+		if (ft_strchr(spec_char, tsh->line[skip_whitespaces(tsh->line, i + 1)]))
+		{
+			if (tsh->line[skip_whitespaces(tsh->line, i + 1)] == ';')
+				print_syntax_error(skip_whitespaces(tsh->line, i + 1), tsh);
+			else
+				print_syntax_error(i, tsh);
+			tsh->prsr.parse_status = 0;
+			return (0);
+		}
+	}
+	return (1);
+}
+
+static int	redirects_check(int i, t_tsh *tsh, int flags)
+{
+	char	*spec_char;
+
+	spec_char = "|;><";
+	if (ft_strchr("><", tsh->line[i]) && !flags)
+	{
+		if (!tsh->line[skip_whitespaces(tsh->line, i + 1)] || \
+		tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\n')
+		{
+			write(2, "turboshell-1.0: syntax error near unexpected token `newline'\n", \
+			61);
+			tsh->prsr.parse_status = 0;
+			return (0);
+		}
+		if (tsh->line[i] == '>' && tsh->line[i + 1] == '>')
+			++i;
+		if (ft_strchr(spec_char, tsh->line[skip_whitespaces(tsh->line, i + 1)]))
+		{
+			print_syntax_error(skip_whitespaces(tsh->line, i + 1), tsh);
+			tsh->prsr.parse_status = 0;
+			return (0);
+		}
 	}
 	return (1);
 }
@@ -59,8 +89,6 @@ void	syntax_checker(t_tsh *tsh)
 	int	dquote;
 	int	squote;
 
-	if (!check_first_symbol(tsh))
-		return ;
 	dquote = 0;
 	squote = 0;
 	shield = 0;
@@ -69,7 +97,9 @@ void	syntax_checker(t_tsh *tsh)
 	{
 		if (!set_flags(tsh->line[i], &shield, &dquote, &squote))
 			continue ;
-		if (!general_check(i, tsh, shield + dquote + squote))
+		if (!semicolon_check(i, tsh, shield + dquote + squote) || \
+		!pipes_check(i, tsh, shield + dquote + squote) || \
+		!redirects_check(i, tsh, shield + dquote + squote))
 			return ;
 		shield = 0;
 	}
