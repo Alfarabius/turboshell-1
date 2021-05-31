@@ -6,6 +6,7 @@ void	builtin_error(char *msg, char *name, char *btin)
 	ft_putstr_fd(btin, 2);
 	ft_putstr_fd(name, 2);
 	ft_putendl_fd(msg, 2);
+	g_exit_status = 1;
 }
 
 void	change_oldpwd(int cond, t_tsh *tsh, t_dict **old_pwd, t_dict *pwd)

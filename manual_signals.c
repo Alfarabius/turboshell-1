@@ -4,9 +4,9 @@ void	ctrl_d(t_tsh *tsh)
 {
 	free(tsh->line);
 	tsh->end_line = 1;
-	tsh->line = ft_strdup("exit");
+	tsh->line = ft_strdup("exit ");
 	if (!tsh->line)
-		error_handler("memmory doesn't allocated", 0);
+		error_handler("memmory doesn't allocated", 1);
 }
 
 void	ctrl_c(t_tsh *tsh)

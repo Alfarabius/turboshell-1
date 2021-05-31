@@ -22,6 +22,7 @@ SRCS	=	minishell.c \
 			get_next_line_utils.c \
 			builtins.c \
 			export.c \
+			exit.c \
 			history.c \
 			signals.c \
 			init.c \
