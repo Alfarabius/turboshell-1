@@ -15,18 +15,33 @@ static void	set_qflag(char **line, int i, int *q_flag)
 	}
 }
 
-static void	set_env(char **line, char **res, int *i, t_tsh tsh)
+static void	set_env(char **line, char **res, int *i, t_tsh *tsh)
 {
 	int		j;
+	int		e;
 	char	*env;
 
-	env = get_env(tsh, i, *line);
+	j = *i;
+	e = j;
+	env = get_env(*tsh, i, *line);
+	while ((*line)[--j] && !ft_strchr("<>", (*line)[j]))
+		;
+	if (ft_strchr("<>", (*line)[j]) && !env[0])
+	{
+		write(2, "turboshell-1.0: $", 16);
+		while (ft_isalnum((*line)[++e]))
+			write(2, &(*line)[e], 1);
+		write(2, ": ambiguous redirect\n", 21);
+		tsh->prsr.parse_status = 4;
+	}
 	j = 0;
 	while (env[j])
 	{
 		*res = ft_realloc(*res, 1, env[j]);
 		j++;
 	}
+	if ((*line)[(*i) - 1] == '?')
+		free(env);
 }
 
 static char	*general_cycle(char **line, t_tsh *tsh, int *i, int q_flag)
@@ -49,7 +64,7 @@ static char	*general_cycle(char **line, t_tsh *tsh, int *i, int q_flag)
 			res = ft_realloc(res, 1, (*line)[*i]);
 		else if (q_flag && ((*i && (*line)[(*i) - 1] != '\\') || !(*i)))
 		{
-			set_env(line, &res, i, *tsh);
+			set_env(line, &res, i, tsh);
 			continue ;
 		}
 		(*i)++;

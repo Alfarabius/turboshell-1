@@ -73,8 +73,7 @@ char	*get_env(t_tsh tsh, int *i, char *line)
 		return ("");
 	while (tsh.env && key[0])
 	{
-		if (!ft_strncmp(key, \
-		((t_dict *)(tsh.env->content))->key, ft_strlen(key)))
+		if (!ft_strcmp(key, ((t_dict *)(tsh.env->content))->key))
 		{
 			value = ((t_dict *)(tsh.env->content))->value;
 			break ;

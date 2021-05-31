@@ -41,7 +41,8 @@ void	ft_export(t_tsh *tsh)
 		temp = NULL;
 		while (tsh->prsr.args[++current])
 		{
-			if (!ft_isalpha(tsh->prsr.args[current][0]))
+			if (tsh->prsr.args[current][0] && \
+			!ft_isalpha(tsh->prsr.args[current][0]))
 			{
 				builtin_error("` not a valid identifier", \
 				tsh->prsr.args[current], "export: '");
