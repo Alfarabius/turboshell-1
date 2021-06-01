@@ -3,7 +3,8 @@
 static int	clear_parser(t_tsh *tsh, char **current_line)
 {
 	free(tsh->prsr.line);
-	free(*current_line);
+	if (current_line)
+		free(*current_line);
 	clear_redirects(tsh);
 	clear_arr(&tsh->prsr.args);
 	return (1);
@@ -42,10 +43,11 @@ static void	pipes_redirects(t_tsh *tsh, char **current_line)
 		redirect_handler(tsh);
 		cmd_processor(tsh);
 		tsh->prsr.parse_status = 1;
-		clear_redirects(tsh);
-		clear_arr(&tsh->prsr.args);
+		clear_parser(tsh, NULL);
 		init_parser(tsh);
-		free(tsh->prsr.line);
+		if (!(*current_line)[skip_whitespaces(*current_line, 1)] ||
+		(*current_line)[skip_whitespaces(*current_line, 1)] == '\n' )
+			ft_freen((void **)&tsh->prsr.args[0]);
 		tsh->prsr.line = preparser(current_line, tsh);
 		tsh->prsr.l_index = -1;
 	}

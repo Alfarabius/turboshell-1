@@ -80,3 +80,20 @@ int	is_file_accessible(const char *file, int flag)
 		return (1);
 	return (0);
 }
+
+void	clear_redirects(t_tsh *tsh)
+{
+	int	i;
+
+	i = -1;
+	while (tsh->prsr.redirects[++i])
+	{
+		if (tsh->prsr.redirects[i]->file_path)
+			free(tsh->prsr.redirects[i]->file_path);
+		if (tsh->prsr.redirects[i]->fd > 0)
+			close(tsh->prsr.redirects[i]->fd);
+		free(tsh->prsr.redirects[i]);
+	}
+	free(tsh->prsr.redirects[i]);
+	free(tsh->prsr.redirects);
+}

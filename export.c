@@ -27,6 +27,31 @@ static	void	write_export(t_tsh *tsh)
 	ft_lstclear(&sorted, dictdelone);
 }
 
+static void	export_processor(t_tsh *tsh, t_dict **elem,
+			t_list **temp, int current)
+{
+	elem_to_lst(tsh->prsr.args[current], temp);
+	*elem = get_env_elem(*tsh, ((t_dict *)((*temp)->content))->key);
+	if (*elem)
+	{
+		if (((t_dict *)((*temp)->content))->is_separ)
+		{
+			ft_freen((void **)&(*elem)->value);
+			(*elem)->value = ((t_dict *)((*temp)->content))->value;
+			(*elem)->is_separ = ((t_dict *)((*temp)->content))->is_separ;
+			(*elem)->is_set = 1;
+		}
+		else
+			ft_freen((void **)&((t_dict *)((*temp)->content))->value);
+	}
+	else
+	{
+		elem_to_lst(tsh->prsr.args[current], &tsh->env);
+		ft_freen((void **)&((t_dict *)((*temp)->content))->value);
+	}
+	ft_freen((void **)&((t_dict *)((*temp)->content))->key);
+}
+
 void	ft_export(t_tsh *tsh)
 {
 	int		current;
@@ -48,25 +73,7 @@ void	ft_export(t_tsh *tsh)
 				tsh->prsr.args[current], "export: '");
 				continue ;
 			}
-			elem_to_lst(tsh->prsr.args[current], &temp);
-			elem = get_env_elem(*tsh, ((t_dict *)(temp->content))->key);
-			if (elem)
-			{
-				if (((t_dict *)(temp->content))->is_separ)
-				{
-					ft_freen((void **)&elem->value);
-					elem->value = ((t_dict *)(temp->content))->value;
-					elem->is_separ = ((t_dict *)(temp->content))->is_separ;
-				}
-				else
-					ft_freen((void **)&((t_dict *)(temp->content))->value);
-			}
-			else
-			{
-				elem_to_lst(tsh->prsr.args[current], &tsh->env);
-				ft_freen((void **)&((t_dict *)(temp->content))->value);
-			}
-			ft_freen((void **)&((t_dict *)(temp->content))->key);
+			export_processor(tsh, &elem, &temp, current);
 			ft_freen((void **)&(temp->content));
 			ft_freen((void **)&temp);
 		}
