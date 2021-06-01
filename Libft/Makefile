@@ -31,10 +31,8 @@ SRCS	= ft_isalpha.c \
 		ft_toupper.c \
 		ft_isalnum.c \
 		ft_itoa.c \
-		ft_itoa_base.c \
 		ft_memccpy.c \
 		ft_memset.c \
-		ft_split.c \
 		ft_strlcpy.c \
 		ft_strrchr.c \
 		ft_strmapi.c \

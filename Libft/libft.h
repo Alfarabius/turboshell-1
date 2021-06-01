@@ -3,13 +3,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-typedef	struct		s_list
+typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }					t_list;
 
-typedef	struct		s_dlst
+typedef struct s_dlst
 {
 	void			*content;
 	struct s_dlst	*next;
@@ -19,10 +19,8 @@ typedef	struct		s_dlst
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s1, char const *set);
-char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char				*ft_itoa_base(long n, int base, char uppercase);
 int					ft_putchar(int ch);
 void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
@@ -45,7 +43,7 @@ size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strnstr(const char *haystack,
-								const char *needle, size_t len);
+						const char *needle, size_t len);
 char				*ft_strdup(const char *s1);
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_atoi(const char *str);
@@ -65,7 +63,7 @@ void				ft_lstdelone(t_list *lst, void (*del)(void*));
 void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
-							void (*del)(void *));
+						void (*del)(void *));
 t_dlst				*ft_dlst_new(void *content);
 void				ft_dlstadd_back(t_dlst **dlst, t_dlst *new);
 int					ft_dlstsize(t_dlst *dlst);
@@ -74,7 +72,7 @@ t_dlst				*ft_dlstlast(t_dlst *dlst);
 void				ft_dlstclear(t_dlst **dlst, void (*del)(void*));
 void				ft_freen(void **ptr);
 char				**ft_freearr(char **arr);
-void				*ft_memdup(const void* mem, size_t size);
+void				*ft_memdup(const void *mem, size_t size);
 void				*ft_memjoin(void *s1, void *s2, size_t l1, size_t l2);
 void				print_arr(char **arr);
 
