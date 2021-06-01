@@ -10,9 +10,9 @@ static	void	init_term_attr(t_tsh *tsh)
 	switch_term_attr(tsh);
 	tsh->term.c_cc[VMIN] = 1;
 	tsh->term.c_cc[VTIME] = 0;
-	tgetent(0, TERM_NAME);
-	// if (!term_type || tgetent(0, term_type) != 1)
-	// 	error_handler("Can not find terminal or termcap base.", 1);
+	if (!term_type || tgetent(tsh->term_buf, term_type) != 1)
+		if(tgetent(tsh->term_buf, TERM_NAME) != 1)
+			error_handler("Can not find terminal or termcap base.", 1);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 }

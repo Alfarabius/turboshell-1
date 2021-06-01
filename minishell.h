@@ -14,6 +14,7 @@
 # include <errno.h>
 # include <string.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/syslimits.h>
 
@@ -70,6 +71,7 @@ typedef struct s_msh
 	t_prsr			prsr;
 	char			**env_arr;
 	char			buf[1024];
+	char			term_buf[2048];
 	char			*line;
 	char			*wdir;
 	char			is_running;

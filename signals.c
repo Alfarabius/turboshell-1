@@ -2,6 +2,7 @@
 
 void	signal_handler(int signum)
 {
+	
 	if (signum == SIGINT)
 	{
 		g_exit_status = 130;

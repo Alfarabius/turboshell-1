@@ -48,10 +48,21 @@ static	int	history_down(t_tsh *tsh)
 
 static	int	erase_symbol(t_tsh *tsh)
 {
-	size_t	len;
+	struct winsize	win;
+	int				len;
+	int				cols;
+	int				row;
 
+	ioctl(1, TIOCGWINSZ, &win);
+	cols = win.ws_col;
 	ft_bzero(tsh->buf, 1024);
-	len = ft_strlen(tsh->line);
+	len = (int)ft_strlen(tsh->line);
+	row = (len + 17) / cols;
+	if (row > 0 && (len + 17) % cols == 0)
+	{
+		tputs(tgoto(tgetstr("ch", 0), 1, cols), 1, ft_putint);
+		tputs("\033[J", 1, ft_putint);
+	}
 	if (len > 0)
 	{
 		tputs(cursor_left, 1, ft_putint);
