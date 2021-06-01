@@ -2,7 +2,7 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void *memory;
+	void	*memory;
 
 	memory = malloc(count * size);
 	if (NULL == memory)

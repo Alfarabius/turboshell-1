@@ -17,19 +17,19 @@ void	*ft_memjoin(void *s1, void *s2, size_t l1, size_t l2)
 	return (new_mem);
 }
 
-void	*ft_memdup(const void* mem, size_t size)
+void	*ft_memdup(const void *mem, size_t size)
 {
-	void*	new_mem;
+	void	*new_mem;
 
 	new_mem = malloc(size);
-	if(new_mem != NULL)
+	if (new_mem != NULL)
 		ft_memcpy(new_mem, mem, size);
 	return (new_mem);
 }
 
 char	**ft_freearr(char **arr)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (arr[i])

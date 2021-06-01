@@ -2,7 +2,7 @@
 
 static	int	ft_symamount_base(long n, int base)
 {
-	int amount;
+	int	amount;
 
 	amount = 0;
 	if (n == 0)
@@ -17,7 +17,7 @@ static	int	ft_symamount_base(long n, int base)
 	return (amount);
 }
 
-char		*ft_itoa_base(long n, int base, char uppercase)
+char	*ft_itoa_base(long n, int base, char uppercase)
 {
 	char	*str;
 	int		start;

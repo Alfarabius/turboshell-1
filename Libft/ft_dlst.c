@@ -2,7 +2,7 @@
 
 t_dlst	*ft_dlst_new(void *content)
 {
-	t_dlst *new_dlst;
+	t_dlst	*new_dlst;
 
 	new_dlst = (t_dlst *)malloc(sizeof(t_dlst));
 	if (new_dlst == NULL)
@@ -31,7 +31,7 @@ void	ft_dlstadd_back(t_dlst **dlst, t_dlst *new)
 	last->prev = curr;
 }
 
-int		ft_dlstsize(t_dlst *dlst)
+int	ft_dlstsize(t_dlst *dlst)
 {
 	int		size;
 
@@ -58,7 +58,7 @@ t_dlst	*ft_dlstlast(t_dlst *dlst)
 
 void	ft_dlstclear(t_dlst **dlst, void (*del)(void*))
 {
-	t_dlst *acc;
+	t_dlst	*acc;
 
 	while (*dlst)
 	{

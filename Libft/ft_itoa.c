@@ -20,7 +20,7 @@ static	int	ft_symamount(int n)
 	return (symb_amount);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*n_str;
 	int		size;

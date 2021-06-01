@@ -2,7 +2,7 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	size_t num_bytes;
+	size_t	num_bytes;
 
 	if (!s)
 		return ;
