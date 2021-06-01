@@ -76,7 +76,7 @@ void	history_to_file(t_tsh *tsh)
 	if (tsh->curr_his)
 	{
 		ptr = tsh->curr_his;
-		if(!check_history_file(tsh))
+		if (!check_history_file(tsh))
 			return ;
 		while (ptr->next)
 		{

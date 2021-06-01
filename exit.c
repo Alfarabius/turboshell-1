@@ -7,7 +7,7 @@ static void	not_numeric_proc(char *arg, t_tsh *tsh)
 	save_history_exit(255, tsh);
 }
 
-static void	too_many_args_proc()
+static void	too_many_args_proc(void)
 {
 	g_exit_status = 1;
 	error_template("turboshell-1.0", "exit", "too many arguments");
