@@ -1,37 +1,42 @@
 #include "minishell.h"
 
+static int	open_processor(t_tsh *tsh, int i)
+{
+	if (tsh->input_fd)
+		close(tsh->input_fd);
+	if (tsh->output_fd)
+		close(tsh->output_fd);
+	if (tsh->prsr.redirects[i]->type == 3)
+		tsh->input_fd = open(tsh->prsr.redirects[i]->file_path, O_RDONLY);
+	if (tsh->prsr.redirects[i]->type == 2)
+		tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, \
+		O_CREAT | O_RDWR | O_APPEND, 0755);
+	if (tsh->prsr.redirects[i]->type == 1)
+		tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, \
+		O_CREAT | O_RDWR | O_TRUNC, 0755);
+	if (tsh->output_fd < 0 || tsh->input_fd < 0)
+	{
+		ft_putstr_fd("turboshell-1.0: ", 2);
+		ft_putstr_fd(tsh->prsr.redirects[i]->file_path, 2);
+		write(2, ": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+		tsh->prsr.parse_status = -1;
+		tsh->output_fd = 0;
+		tsh->input_fd = 0;
+		g_exit_status = 1;
+		return (0);
+	}
+	return (1);
+}
+
 void	open_redirects(t_tsh *tsh)
 {
 	int	i;
 
 	i = -1;
 	while (tsh->prsr.redirects[++i])
-	{
-		if (tsh->input_fd)
-			close(tsh->input_fd);
-		if (tsh->output_fd)
-			close(tsh->output_fd);
-		if (tsh->prsr.redirects[i]->type == 3)
-			tsh->input_fd = open(tsh->prsr.redirects[i]->file_path, O_RDONLY);
-		if (tsh->prsr.redirects[i]->type == 2)
-			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, \
-			O_CREAT | O_RDWR | O_APPEND, 0755);
-		if (tsh->prsr.redirects[i]->type == 1)
-			tsh->output_fd = open(tsh->prsr.redirects[i]->file_path, \
-			O_CREAT | O_RDWR | O_TRUNC, 0755);
-		if (tsh->output_fd < 0 || tsh->input_fd < 0)
-		{
-			ft_putstr_fd("turboshell-1.0: ", 2);
-			ft_putstr_fd(tsh->prsr.redirects[i]->file_path, 2);
-			write(2, ": ", 2);
-			ft_putendl_fd(strerror(errno), 2);
-			tsh->prsr.parse_status = -1;
-			tsh->output_fd = 0;
-			tsh->input_fd = 0;
-			g_exit_status = 1;
+		if (!open_processor(tsh, i))
 			return ;
-		}
-	}
 	if (i)
 	{
 		if (tsh->input_fd)
@@ -60,11 +65,9 @@ void	close_redirects(t_tsh *tsh)
 	}
 }
 
-void	redirect_handler(t_tsh *tsh)
+static void	redirects_set_path(t_tsh *tsh)
 {
-	char	**res_arr;
-	int		len;
-	int		i;
+	int	i;
 
 	i = -1;
 	while (tsh->prsr.redirects[++i])
@@ -81,6 +84,15 @@ void	redirect_handler(t_tsh *tsh)
 			"memmory doesn't allocated", 1);
 		}
 	}
+}
+
+void	redirect_handler(t_tsh *tsh)
+{
+	char	**res_arr;
+	int		len;
+	int		i;
+
+	redirects_set_path(tsh);
 	i = -1;
 	len = 0;
 	while (tsh->prsr.args[++i])
@@ -101,21 +113,4 @@ void	redirect_handler(t_tsh *tsh)
 	}
 	clear_arr(&tsh->prsr.args);
 	tsh->prsr.args = res_arr;
-}
-
-void	clear_redirects(t_tsh *tsh)
-{
-	int	i;
-
-	i = -1;
-	while (tsh->prsr.redirects[++i])
-	{
-		if (tsh->prsr.redirects[i]->file_path)
-			free(tsh->prsr.redirects[i]->file_path);
-		if (tsh->prsr.redirects[i]->fd > 0)
-			close(tsh->prsr.redirects[i]->fd);
-		free(tsh->prsr.redirects[i]);
-	}
-	free(tsh->prsr.redirects[i]);
-	free(tsh->prsr.redirects);
 }

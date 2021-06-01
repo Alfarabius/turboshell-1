@@ -62,3 +62,20 @@ void	save_history_exit(int status, t_tsh *tsh)
 	history_to_file(tsh);
 	exit(status);
 }
+
+void	clear_redirects(t_tsh *tsh)
+{
+	int	i;
+
+	i = -1;
+	while (tsh->prsr.redirects[++i])
+	{
+		if (tsh->prsr.redirects[i]->file_path)
+			free(tsh->prsr.redirects[i]->file_path);
+		if (tsh->prsr.redirects[i]->fd > 0)
+			close(tsh->prsr.redirects[i]->fd);
+		free(tsh->prsr.redirects[i]);
+	}
+	free(tsh->prsr.redirects[i]);
+	free(tsh->prsr.redirects);
+}
