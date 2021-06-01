@@ -1,10 +1,5 @@
 #include "minishell.h"
 
-int	ft_putint(int c)
-{
-	return (write(1, &c, 1));
-}
-
 char	*ft_memjoin_tsh(char *s1, char *s2)
 {
 	char	*str;
@@ -69,4 +64,21 @@ int	envlist_to_arr(t_tsh *tsh)
 	}
 	tsh->env_arr[i] = NULL;
 	return (0);
+}
+
+void	clear_redirects(t_tsh *tsh)
+{
+	int	i;
+
+	i = -1;
+	while (tsh->prsr.redirects[++i])
+	{
+		if (tsh->prsr.redirects[i]->file_path)
+			free(tsh->prsr.redirects[i]->file_path);
+		if (tsh->prsr.redirects[i]->fd > 0)
+			close(tsh->prsr.redirects[i]->fd);
+		free(tsh->prsr.redirects[i]);
+	}
+	free(tsh->prsr.redirects[i]);
+	free(tsh->prsr.redirects);
 }
