@@ -62,3 +62,21 @@ void	save_history_exit(int status, t_tsh *tsh)
 	history_to_file(tsh);
 	exit(status);
 }
+
+int	is_file_accessible(const char *file, int flag)
+{
+	struct stat	state;
+	mode_t		mode;
+	int			err;
+
+	err = lstat(file, &state);
+	error_checker(err == -1, strerror(errno), 0);
+	mode = state.st_mode;
+	if (flag == 1 && mode & S_IXUSR)
+		return (1);
+	if (flag == 0 && mode & S_IWUSR)
+		return (1);
+	if (flag == 2 && mode & S_IWUSR & S_IXUSR)
+		return (1);
+	return (0);
+}

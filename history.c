@@ -4,6 +4,8 @@ static	int	check_history_file(t_tsh *tsh)
 {
 	int		check;
 
+	if (!is_file_accessible(tsh->wdir, 0))
+		return (0);
 	check = open(tsh->wdir, O_RDONLY);
 	if (check == -1)
 	{
@@ -74,7 +76,8 @@ void	history_to_file(t_tsh *tsh)
 	if (tsh->curr_his)
 	{
 		ptr = tsh->curr_his;
-		check_history_file(tsh);
+		if(!check_history_file(tsh))
+			return ;
 		while (ptr->next)
 		{
 			ft_putendl_fd(ptr->content, tsh->hfd);

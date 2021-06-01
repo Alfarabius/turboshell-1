@@ -132,6 +132,7 @@ int					new_prompt(t_tsh *tsh);
 void				binary_processor(t_tsh *tsh, int status);
 int					envlist_to_arr(t_tsh *tsh);
 int					binary_in_dir(char *path, char *bin);
+int					is_file_accessible(const char *file, int flag);
 size_t				keylen(char *env_elem);
 char				*get_dir_for_history(t_tsh *tsh, char *path);
 char				*ft_newreminder(char *rem, char *err);
