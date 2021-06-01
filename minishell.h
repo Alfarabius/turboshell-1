@@ -87,7 +87,7 @@ typedef struct s_msh
 
 void				ft_exit(t_tsh *tsh, int i);
 void				ft_env(t_tsh *tsh);
-void				ft_unset(t_tsh *tsh);
+void				ft_unset(t_tsh *tsh, int i);
 void				ft_echo(t_tsh *tsh);
 void				line_parser(t_tsh *tsh);
 void				ft_pwd(void);

@@ -112,7 +112,7 @@ int	cmd_processor(t_tsh *tsh)
 	else if (tsh->prsr.args[0] && !ft_strcmp("export", tsh->prsr.args[0]))
 		ft_export(tsh);
 	else if (tsh->prsr.args[0] && !ft_strcmp("unset", tsh->prsr.args[0]))
-		ft_unset(tsh);
+		ft_unset(tsh, 0);
 	else if (tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
 		ft_env(tsh);
 	else if (tsh->prsr.args[0])

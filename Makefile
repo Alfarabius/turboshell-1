@@ -33,7 +33,8 @@ SRCS	=	minishell.c \
 			parser_utils2.c \
 			parser_cases.c \
 			preparser.c \
-			syntax_checker.c
+			syntax_checker.c \
+			ft_unset.c
 
 OBJS		=	$(addprefix $(OBJS_PATH)/, $(SRCS:.c=.o))
 RM			=	rm -f
