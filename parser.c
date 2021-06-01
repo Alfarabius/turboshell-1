@@ -1,9 +1,12 @@
 #include "minishell.h"
 
-static void	clear_parser(t_tsh *tsh)
+static int	clear_parser(t_tsh *tsh, char **current_line)
 {
+	free(tsh->prsr.line);
+	free(*current_line);
 	clear_redirects(tsh);
 	clear_arr(&tsh->prsr.args);
+	return (1);
 }
 
 static void	init_parser(t_tsh *tsh)
@@ -30,21 +33,19 @@ static void	pipes_redirects(t_tsh *tsh, char **current_line)
 		pipe_processor(tsh);
 		if (tsh->prsr.parse_status == 0)
 			return ;
-		clear_parser(tsh);
+		clear_redirects(tsh);
+		clear_arr(&tsh->prsr.args);
 		init_parser(tsh);
 	}
 	if (tsh->prsr.parse_status >= 3)
 	{
 		redirect_handler(tsh);
-		if (tsh->prsr.parse_status == 3)
-			cmd_processor(tsh);
+		cmd_processor(tsh);
 		tsh->prsr.parse_status = 1;
-		clear_parser(tsh);
+		clear_redirects(tsh);
+		clear_arr(&tsh->prsr.args);
 		init_parser(tsh);
 		free(tsh->prsr.line);
-		if (!(*current_line)[skip_whitespaces(*current_line, 1)] ||
-		(*current_line)[skip_whitespaces(*current_line, 1)] == '\n' )
-			ft_freen((void **)&tsh->prsr.args[0]);
 		tsh->prsr.line = preparser(current_line, tsh);
 		tsh->prsr.l_index = -1;
 	}
@@ -59,7 +60,8 @@ static void	ending(t_tsh *tsh, char **current_line)
 		cmd_processor(tsh);
 	else
 		wait_pipes(tsh);
-	clear_parser(tsh);
+	clear_redirects(tsh);
+	clear_arr(&tsh->prsr.args);
 	tsh->prsr.parse_status = 0;
 }
 
@@ -72,16 +74,13 @@ void	line_parser(t_tsh *tsh)
 	init_parser(tsh);
 	syntax_checker(tsh);
 	tsh->prsr.line = preparser(&current_line, tsh);
+	if (!tsh->prsr.parse_status && clear_parser(tsh, &current_line))
+		return ;
 	while (tsh->prsr.line[tsh->prsr.l_index] && \
 	tsh->prsr.line[tsh->prsr.l_index] != '\n')
 	{
-		if (!tsh->prsr.parse_status)
-		{
-			free(tsh->prsr.line);
-			free(current_line);
-			clear_parser(tsh);
+		if (!tsh->prsr.parse_status && clear_parser(tsh, &current_line))
 			return ;
-		}
 		distributor(&tsh->prsr);
 		if (tsh->prsr.l_index >= (int)ft_strlen(tsh->prsr.line) || \
 		!tsh->prsr.parse_status || tsh->prsr.line[tsh->prsr.l_index] == '\n')

@@ -24,7 +24,7 @@ static void	set_env(char **line, char **res, int *i, t_tsh *tsh)
 	j = *i;
 	e = j;
 	env = get_env(*tsh, i, *line);
-	while ((*line)[--j] && !ft_strchr("<>", (*line)[j]))
+	while (j && (*line)[--j] && !ft_strchr("<>", (*line)[j]))
 		;
 	if (ft_strchr("<>", (*line)[j]) && !env[0])
 	{
@@ -32,7 +32,7 @@ static void	set_env(char **line, char **res, int *i, t_tsh *tsh)
 		while (ft_isalnum((*line)[++e]))
 			write(2, &(*line)[e], 1);
 		write(2, ": ambiguous redirect\n", 21);
-		tsh->prsr.parse_status = 4;
+		tsh->prsr.parse_status = 0;
 	}
 	j = 0;
 	while (env[j])
@@ -79,6 +79,12 @@ char	*preparser(char **line, t_tsh *tsh)
 	char	*res;
 	char	*env;
 
+	if (!tsh->prsr.parse_status)
+	{
+		res = (char *)malloc(1);
+		res[0] = '\0';
+		return (res);
+	}
 	i = 0;
 	q_flag = 1;
 	res = general_cycle(line, tsh, &i, q_flag);
