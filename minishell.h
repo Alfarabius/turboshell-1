@@ -112,6 +112,7 @@ void				dictdelone(void *dict);
 void				error_template(char *head, char *arg, char *error);
 void				error_template_prsr(char *head, char *arg, \
 					char *error, t_tsh *tsh);
+void				print_syntax_error(int i, t_tsh *tsh);
 void				arg_to_lower(t_tsh *tsh);
 void				exit_status_handler(int status);
 void				builtin_error(char *msg, char *name, char *btin);

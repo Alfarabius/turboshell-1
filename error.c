@@ -34,3 +34,12 @@ void	error_template_prsr(char *head, char *arg, char *error, t_tsh *tsh)
 	write(2, "\n", 1);
 	tsh->prsr.parse_status = 0;
 }
+
+void	print_syntax_error(int i, t_tsh *tsh)
+{
+	write(2, "turboshell-1.0: syntax error near unexpected token `", 52);
+	write(2, &tsh->line[i], 1);
+	if (tsh->line[i] == tsh->line[i + 1] && ft_strchr(";>", tsh->line[i]))
+		write(2, &tsh->line[i], 1);
+	write(2, "'\n", 2);
+}

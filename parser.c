@@ -33,14 +33,18 @@ static void	pipes_redirects(t_tsh *tsh, char **current_line)
 		clear_parser(tsh);
 		init_parser(tsh);
 	}
-	if (tsh->prsr.parse_status == 3)
+	if (tsh->prsr.parse_status >= 3)
 	{
-		tsh->prsr.parse_status = 1;
 		redirect_handler(tsh);
-		cmd_processor(tsh);
+		if (tsh->prsr.parse_status == 3)
+			cmd_processor(tsh);
+		tsh->prsr.parse_status = 1;
 		clear_parser(tsh);
 		init_parser(tsh);
 		free(tsh->prsr.line);
+		if (!(*current_line)[skip_whitespaces(*current_line, 1)] ||
+		(*current_line)[skip_whitespaces(*current_line, 1)] == '\n' )
+			ft_freen((void **)&tsh->prsr.args[0]);
 		tsh->prsr.line = preparser(current_line, tsh);
 		tsh->prsr.l_index = -1;
 	}
@@ -48,7 +52,6 @@ static void	pipes_redirects(t_tsh *tsh, char **current_line)
 
 static void	ending(t_tsh *tsh, char **current_line)
 {
-	tsh->prsr.parse_status = 0;
 	redirect_handler(tsh);
 	free(tsh->prsr.line);
 	free(*current_line);
@@ -57,6 +60,7 @@ static void	ending(t_tsh *tsh, char **current_line)
 	else
 		wait_pipes(tsh);
 	clear_parser(tsh);
+	tsh->prsr.parse_status = 0;
 }
 
 void	line_parser(t_tsh *tsh)
