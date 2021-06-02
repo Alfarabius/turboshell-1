@@ -11,7 +11,7 @@ static	int	check_history_file(t_tsh *tsh)
 	{
 		tsh->hfd = open(tsh->wdir, O_CREAT | O_RDWR | O_APPEND, 0755);
 		if (tsh->hfd == -1)
-			error_handler("history file doesn't open", 1);
+			error_handler("history file doesn't open\n", 0);
 	}
 	close(check);
 	return (1);
@@ -22,6 +22,8 @@ int	file_to_history(t_tsh *tsh)
 	int		fd;
 	char	*line;
 
+	if (!is_file_accessible(tsh->wdir, 3))
+		return (0);
 	fd = open(tsh->wdir, O_RDONLY);
 	if (fd == -1)
 		return (error_handler("tsh_history file fd = -1", 0));

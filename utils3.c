@@ -83,5 +83,7 @@ int	is_file_accessible(const char *file, int flag)
 		return (1);
 	if (flag == 2 && mode & S_IWUSR & S_IXUSR)
 		return (1);
+	if (flag == 3 && mode & S_IRUSR)
+		return (1);
 	return (0);
 }
