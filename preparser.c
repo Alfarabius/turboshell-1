@@ -22,6 +22,22 @@ static void	set_qflag(char **line, int i, int *q_flag)
 	}
 }
 
+static void	set_quotes(char **res, char *env)
+{
+	int	j;
+
+	j = 0;
+	if (env[0] && ft_strlen(*res))
+		*res = ft_realloc(*res, 1, '\"');
+	while (env[j])
+	{
+		*res = ft_realloc(*res, 1, env[j]);
+		j++;
+	}
+	if (env[0] && ft_strlen(*res) - ft_strlen(env))
+		*res = ft_realloc(*res, 1, '\"');
+}
+
 static void	set_env(char **line, char **res, int *i, t_tsh *tsh)
 {
 	int		j;
@@ -41,16 +57,7 @@ static void	set_env(char **line, char **res, int *i, t_tsh *tsh)
 		write(2, ": ambiguous redirect\n", 21);
 		tsh->prsr.parse_status = 0;
 	}
-	j = 0;
-	if (env[0] && ft_strlen(*res))
-		*res = ft_realloc(*res, 1, '\"');
-	while (env[j])
-	{
-		*res = ft_realloc(*res, 1, env[j]);
-		j++;
-	}
-	if (env[0] && ft_strlen(*res) - ft_strlen(env))
-		*res = ft_realloc(*res, 1, '\"');
+	set_quotes(res, env);
 	if ((*line)[(*i) - 1] == '?')
 		free(env);
 }

@@ -28,12 +28,13 @@ static	char	*get_bpath(int current_path, t_tsh *tsh)
 	return (bpath);
 }
 
-int	path_len(t_tsh *tsh)
+int	path_len(t_tsh *tsh, char **to_null)
 {
 	char	*path;
 	int		i;
 	int		len;
 
+	*to_null = NULL;
 	path = get_env_value(*tsh, "PATH");
 	if (!path)
 		return (0);
@@ -103,8 +104,7 @@ void	binary_processor(t_tsh *tsh, int status)
 	int		len;
 
 	current_path = 0;
-	binary_path = NULL;
-	len = path_len(tsh);
+	len = path_len(tsh, &binary_path);
 	envlist_to_arr(tsh);
 	while (current_path < len)
 	{
