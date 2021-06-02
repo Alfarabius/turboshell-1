@@ -1,20 +1,19 @@
 #include "minishell.h"
 
-void	arg_to_lower(t_tsh *tsh)
+static int	curr_dir_check(t_tsh *tsh, char **path_to_exec)
 {
-	int		len;
-	char	*res;
-
-	if (tsh->prsr.args[0])
+	if (tsh->prsr.args[0][0] == '.' && ft_strlen(tsh->prsr.args[0]) == 1)
 	{
-		len = ft_strlen(tsh->prsr.args[0]);
-		res = (char *)malloc(sizeof(char) * (len + 1));
-		res[len] = '\0';
-		while (--len >= 0)
-			res[len] = ft_tolower(tsh->prsr.args[0][len]);
-		free(tsh->prsr.args[0]);
-		tsh->prsr.args[0] = res;
+		write(2, "turboshell-1.0: .: filename argument required\n", 46);
+		write(2, ".: usage: . filename [arguments]\n", 33);
+		return (0);
 	}
+	*path_to_exec = getcwd(NULL, 0);
+	error_checker(!*path_to_exec, "getcwd return error", 1);
+	*path_to_exec = ft_strjoin_gnl(*path_to_exec, "/");
+	*path_to_exec = ft_strjoin_gnl(*path_to_exec, tsh->prsr.args[0]);
+	error_checker(!path_to_exec, "Memmory doesn't allocated", 1);
+	return (1);
 }
 
 static int	check_bin(char *path_bin)
@@ -69,16 +68,8 @@ static void	start_by_path(t_tsh *tsh, char *path_to_exec)
 {
 	if (tsh->prsr.args[0][0] == '.')
 	{
-		if (tsh->prsr.args[0][0] == '.' && ft_strlen(tsh->prsr.args[0]) == 1)
-		{
-			write(2, "turboshell-1.0: .: filename argument required\n", 46);
-			write(2, ".: usage: . filename [arguments]\n", 33);
+		if (!curr_dir_check(tsh, &path_to_exec))
 			return ;
-		}
-		path_to_exec = getcwd(NULL, 0);
-		error_checker(!path_to_exec, "getcwd return error", 1);
-		path_to_exec = ft_strjoin_gnl(path_to_exec, "/");
-		path_to_exec = ft_strjoin_gnl(path_to_exec, tsh->prsr.args[0]);
 	}
 	else
 		path_to_exec = ft_strdup(tsh->prsr.args[0]);
