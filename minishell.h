@@ -124,7 +124,7 @@ int					history_editor(t_tsh *tsh);
 int					file_to_history(t_tsh *tsh);
 int					add_to_history(t_tsh *tsh);
 void				history_to_file(t_tsh *tsh);
-int					cmd_processor(t_tsh *tsh);
+void				cmd_processor(t_tsh *tsh);
 int					get_next_line(int fd, char **line);
 int					is_separ_exist(char *env_elem);
 int					new_prompt(t_tsh *tsh);

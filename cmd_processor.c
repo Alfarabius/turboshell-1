@@ -67,18 +67,21 @@ static void	start_exec(t_tsh *tsh, char *path)
 
 static void	start_by_path(t_tsh *tsh, char *path_to_exec)
 {
-	if (tsh->prsr.args[0][0] == '.')
-	{
-		if (!curr_dir_check(tsh, &path_to_exec))
-			return ;
-	}
-	else
+	DIR	*dir;
+
+	if (path_to_exec)
+		path_to_exec = ft_strjoin("./", path_to_exec);
+	else if (tsh->prsr.args[0][0] == '.' && !curr_dir_check(tsh, &path_to_exec))
+		return ;
+	else if (!path_to_exec)
 		path_to_exec = ft_strdup(tsh->prsr.args[0]);
 	error_checker(!path_to_exec, "Memmory doesn't allocated", 1);
-	if (opendir(path_to_exec))
+	dir = opendir(path_to_exec);
+	if (dir)
 	{
 		g_exit_status = 126;
 		error_template("turboshell-1.0", tsh->prsr.args[0], "is a directory");
+		closedir(dir);
 		return (free(path_to_exec));
 	}
 	if (!check_bin(path_to_exec))
@@ -91,14 +94,13 @@ static void	start_by_path(t_tsh *tsh, char *path_to_exec)
 	free(path_to_exec);
 }
 
-int	cmd_processor(t_tsh *tsh)
+void	cmd_processor(t_tsh *tsh)
 {
 	open_redirects(tsh);
 	if (tsh->prsr.parse_status < 0)
-		return (1);
-	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0] == '.' \
-	&& (tsh->prsr.args[0][1] == '/' || tsh->prsr.args[0][1] == '.' \
-	|| !tsh->prsr.args[0][1]))))
+		return ;
+	if (tsh->prsr.args[0] && (ft_strchr(tsh->prsr.args[0], '/') || (tsh->prsr.args[0][0] \
+	== '.' && (tsh->prsr.args[0][1] == '.' || !tsh->prsr.args[0][1]))))
 		start_by_path(tsh, NULL);
 	else if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh, -1);
@@ -114,8 +116,9 @@ int	cmd_processor(t_tsh *tsh)
 		ft_unset(tsh, 0);
 	else if (tsh->prsr.args[0] && !ft_strcmp("env", tsh->prsr.args[0]))
 		ft_env(tsh);
-	else if (tsh->prsr.args[0])
+	else if (tsh->prsr.args[0] && get_env_value(*tsh, "PATH"))
 		binary_processor(tsh, 0);
+	else if (tsh->prsr.args[0] && !get_env_value(*tsh, "PATH"))
+		start_by_path(tsh, tsh->prsr.args[0]);
 	close_redirects(tsh);
-	return (0);
 }
