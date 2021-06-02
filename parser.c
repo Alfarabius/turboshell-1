@@ -55,6 +55,11 @@ static void	pipes_redirects(t_tsh *tsh, char **current_line)
 
 static void	ending(t_tsh *tsh, char **current_line)
 {
+	// int i;
+
+	// i = -1;
+	// while (tsh->prsr.args[++i])
+	// 	printf("%d %s\n", i, tsh->prsr.args[i]);
 	redirect_handler(tsh);
 	free(tsh->prsr.line);
 	free(*current_line);
@@ -76,6 +81,7 @@ void	line_parser(t_tsh *tsh)
 	init_parser(tsh);
 	syntax_checker(tsh);
 	tsh->prsr.line = preparser(&current_line, tsh);
+	// printf("pr: %s\n", tsh->prsr.line);
 	if (!tsh->prsr.parse_status && clear_parser(tsh, &current_line))
 		return ;
 	while (tsh->prsr.line[tsh->prsr.l_index] && \

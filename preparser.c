@@ -35,11 +35,15 @@ static void	set_env(char **line, char **res, int *i, t_tsh *tsh)
 		tsh->prsr.parse_status = 0;
 	}
 	j = 0;
+	if (env[0] && ft_strlen(*res))
+		*res = ft_realloc(*res, 1, '\"');
 	while (env[j])
 	{
 		*res = ft_realloc(*res, 1, env[j]);
 		j++;
 	}
+	if (env[0] && ft_strlen(*res) - ft_strlen(env))
+		*res = ft_realloc(*res, 1, '\"');
 	if ((*line)[(*i) - 1] == '?')
 		free(env);
 }

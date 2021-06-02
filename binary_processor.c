@@ -102,6 +102,7 @@ void	binary_processor(t_tsh *tsh, int status)
 	int		len;
 
 	current_path = 0;
+	binary_path = NULL;
 	len = path_len(tsh);
 	envlist_to_arr(tsh);
 	while (current_path < len)
