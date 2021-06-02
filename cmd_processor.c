@@ -69,6 +69,12 @@ static void	start_by_path(t_tsh *tsh, char *path_to_exec)
 {
 	if (tsh->prsr.args[0][0] == '.')
 	{
+		if (tsh->prsr.args[0][0] == '.' && ft_strlen(tsh->prsr.args[0]) == 1)
+		{
+			write(2, "turboshell-1.0: .: filename argument required\n", 46);
+			write(2, ".: usage: . filename [arguments]\n", 33);
+			return ;
+		}
 		path_to_exec = getcwd(NULL, 0);
 		error_checker(!path_to_exec, "getcwd return error", 1);
 		path_to_exec = ft_strjoin_gnl(path_to_exec, "/");
@@ -98,8 +104,9 @@ int	cmd_processor(t_tsh *tsh)
 	open_redirects(tsh);
 	if (tsh->prsr.parse_status < 0)
 		return (1);
-	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0] \
-	== '.' && (tsh->prsr.args[0][1] == '/' || tsh->prsr.args[0][1] == '.'))))
+	if (tsh->prsr.args[0] && (tsh->prsr.args[0][0] == '/' || (tsh->prsr.args[0][0] == '.' \
+	&& (tsh->prsr.args[0][1] == '/' || tsh->prsr.args[0][1] == '.' \
+	|| !tsh->prsr.args[0][1]))))
 		start_by_path(tsh, NULL);
 	else if (tsh->prsr.args[0] && !ft_strcmp("exit", tsh->prsr.args[0]))
 		ft_exit(tsh, -1);
