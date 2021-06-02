@@ -11,7 +11,8 @@ SRCS	=	minishell.c \
 			termcap.c \
 			term.c \
 			error.c \
-			utils.c \
+			utils0.c \
+			utils1.c \
 			utils2.c \
 			utils3.c \
 			env_processor.c \
