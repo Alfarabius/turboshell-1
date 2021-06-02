@@ -3,7 +3,14 @@
 static void	set_qflag(char **line, int i, int *q_flag)
 {
 	if ((*line)[i] == '\'')
-		*q_flag = !*(q_flag);
+	{
+		if (*q_flag == 0)
+			*q_flag = 1;
+		else if (*q_flag == 1)
+			*q_flag = 0;
+		else if (*q_flag == 2)
+			*q_flag = 2;
+	}
 	if ((*line)[i] == '\"')
 	{
 		if (*q_flag == 0)
