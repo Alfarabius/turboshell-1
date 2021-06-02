@@ -65,6 +65,7 @@ static int	redirects_check(int i, t_tsh *tsh, int flags)
 		if (!tsh->line[skip_whitespaces(tsh->line, i + 1)] || \
 		tsh->line[skip_whitespaces(tsh->line, i + 1)] == '\n')
 		{
+			g_exit_status = 2;
 			write(2, "turboshell-1.0: syntax error near unexpected token `newline'\n", \
 			61);
 			tsh->prsr.parse_status = 0;
