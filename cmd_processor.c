@@ -54,13 +54,14 @@ static void	start_exec(t_tsh *tsh, char *path)
 			"", strerror(errno), tsh));
 		if (!pid)
 		{
-			execve(path, tsh->prsr.args, tsh->env_arr);
+			if (is_file_accessible(path, 1))
+				execve(path, tsh->prsr.args, tsh->env_arr);
 			exit(0);
 		}
 		else
 			waitpid(pid, &status, 0);
 	}
-	else
+	else if (is_file_accessible(path, 1))
 		execve(path, tsh->prsr.args, tsh->env_arr);
 	exit_status_handler(status);
 }

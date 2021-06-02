@@ -74,6 +74,11 @@ int	is_file_accessible(const char *file, int flag)
 	mode = state.st_mode;
 	if (flag == 1 && mode & S_IXUSR)
 		return (1);
+	else if (flag == 1)
+	{
+		builtin_error(": Permission denied", (char *)file, "");
+		return (0);
+	}
 	if (flag == 0 && mode & S_IWUSR)
 		return (1);
 	if (flag == 2 && mode & S_IWUSR & S_IXUSR)

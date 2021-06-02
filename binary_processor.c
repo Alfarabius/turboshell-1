@@ -84,13 +84,14 @@ static	void	open_binary(t_tsh *tsh, char **binary_path, int status)
 			"", strerror(errno), tsh));
 		if (!pid)
 		{
-			execve(*binary_path, tsh->prsr.args, tsh->env_arr);
+			if (is_file_accessible(*binary_path, 1))
+				execve(*binary_path, tsh->prsr.args, tsh->env_arr);
 			exit(0);
 		}
 		else
 			waitpid(pid, &status, 0);
 	}
-	else
+	else if (is_file_accessible(*binary_path, 1))
 		execve(*binary_path, tsh->prsr.args, tsh->env_arr);
 	exit_status_handler(status);
 }
